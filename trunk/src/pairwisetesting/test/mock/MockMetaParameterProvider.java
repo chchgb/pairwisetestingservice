@@ -6,7 +6,6 @@ import pairwisetesting.coredomain.MetaParameter;
 
 public class MockMetaParameterProvider implements IMetaParameterProvider {
 
-	@Override
 	public MetaParameter get() {
 		Factor f1 = new Factor("OS");
 		f1.addLevel("Windows XP");
