@@ -5,7 +5,6 @@ import pairwisetesting.coredomain.MetaParameter;
 
 public class MockTestDataTransformer implements ITestDataTransformer{
 
-	@Override
 	public String[][] transform(MetaParameter mp, String[][] rawTestData) {
 		String[][] testData = rawTestData;
 		for (int columnIndex = 0; columnIndex < rawTestData[0].length; columnIndex++) {

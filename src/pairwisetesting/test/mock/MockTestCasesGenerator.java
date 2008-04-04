@@ -5,7 +5,6 @@ import pairwisetesting.coredomain.MetaParameter;
 
 public class MockTestCasesGenerator implements ITestCasesGenerator {
 
-	@Override
 	public String generate(MetaParameter mp, String[][] testData) {
 		StringBuilder res = new StringBuilder();
 		for (String factorName : mp.getFactorNames()) {
