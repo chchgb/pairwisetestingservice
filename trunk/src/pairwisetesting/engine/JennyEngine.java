@@ -35,7 +35,7 @@ public class JennyEngine extends Engine {
 			Process p = Runtime.getRuntime().exec(command.toString());						
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			
-            String strProc = null;
+			String strProc = null;
 			while ((strProc = in.readLine()) != null) {
 				String[] testDataRow = strProc.trim().split(" ");
 				testDataList.add(testDataRow);
