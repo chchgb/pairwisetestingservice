@@ -28,25 +28,29 @@ public class JennyEngine extends Engine {
 		}
 		// System.out.println(command.toString());
 		
+		String[][] testData = null;
+		ArrayList<String[]> testDataList = new ArrayList<String[]>();
+                
 		try {
-			Process p = Runtime.getRuntime().exec(command.toString());
-			
-			ArrayList<String[]> testDataList = new ArrayList<String[]>();
+			Process p = Runtime.getRuntime().exec(command.toString());						
 			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			String strProc;
 			
+            String strProc = null;
 			while ((strProc = in.readLine()) != null) {
 				String[] testDataRow = strProc.trim().split(" ");
 				testDataList.add(testDataRow);
 			}
-			in.close();
-			
-			return testDataList.toArray(new String[0][0]);
-			
+			in.close();                       					
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new EngineException("jenny.exe error!");
 		}
+                
+		testData = new String[testDataList.size()][];
+		for (int i = 0; i < testDataList.size(); i++) {
+			testData[i] = testDataList.get(i);                            
+		}
+		return testData;
 	}
 
 }
