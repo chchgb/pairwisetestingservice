@@ -10,6 +10,10 @@ import pairwisetesting.coredomain.IMetaParameterProvider;
 import pairwisetesting.coredomain.ITestCasesGenerator;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.JennyEngine;
+import pairwisetesting.engine.am.AMEngine;
+import pairwisetesting.engine.am.H_2S_OAProvider;
+import pairwisetesting.engine.am.IOAProvider;
+import pairwisetesting.engine.am.Matrix;
 import pairwisetesting.exception.EngineException;
 import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
@@ -71,8 +75,11 @@ public class TestPairwiseTesting extends TestCase {
 
 		assertEquals("Windows XP", mp.getLevelOfFactor("OS", 0));
 
+		assertEquals(3, mp.getNumOfFactors());
+
 		MetaParameter mp2 = new MetaParameter(3);
 		assertEquals(3, mp2.getStrength());
+
 	}
 
 	public void testPairwiseTestingToolkit() {
@@ -147,14 +154,160 @@ public class TestPairwiseTesting extends TestCase {
 					+ "Red Hat 9\tOpera\t2G\tOracle\t\n"
 					+ "Solaris 10\tOpera\t1G\tOracle\t\n";
 			assertEquals(expectedTestCases, testCases);
-//			for (int i = 0; i != testData.length; ++i) {
-//				System.out.println(Arrays.toString(testData[i]));
-//			}
+			// for (int i = 0; i != testData.length; ++i) {
+			// System.out.println(Arrays.toString(testData[i]));
+			// }
 		} catch (EngineException e) {
 			e.printStackTrace();
 			fail("Should not throw EngineException" + e);
 		}
 
+	}
+
+	public void testMatrix() {
+		Matrix m = new Matrix(2, 2);
+		m.setElement(1, 1, 2);
+		m.setElement(1, 2, 3);
+		m.setElement(2, 1, 1);
+		m.setElement(2, 2, 0);
+
+		assertEquals(2, m.getElement(1, 1));
+		assertEquals(1, m.getElement(2, 1));
+
+		assertEquals(2, m.getNumOfRows());
+		assertEquals(2, m.getNumOfColumns());
+
+		Matrix m1 = new Matrix(2, 2);
+		m1.setElement(1, 1, 2);
+		m1.setElement(1, 2, 3);
+		m1.setElement(2, 1, 1);
+		m1.setElement(2, 2, 0);
+
+		assertEquals(m1, m);
+
+		Matrix m2 = new Matrix(3, 2);
+		m2.setElement(1, 1, -1);
+		m2.setElement(1, 2, 1);
+		m2.setElement(2, 1, 2);
+		m2.setElement(2, 2, -3);
+		m2.setElement(3, 1, 1);
+		m2.setElement(3, 2, 0);
+
+		Matrix expected = new Matrix(6, 4);
+		expected.setElement(1, 1, -2);
+		expected.setElement(1, 2, 2);
+		expected.setElement(1, 3, -3);
+		expected.setElement(1, 4, 3);
+		expected.setElement(2, 1, 4);
+		expected.setElement(2, 2, -6);
+		expected.setElement(2, 3, 6);
+		expected.setElement(2, 4, -9);
+		expected.setElement(3, 1, 2);
+		expected.setElement(3, 2, 0);
+		expected.setElement(3, 3, 3);
+		expected.setElement(3, 4, 0);
+		expected.setElement(4, 1, -1);
+		expected.setElement(4, 2, 1);
+		expected.setElement(4, 3, 0);
+		expected.setElement(4, 4, 0);
+		expected.setElement(5, 1, 2);
+		expected.setElement(5, 2, -3);
+		expected.setElement(5, 3, 0);
+		expected.setElement(5, 4, 0);
+		expected.setElement(6, 1, 1);
+		expected.setElement(6, 2, 0);
+		expected.setElement(6, 3, 0);
+		expected.setElement(6, 4, 0);
+
+		Matrix res = m1.directProduct(m2);
+		// System.out.println(res);
+		assertEquals(expected, res);
+
+		int[][] expected1 = new int[][] { { 2, -3, 3 }, { -6, 6, -9 },
+				{ 0, 3, 0 }, { 1, 0, 0 }, { -3, 0, 0 }, { 0, 0, 0 } };
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
+				res.to2DArray(2)));
+
+		Matrix H2 = new Matrix(2, 2);
+		H2.setElement(1, 1, 1);
+		H2.setElement(1, 2, 1);
+		H2.setElement(2, 1, 1);
+		H2.setElement(2, 2, -1);
+		Matrix H4 = H2.directProduct(H2);
+		Matrix H8 = H2.directProduct(H4);
+		assertEquals(1, H8.getElement(3, 1));
+		assertEquals(1, H8.getElement(3, 2));
+		assertEquals(-1, H8.getElement(3, 3));
+		assertEquals(-1, H8.getElement(3, 4));
+		assertEquals(1, H8.getElement(3, 5));
+		assertEquals(1, H8.getElement(3, 6));
+		assertEquals(-1, H8.getElement(3, 7));
+		assertEquals(-1, H8.getElement(3, 8));
+		assertEquals(1, H8.getElement(6, 1));
+		assertEquals(-1, H8.getElement(6, 2));
+		assertEquals(1, H8.getElement(6, 3));
+		assertEquals(-1, H8.getElement(3, 4));
+		assertEquals(-1, H8.getElement(6, 5));
+		assertEquals(1, H8.getElement(3, 6));
+		assertEquals(-1, H8.getElement(3, 7));
+		assertEquals(1, H8.getElement(6, 8));
+	}
+
+	public void testH_2S_OAProvider() {
+		IOAProvider provider = new H_2S_OAProvider();
+
+		int[][] rawTestData = provider.get(3);
+		int[][] expected = { { 1, 1, 1 }, { 2, 1, 2 }, { 1, 2, 2 }, { 2, 2, 1 } };
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				rawTestData));
+		// System.out.println(Arrays.deepToString(rawTestData));
+
+		rawTestData = provider.get(7);
+		int[][] expected2 = { { 1, 1, 1, 1, 1, 1, 1 }, { 2, 1, 2, 1, 2, 1, 2 },
+				{ 1, 2, 2, 1, 1, 2, 2 }, { 2, 2, 1, 1, 2, 2, 1 },
+				{ 1, 1, 1, 2, 2, 2, 2 }, { 2, 1, 2, 2, 1, 2, 1 },
+				{ 1, 2, 2, 2, 2, 1, 1 }, { 2, 2, 1, 2, 1, 1, 2 } };
+		// System.out.println(Arrays.deepToString(rawTestData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
+				rawTestData));
+	}
+
+	public void testAMEngine() throws EngineException {
+		Engine engine = new AMEngine();
+		Factor f1 = new Factor("OS");
+		f1.addLevel("Windows XP");
+		f1.addLevel("Solaris 10");
+		Factor f2 = new Factor("Browser", new String[] { "IE", "Firefox" });
+		Factor f3 = new Factor("Memory", new String[] { "1G", "2G" });
+		Factor f4 = new Factor("DB", new String[] { "MySQL", "Oracle" });
+		Factor f5 = new Factor("PC", new String[] { "DELL", "HP" });
+		Factor f6 = new Factor("Server", new String[] { "WebLogic", "Tomcat" });
+		Factor f7 = new Factor("HardDisk", new String[] { "40G", "80G" });
+		MetaParameter mp = new MetaParameter(2);
+		mp.addFactor(f1);
+		mp.addFactor(f2);
+		mp.addFactor(f3);
+		mp.addFactor(f4);
+		mp.addFactor(f5);
+		mp.addFactor(f6);
+		mp.addFactor(f7);
+		
+		String[][] testData = engine.generateTestData(mp);
+		String[][] expected = {
+				{ "Windows XP", "IE", "1G", "MySQL", "DELL", "WebLogic", "40G" },
+				{ "Solaris 10", "IE", "2G", "MySQL", "HP", "WebLogic", "80G" },
+				{ "Windows XP", "Firefox", "2G", "MySQL", "DELL", "Tomcat",
+						"80G" },
+				{ "Solaris 10", "Firefox", "1G", "MySQL", "HP", "Tomcat", "40G" },
+				{ "Windows XP", "IE", "1G", "Oracle", "HP", "Tomcat", "80G" },
+				{ "Solaris 10", "IE", "2G", "Oracle", "DELL", "Tomcat", "40G" },
+				{ "Windows XP", "Firefox", "2G", "Oracle", "HP", "WebLogic",
+						"40G" },
+				{ "Solaris 10", "Firefox", "1G", "Oracle", "DELL", "WebLogic",
+						"80G" } };
+		// System.out.println(Arrays.deepToString(testData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				testData));
 	}
 
 	protected void tearDown() throws Exception {
