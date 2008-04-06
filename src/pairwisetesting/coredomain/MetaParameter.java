@@ -52,4 +52,8 @@ public class MetaParameter {
 		return (strength == mp.strength) && (factorMap.equals(mp.factorMap));
 	}
 
+	public int getNumOfFactors() {
+		return factorMap.values().size();
+	}
+
 }
