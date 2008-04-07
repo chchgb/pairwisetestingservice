@@ -1,4 +1,4 @@
-package pairwisetesting.engine;
+package pairwisetesting.engine.jenny;
 
 import pairwisetesting.coredomain.ITestDataTransformer;
 import pairwisetesting.coredomain.MetaParameter;
