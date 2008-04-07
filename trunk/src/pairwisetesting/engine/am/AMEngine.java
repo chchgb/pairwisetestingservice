@@ -15,8 +15,8 @@ public class AMEngine extends Engine {
 			throws EngineException {
 		OAProvider provider = null;
 		
-		//TODO Currently assume that the levels of all the factors are same
-		int numOfLevels = mp.getFactors()[0].getNumOfLevels();
+		//TODO Currently only two OA providers are available
+		int numOfLevels = mp.getMaxNumOfLevels();
 		if ( numOfLevels == 2)
 			provider = new H_2S_OAProvider();
 		else

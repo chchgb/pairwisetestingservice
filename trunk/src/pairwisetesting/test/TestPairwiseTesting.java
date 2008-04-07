@@ -22,7 +22,7 @@ import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
 
 public class TestPairwiseTesting extends TestCase {
-	private Factor f1, f2, f3, f4;
+	private Factor f1, f2, f3, f4, f5;
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -33,6 +33,7 @@ public class TestPairwiseTesting extends TestCase {
 		f2 = new Factor("Browser", new String[] { "IE", "Firefox", "Opera" });
 		f3 = new Factor("Memory", new String[] { "255M", "1G", "2G" });
 		f4 = new Factor("DB", new String[] { "MySQL", "Oracle", "DB2" });
+		f5 = new Factor("Server", new String[] { "WebLogic", "JBoss", "Tomcat", "GlassFish" });
 	}
 
 	public void testFactor() {
@@ -77,6 +78,10 @@ public class TestPairwiseTesting extends TestCase {
 		assertEquals("Windows XP", mp.getLevelOfFactor("OS", 0));
 
 		assertEquals(3, mp.getNumOfFactors());
+		
+		assertEquals(3, mp.getMaxNumOfLevels());
+		mp.addFactor(f5);
+		assertEquals(4, mp.getMaxNumOfLevels());
 
 		MetaParameter mp2 = new MetaParameter(3);
 		assertEquals(3, mp2.getStrength());
@@ -343,8 +348,10 @@ public class TestPairwiseTesting extends TestCase {
 
 	public void testAMEngine() throws EngineException {
 		Engine engine = new AMEngine();
-
+		
+		//
 		// AMEngine with H_2S_OAProvider
+		//
 		Factor f1 = new Factor("OS");
 		f1.addLevel("Windows XP");
 		f1.addLevel("Solaris 10");
@@ -379,8 +386,10 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
 				testData));
-
+		
+		//
 		// AMEngine with Rp_OLS_p2_OAProvider
+		//
 		mp = new MockMetaParameterProvider().get();
 		testData = engine.generateTestData(mp);
 		String[][] expected2 = { { "Windows XP", "IE", "255M", "MySQL" },
@@ -395,7 +404,34 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				testData));
-
+		
+		// with missing values
+		f1 = new Factor("OS");
+		f1.addLevel("Windows XP");
+		f1.addLevel("Solaris 10");
+		f2 = new Factor("Browser", new String[] { "IE", "Firefox"});
+		f3 = new Factor("Memory", new String[] {"255M", "1G", "2G"});
+		f4 = new Factor("DB", new String[] {"MySQL", "Oracle"});
+		mp = new MetaParameter(2);
+		mp.addFactor(f1);
+		mp.addFactor(f2);
+		mp.addFactor(f3);
+		mp.addFactor(f4);
+		
+		testData = engine.generateTestData(mp);
+		String[][] expected3 = { { "Windows XP", "IE", "255M", "MySQL" },
+				{ "Windows XP", "Firefox", "1G", "Oracle" },
+				{ "Windows XP", "IE", "2G", "MySQL" },
+				{ "Solaris 10", "IE", "1G", "Oracle" },
+				{ "Solaris 10", "Firefox", "2G", "MySQL" },
+				{ "Solaris 10", "Firefox", "255M", "Oracle" },
+				{ "Windows XP", "IE", "2G", "Oracle" },
+				{ "Solaris 10", "Firefox", "255M", "MySQL" },
+				{ "Windows XP", "IE", "1G", "MySQL" } };
+		// System.out.println(Arrays.deepToString(testData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
+				testData));
+		
 	}
 
 	protected void tearDown() throws Exception {

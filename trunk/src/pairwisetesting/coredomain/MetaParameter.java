@@ -56,4 +56,17 @@ public class MetaParameter {
 		return factorMap.values().size();
 	}
 
+	/**
+	 * @return the max number of levels within all the factors
+	 */
+	public int getMaxNumOfLevels() {
+		int max = 0;
+		Factor[] factors = this.getFactors();
+		for (Factor factor : factors) {
+			if (max < factor.getNumOfLevels())
+				max = factor.getNumOfLevels();
+		}
+		return max;
+	}
+
 }
