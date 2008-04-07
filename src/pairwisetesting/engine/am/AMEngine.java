@@ -13,10 +13,15 @@ public class AMEngine extends Engine {
 	@Override
 	protected String[][] generateRawTestData(MetaParameter mp)
 			throws EngineException {
-		IOAProvider provider = null;
+		OAProvider provider = null;
 		
-		//TODO Currently only H_2S_OAProvider is available
-		provider = new H_2S_OAProvider();
+		//TODO Currently assume that the levels of all the factors are same
+		int numOfLevels = mp.getFactors()[0].getNumOfLevels();
+		if ( numOfLevels == 2)
+			provider = new H_2S_OAProvider();
+		else
+			provider = new Rp_OLS_p2_OAProvider(numOfLevels);
+		
 		int[][] rawTestData = provider.get(mp.getNumOfFactors());
 		return int2DArrayToString2DArray(rawTestData);
 		
