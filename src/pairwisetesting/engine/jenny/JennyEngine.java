@@ -1,4 +1,4 @@
-package pairwisetesting.engine;
+package pairwisetesting.engine.jenny;
 
 import java.io.BufferedReader;
 import java.io.IOException;
