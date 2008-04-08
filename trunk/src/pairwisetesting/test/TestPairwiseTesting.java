@@ -13,6 +13,7 @@ import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.am.OAProvider;
 import pairwisetesting.engine.am.oaprovider.H_2s_OAProvider;
 import pairwisetesting.engine.am.oaprovider.Matrix;
+import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
 import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
 import pairwisetesting.engine.am.oaprovider.Rp_OLS_pu_OAProvider;
 import pairwisetesting.engine.jenny.JennyEngine;
@@ -21,6 +22,7 @@ import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
+import pairwisetesting.util.MathUtil;
 
 public class TestPairwiseTesting extends TestCase {
 	private Factor f1, f2, f3, f4, f5;
@@ -518,8 +520,62 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
 				testData));
 		
-	}
+		//
+		// AMEngine with Rp_OLS_pu_OAProvider
+		//
+		f1 = new Factor("OS");
+		f1.addLevel("Windows XP");
+		f1.addLevel("Solaris 10");
+		f2 = new Factor("Browser", new String[] { "IE", "Firefox"});
+		f3 = new Factor("Memory", new String[] {"255M", "1G"});
+		f4 = new Factor("DB", new String[] {"MySQL", "Oracle"});
+		mp = new MetaParameter(2);
+		mp.addFactor(f1);
+		mp.addFactor(f2);
+		mp.addFactor(f3);
+		mp.addFactor(f4);
 
+		testData = engine.generateTestData(mp);
+		String[][] expected4 = {
+			{"Windows XP", "IE", "255M", "MySQL"},
+			{"Windows XP", "IE", "1G", "Oracle"},
+			{"Windows XP", "Firefox", "255M", "Oracle"},
+			{"Windows XP", "Firefox", "1G", "MySQL"}, 
+			{"Solaris 10", "IE", "255M", "MySQL"},
+			{"Solaris 10", "IE", "1G", "Oracle"},
+			{"Solaris 10", "Firefox", "255M", "Oracle"},
+			{"Solaris 10", "Firefox", "1G", "MySQL"}
+		};
+		// System.out.println(Arrays.deepToString(testData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
+				testData));
+		
+	}
+	
+	public void testUtil() {
+		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(1));
+		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(3));
+		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(7));
+		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(63));
+		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(255));
+		
+		assertTrue("It should be a prime", MathUtil.isPrime(2));
+		assertTrue("It should be a prime", MathUtil.isPrime(7));
+		assertTrue("It should be a prime", MathUtil.isPrime(17));
+		assertTrue("It should be a prime", MathUtil.isPrime(67));
+		assertFalse("It should not be a prime", MathUtil.isPrime(4));
+		assertFalse("It should not be a prime", MathUtil.isPrime(6));
+		assertFalse("It should not be a prime", MathUtil.isPrime(10));
+	}
+	
+	public void testOAProviderFactory() {
+		OAProviderFactory factory = new OAProviderFactory();
+		assertTrue("It should create H_2s_OAProvider object", factory.create(2, 3) instanceof H_2s_OAProvider);
+		assertTrue("It should create Rp_OLS_p2_OAProvider object", factory.create(3, 4) instanceof Rp_OLS_p2_OAProvider);
+		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(2, 4) instanceof Rp_OLS_pu_OAProvider);
+		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(3, 5) instanceof Rp_OLS_pu_OAProvider);
+	}
+	
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
