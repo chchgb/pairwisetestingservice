@@ -2,31 +2,27 @@ package pairwisetesting.engine.am;
 
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.engine.am.oaprovider.H_2s_OAProvider;
-import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
+import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
 import pairwisetesting.exception.EngineException;
 
 public class AMEngine extends Engine {
 	
+	private OAProviderFactory factory;
+	
 	public AMEngine() {
 		this.transformer = new OATestDataTransformer();
+		this.factory = new OAProviderFactory();
 	}
 
 	@Override
 	protected String[][] generateRawTestData(MetaParameter mp)
 			throws EngineException {
-		OAProvider provider = null;
 		
-		//TODO Currently only two OA providers are available
 		int numOfLevels = mp.getMaxNumOfLevels();
-		if ( numOfLevels == 2)
-			provider = new H_2s_OAProvider();
-		else
-			provider = new Rp_OLS_p2_OAProvider(numOfLevels);
+		OAProvider provider = factory.create(numOfLevels, mp.getNumOfFactors());
 		
 		int[][] rawTestData = provider.get(mp.getNumOfFactors());
 		return int2DArrayToString2DArray(rawTestData);
-		
 	}
 	
 	private String[][] int2DArrayToString2DArray(int[][] int2DArray) {
