@@ -1,12 +1,14 @@
 package pairwisetesting.coredomain;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class MetaParameter {
 
 	private int strength = 2;
 	private LinkedHashMap<String, Factor> factorMap = new LinkedHashMap<String, Factor>();
-
+	private ArrayList<String> constraints = new ArrayList<String>();
+	
 	public MetaParameter(int strength) {
 		this.strength = strength;
 	}
@@ -41,17 +43,7 @@ public class MetaParameter {
 	public String getLevelOfFactor(String factorName, int index) {
 		return getFactor(factorName).getLevel(index);
 	}
-
-	@Override
-	public boolean equals(Object other) {
-		if (other == this)
-			return true;
-		if (!(other instanceof MetaParameter))
-			return false;
-		MetaParameter mp = (MetaParameter) other;
-		return (strength == mp.strength) && (factorMap.equals(mp.factorMap));
-	}
-
+	
 	public int getNumOfFactors() {
 		return factorMap.values().size();
 	}
@@ -69,4 +61,21 @@ public class MetaParameter {
 		return max;
 	}
 
+	public void addConstraint(String constraint) {
+		this.constraints.add(constraint);
+	}
+
+	public String[] getConstraints() {
+		return this.constraints.toArray(new String[0]);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof MetaParameter))
+			return false;
+		MetaParameter mp = (MetaParameter) other;
+		return (strength == mp.strength) && (factorMap.equals(mp.factorMap));
+	}
 }
