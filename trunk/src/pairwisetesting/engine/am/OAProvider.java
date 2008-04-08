@@ -8,6 +8,19 @@ public abstract class OAProvider {
 	protected int t = 2;
 
 	/**
+	 * @param t
+	 *           the number of levels
+	 * 
+	 */
+	public OAProvider(int t) {
+		this.t = t;
+	}
+	
+	public OAProvider() {
+		
+	}
+
+	/**
 	 * @param m
 	 *            the number of factors
 	 * @return the OA based on the specific implementation
