@@ -440,6 +440,14 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
 				rawTestData));
 	}
+	
+	public void testOAProviderFactory() {
+		OAProviderFactory factory = new OAProviderFactory();
+		assertTrue("It should create H_2s_OAProvider object", factory.create(2, 3) instanceof H_2s_OAProvider);
+		assertTrue("It should create Rp_OLS_p2_OAProvider object", factory.create(3, 4) instanceof Rp_OLS_p2_OAProvider);
+		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(2, 4) instanceof Rp_OLS_pu_OAProvider);
+		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(3, 5) instanceof Rp_OLS_pu_OAProvider);
+	}
 
 	public void testAMEngine() throws EngineException {
 		Engine engine = new AMEngine(new MockOAProviderFactory());
@@ -592,14 +600,6 @@ public class TestPairwiseTesting extends TestCase {
 		String[][] expected = new String[][] {{"1", "2", "3"}, {"4", "5", "6"}};
 		int[][] testArray = new int[][] {{1, 2, 3}, {4, 5, 6}};
 		assertTrue("They should be equal", Arrays.deepEquals(expected, ArrayUtil.int2DArrayToString2DArray(testArray)));
-	}
-	
-	public void testOAProviderFactory() {
-		OAProviderFactory factory = new OAProviderFactory();
-		assertTrue("It should create H_2s_OAProvider object", factory.create(2, 3) instanceof H_2s_OAProvider);
-		assertTrue("It should create Rp_OLS_p2_OAProvider object", factory.create(3, 4) instanceof Rp_OLS_p2_OAProvider);
-		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(2, 4) instanceof Rp_OLS_pu_OAProvider);
-		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(3, 5) instanceof Rp_OLS_pu_OAProvider);
 	}
 	
 	protected void tearDown() throws Exception {
