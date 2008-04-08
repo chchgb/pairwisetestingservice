@@ -1,4 +1,4 @@
-package pairwisetesting.engine.am;
+package pairwisetesting.engine.am.oaprovider;
 
 import java.util.Arrays;
 

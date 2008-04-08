@@ -3,6 +3,7 @@ package pairwisetesting.engine.am;
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.am.oaprovider.H_2s_OAProvider;
+import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
 import pairwisetesting.exception.EngineException;
 
 public class AMEngine extends Engine {

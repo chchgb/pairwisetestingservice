@@ -1,6 +1,5 @@
 package pairwisetesting.engine.am.oaprovider;
 
-import pairwisetesting.engine.am.Matrix;
 import pairwisetesting.engine.am.OAProvider;
 
 /**
