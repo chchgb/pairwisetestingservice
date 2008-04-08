@@ -1,10 +1,17 @@
-package pairwisetesting.engine.am;
+package pairwisetesting.engine.am.oaprovider;
 
-public class H_2S_OAProvider extends OAProvider {
+import pairwisetesting.engine.am.Matrix;
+import pairwisetesting.engine.am.OAProvider;
 
-	private Matrix H2; // 2 order Hadamard Matrix
+/**
+ * The OA provider based on Hadamard Matrix and its runs is 2^s
+ *
+ */
+public class H_2s_OAProvider extends OAProvider {
 
-	public H_2S_OAProvider() {
+	private Matrix H2; // 2-order Hadamard Matrix
+
+	public H_2s_OAProvider() {
 		H2 = new Matrix(2, 2);
 		H2.setElement(1, 1, 1);
 		H2.setElement(1, 2, 1);
