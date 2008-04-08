@@ -4,14 +4,19 @@ import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
 import pairwisetesting.exception.EngineException;
+import pairwisetesting.util.ArrayUtil;
 
 public class AMEngine extends Engine {
 	
-	private OAProviderFactory factory;
+	private IOAProviderFactory factory = new OAProviderFactory();
 	
 	public AMEngine() {
 		this.transformer = new OATestDataTransformer();
-		this.factory = new OAProviderFactory();
+	}
+
+	public AMEngine(IOAProviderFactory factory) {
+		this();
+		this.factory = factory;
 	}
 
 	@Override
@@ -22,17 +27,7 @@ public class AMEngine extends Engine {
 		OAProvider provider = factory.create(numOfLevels, mp.getNumOfFactors());
 		
 		int[][] rawTestData = provider.get(mp.getNumOfFactors());
-		return int2DArrayToString2DArray(rawTestData);
-	}
-	
-	private String[][] int2DArrayToString2DArray(int[][] int2DArray) {
-		String[][] res = new String[int2DArray.length][int2DArray[0].length];
-		for (int column = 0; column < int2DArray[0].length; column++) {
-			for (int row = 0; row < int2DArray.length; row++) {
-				res[row][column] = "" + int2DArray[row][column];
-			}
-		}
-		return res;
+		return ArrayUtil.int2DArrayToString2DArray(rawTestData);
 	}
 
 }

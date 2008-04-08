@@ -1,17 +1,11 @@
 package pairwisetesting.engine.am.oaprovider;
 
+import pairwisetesting.engine.am.IOAProviderFactory;
 import pairwisetesting.engine.am.OAProvider;
 import pairwisetesting.util.MathUtil;
 
-public class OAProviderFactory {
+public class OAProviderFactory implements IOAProviderFactory {
 
-	/**
-	 * @param t
-	 *            the number of levels
-	 * @param m
-	 *            the number of factors
-	 * @return the proper OAProvider based on t and m
-	 */
 	public OAProvider create(int t, int m) {
 		if (t == 2 && MathUtil.is_2sMinusOne(m)) {
 			return new H_2s_OAProvider();
