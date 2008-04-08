@@ -85,7 +85,12 @@ public class TestPairwiseTesting extends TestCase {
 		assertEquals(3, mp.getMaxNumOfLevels());
 		mp.addFactor(f5);
 		assertEquals(4, mp.getMaxNumOfLevels());
-
+		
+		mp.addConstraint("IF [File system] = \"FAT\" THEN [Size] <= 4096");
+		mp.addConstraint("IF [OS_2] = \"WinXP\" THEN [SKU_2] = \"Professional\"");
+		assertEquals("IF [File system] = \"FAT\" THEN [Size] <= 4096", mp.getConstraints()[0]);
+		assertEquals("IF [OS_2] = \"WinXP\" THEN [SKU_2] = \"Professional\"", mp.getConstraints()[1]);
+		
 		MetaParameter mp2 = new MetaParameter(3);
 		assertEquals(3, mp2.getStrength());
 
