@@ -21,7 +21,9 @@ import pairwisetesting.exception.EngineException;
 import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
+import pairwisetesting.test.mock.MockOAProviderFactory;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
+import pairwisetesting.util.ArrayUtil;
 import pairwisetesting.util.MathUtil;
 
 public class TestPairwiseTesting extends TestCase {
@@ -440,8 +442,23 @@ public class TestPairwiseTesting extends TestCase {
 	}
 
 	public void testAMEngine() throws EngineException {
-		Engine engine = new AMEngine();
+		Engine engine = new AMEngine(new MockOAProviderFactory());
+		String[][] testData = engine.generateTestData(new MockMetaParameterProvider().get());
 		
+		String[][] expected = { { "Windows XP", "IE", "255M", "MySQL" },
+				{ "Windows XP", "Firefox", "1G", "Oracle" },
+				{ "Windows XP", "Opera", "2G", "DB2" },
+				{ "Solaris 10", "IE", "1G", "DB2" },
+				{ "Solaris 10", "Firefox", "2G", "MySQL" },
+				{ "Solaris 10", "Opera", "255M", "Oracle" },
+				{ "Red Hat 9", "IE", "2G", "Oracle" },
+				{ "Red Hat 9", "Firefox", "255M", "DB2" },
+				{ "Red Hat 9", "Opera", "1G", "MySQL" } };
+		// System.out.println(Arrays.deepToString(testData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				testData));
+		
+		engine = new AMEngine();
 		//
 		// AMEngine with H_2s_OAProvider
 		//
@@ -463,8 +480,8 @@ public class TestPairwiseTesting extends TestCase {
 		mp.addFactor(f6);
 		mp.addFactor(f7);
 
-		String[][] testData = engine.generateTestData(mp);
-		String[][] expected = {
+		testData = engine.generateTestData(mp);
+		String[][] expected1 = {
 				{ "Windows XP", "IE", "1G", "MySQL", "DELL", "WebLogic", "40G" },
 				{ "Solaris 10", "IE", "2G", "MySQL", "HP", "WebLogic", "80G" },
 				{ "Windows XP", "Firefox", "2G", "MySQL", "DELL", "Tomcat",
@@ -477,7 +494,7 @@ public class TestPairwiseTesting extends TestCase {
 				{ "Solaris 10", "Firefox", "1G", "Oracle", "DELL", "WebLogic",
 						"80G" } };
 		// System.out.println(Arrays.deepToString(testData));
-		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
 				testData));
 		
 		//
@@ -571,6 +588,10 @@ public class TestPairwiseTesting extends TestCase {
 		assertFalse("It should not be a prime", MathUtil.isPrime(4));
 		assertFalse("It should not be a prime", MathUtil.isPrime(6));
 		assertFalse("It should not be a prime", MathUtil.isPrime(10));
+		
+		String[][] expected = new String[][] {{"1", "2", "3"}, {"4", "5", "6"}};
+		int[][] testArray = new int[][] {{1, 2, 3}, {4, 5, 6}};
+		assertTrue("They should be equal", Arrays.deepEquals(expected, ArrayUtil.int2DArrayToString2DArray(testArray)));
 	}
 	
 	public void testOAProviderFactory() {
