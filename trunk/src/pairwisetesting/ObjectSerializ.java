@@ -10,7 +10,7 @@ import java.util.*;
 
 import pairwisetesting.coredomain.MetaParameter;
 
-public class MetaParameterSerializ implements Serializable {
+public class ObjectSerializ implements Serializable {
 	/**
 	 * 此例是一个序列化/反序列化的方法 ：
 	 * 
@@ -23,7 +23,7 @@ public class MetaParameterSerializ implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static String Object2String(MetaParameter input) {
+	public static String Object2String(Object input) {
 		ObjectOutputStream OOS = null;
 		// 序列化后数据流给ByteArrayOutputStream 来保存。
 		// ByteArrayOutputStream 可转成字符串或字节数组
@@ -54,21 +54,21 @@ public class MetaParameterSerializ implements Serializable {
 		return Sstr;
 	}
 
-	public static MetaParameter String2Object(String Sstr) {
+	public static Object String2Object(String Sstr) {
 		// ByteArrayInputStream 可接收一个字节数组"byte[]"。供反序列化做参数
 		ByteArrayInputStream BAIS = null;
 		// 反序列化使用的输入流
 		ObjectInputStream OIS = null;
 		// 把字符串转成一个byte[]
 
-		MetaParameter result = null;
+		Object result = null;
 
 		try {
 			byte[] DSbuff = new sun.misc.BASE64Decoder().decodeBuffer(Sstr);
 			// 实现反序列化
 			BAIS = new ByteArrayInputStream(DSbuff);
 			OIS = new ObjectInputStream(BAIS);
-			result = (MetaParameter) OIS.readObject();
+			result = (Object) OIS.readObject();
 			OIS.close();
 		} catch (IOException e) {
 			e.printStackTrace();
