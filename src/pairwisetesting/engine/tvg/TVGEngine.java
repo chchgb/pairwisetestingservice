@@ -3,11 +3,11 @@ package pairwisetesting.engine.tvg;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import pairwisetesting.PTSInterface;
-import pairwisetesting.TVG;
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
+import pairwisetesting.engine.PTSInterface;
+import pairwisetesting.engine.TVG;
 import pairwisetesting.exception.EngineException;
 
 public class TVGEngine extends Engine {

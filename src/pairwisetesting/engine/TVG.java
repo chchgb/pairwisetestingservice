@@ -1,4 +1,4 @@
-package pairwisetesting;
+package pairwisetesting.engine;
 
 import java.util.ArrayList;
 import java.util.Date;
