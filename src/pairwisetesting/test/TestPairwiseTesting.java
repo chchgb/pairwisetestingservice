@@ -17,6 +17,8 @@ import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
 import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
 import pairwisetesting.engine.am.oaprovider.Rp_OLS_pu_OAProvider;
 import pairwisetesting.engine.jenny.JennyEngine;
+import pairwisetesting.engine.pict.PICTEngine;
+import pairwisetesting.engine.tvg.TVGEngine;
 import pairwisetesting.exception.EngineException;
 import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
@@ -145,6 +147,37 @@ public class TestPairwiseTesting extends TestCase {
 		assertEquals(expectedTestCases, testCases);
 	}
 
+	public void testPICTEngine() throws MetaParameterException {
+		Engine engine = new TVGEngine();
+		IMetaParameterProvider provider = new MockMetaParameterProvider();
+		ITestCasesGenerator generator = new MockTestCasesGenerator();
+		MetaParameter mp = provider.get();
+		String[][] testData = null;
+		try {
+			testData = engine.generateTestData(mp);
+			assertNotNull(testData);
+			String testCases = generator.generate(mp, testData);
+			String expectedTestCases = "OS	Browser	Memory	DB	\n"
+					+ "Windows XP\tOpera\t2G\tMySQL\t\n"
+					+ "Solaris 10\tFirefox\t255M\tDB2\t\n"
+					+ "Red Hat 9\tIE\t1G\tOracle\t\n"
+					+ "Windows XP\tIE\t255M\tOracle\t\n"
+					+ "Solaris 10\tIE\t2G\tDB2\t\n"
+					+ "Red Hat 9\tFirefox\t1G\tMySQL\t\n"
+					+ "Solaris 10\tOpera\t1G\tDB2\t\n"
+					+ "Red Hat 9\tOpera\t255M\tDB2\t\n"
+					+ "Windows XP\tFirefox\t2G\tOracle\t\n"
+					+ "Solaris 10\tIE\t255M\tMySQL\t\n"
+					+ "Windows XP\tIE\t1G\tDB2\t\n"
+					+ "Red Hat 9\tOpera\t2G\tOracle\t\n"
+					+ "Solaris 10\tOpera\t1G\tOracle\t\n";
+			//assertEquals(expectedTestCases, testCases);
+		} catch (EngineException e) {
+			e.printStackTrace();
+			fail("Should not throw EngineException" + e);
+		}
+	}
+	
 	public void testJennyEngine() throws MetaParameterException {
 		Engine engine = new JennyEngine();
 		IMetaParameterProvider provider = new MockMetaParameterProvider();
