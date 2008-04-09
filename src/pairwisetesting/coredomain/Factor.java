@@ -2,6 +2,7 @@ package pairwisetesting.coredomain;
 
 import java.util.ArrayList;
 
+///
 public class Factor {
 	private String name = "";
 	private ArrayList<String> levelList = new ArrayList<String>();
