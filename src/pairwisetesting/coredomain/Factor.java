@@ -37,6 +37,10 @@ public class Factor {
 	public String[] getLevels() {
 		return levelList.toArray(new String[0]);
 	}
+	
+	public ArrayList<String> getLevelList(){
+		return levelList;
+	}
 
 	@Override
 	public boolean equals(Object other) {
