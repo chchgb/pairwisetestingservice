@@ -1,8 +1,5 @@
 package pairwisetesting.engine.pict;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -35,7 +32,7 @@ public class PICTEngine extends Engine {
 		
 		pict.initEngine(iNames, iValues, nWay);
 		
-		boolean result = pict.startAlgorithm();
+		pict.startAlgorithm();
 		ArrayList<String> resultArrayList = pict.getOutputList();
 		
 		String[][] testData = new String[resultArrayList.size()][];

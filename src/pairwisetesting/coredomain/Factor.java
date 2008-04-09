@@ -1,9 +1,10 @@
 package pairwisetesting.coredomain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 ///
-public class Factor {
+public class Factor implements Serializable{
 	private String name = "";
 	private ArrayList<String> levelList = new ArrayList<String>();
 

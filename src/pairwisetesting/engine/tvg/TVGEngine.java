@@ -31,7 +31,7 @@ public class TVGEngine extends Engine {
 		
 		pict.initEngine(iNames, iValues, nWay);
 		
-		boolean result = pict.startAlgorithm();
+		pict.startAlgorithm();
 		ArrayList<String> resultArrayList = pict.getOutputList();
 		
 		String[][] testData = new String[resultArrayList.size()][];

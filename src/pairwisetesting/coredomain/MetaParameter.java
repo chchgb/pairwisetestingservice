@@ -1,10 +1,15 @@
 package pairwisetesting.coredomain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class MetaParameter {
+public class MetaParameter implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int strength = 2;
 	private LinkedHashMap<String, Factor> factorMap = new LinkedHashMap<String, Factor>();
 	private ArrayList<String> constraints = new ArrayList<String>();
