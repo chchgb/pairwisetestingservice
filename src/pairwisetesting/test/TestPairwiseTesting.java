@@ -148,7 +148,7 @@ public class TestPairwiseTesting extends TestCase {
 	}
 
 	public void testPICTEngine() throws MetaParameterException {
-		Engine engine = new TVGEngine();
+		Engine engine = new PICTEngine();
 		IMetaParameterProvider provider = new MockMetaParameterProvider();
 		ITestCasesGenerator generator = new MockTestCasesGenerator();
 		MetaParameter mp = provider.get();
