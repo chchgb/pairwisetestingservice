@@ -7,7 +7,6 @@ import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.PTSInterface;
-import pairwisetesting.engine.TVG;
 import pairwisetesting.exception.EngineException;
 
 public class TVGEngine extends Engine {

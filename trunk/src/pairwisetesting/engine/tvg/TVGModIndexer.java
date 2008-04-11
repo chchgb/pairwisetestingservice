@@ -1,4 +1,4 @@
-package pairwisetesting.engine;
+package pairwisetesting.engine.tvg;
 
 public class TVGModIndexer {
     private int[] currIndex = null;

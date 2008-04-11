@@ -6,7 +6,6 @@ import java.util.Arrays;
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.engine.PICT;
 import pairwisetesting.engine.PTSInterface;
 import pairwisetesting.exception.EngineException;
 

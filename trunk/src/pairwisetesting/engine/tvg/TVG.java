@@ -1,7 +1,9 @@
-package pairwisetesting.engine;
+package pairwisetesting.engine.tvg;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import pairwisetesting.engine.PTSInterface;
 
 
 
