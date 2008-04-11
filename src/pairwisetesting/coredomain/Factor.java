@@ -3,8 +3,9 @@ package pairwisetesting.coredomain;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-///
 public class Factor implements Serializable{
+
+	private static final long serialVersionUID = -4146558040253604753L;
 	private String name = "";
 	private ArrayList<String> levelList = new ArrayList<String>();
 
