@@ -1,4 +1,4 @@
-package pairwisetesting.engine;
+package pairwisetesting.engine.tvg;
 
 import java.util.ArrayList;
 
