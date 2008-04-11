@@ -6,10 +6,7 @@ import java.util.LinkedHashMap;
 
 public class MetaParameter implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2799432989700537225L;
 	private int strength = 2;
 	private LinkedHashMap<String, Factor> factorMap = new LinkedHashMap<String, Factor>();
 	private ArrayList<String> constraints = new ArrayList<String>();

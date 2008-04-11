@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.*;
-
-import pairwisetesting.coredomain.MetaParameter;
 
 public class ObjectSerializ implements Serializable {
 	/**
