@@ -14,7 +14,6 @@ public class PICTEngine extends Engine {
 	@Override
 	protected String[][] generateRawTestData(MetaParameter mp)
 			throws EngineException {
-		// TODO Auto-generated method stub
 		
 		ArrayList<String> iNames = new ArrayList<String>(Arrays.asList(mp.getFactorNames()));
 		

@@ -25,8 +25,12 @@ import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockOAProviderFactory;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
+import pairwisetesting.testcasesgenerator.TXTTestCasesGenerator;
+import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 import pairwisetesting.util.ArrayUtil;
 import pairwisetesting.util.MathUtil;
+import pairwisetesting.util.TextFile;
+import pairwisetesting.xml.MetaParameterXMLSerializer;
 
 public class TestPairwiseTesting extends TestCase {
 	private Factor f1, f2, f3, f4, f5;
@@ -40,7 +44,8 @@ public class TestPairwiseTesting extends TestCase {
 		f2 = new Factor("Browser", new String[] { "IE", "Firefox", "Opera" });
 		f3 = new Factor("Memory", new String[] { "255M", "1G", "2G" });
 		f4 = new Factor("DB", new String[] { "MySQL", "Oracle", "DB2" });
-		f5 = new Factor("Server", new String[] { "WebLogic", "JBoss", "Tomcat", "GlassFish" });
+		f5 = new Factor("Server", new String[] { "WebLogic", "JBoss", "Tomcat",
+				"GlassFish" });
 	}
 
 	public void testFactor() {
@@ -85,16 +90,19 @@ public class TestPairwiseTesting extends TestCase {
 		assertEquals("Windows XP", mp.getLevelOfFactor("OS", 0));
 
 		assertEquals(3, mp.getNumOfFactors());
-		
+
 		assertEquals(3, mp.getMaxNumOfLevels());
 		mp.addFactor(f5);
 		assertEquals(4, mp.getMaxNumOfLevels());
-		
+
 		mp.addConstraint("IF [File system] = \"FAT\" THEN [Size] <= 4096");
-		mp.addConstraint("IF [OS_2] = \"WinXP\" THEN [SKU_2] = \"Professional\"");
-		assertEquals("IF [File system] = \"FAT\" THEN [Size] <= 4096", mp.getConstraints()[0]);
-		assertEquals("IF [OS_2] = \"WinXP\" THEN [SKU_2] = \"Professional\"", mp.getConstraints()[1]);
-		
+		mp
+				.addConstraint("IF [OS_2] = \"WinXP\" THEN [SKU_2] = \"Professional\"");
+		assertEquals("IF [File system] = \"FAT\" THEN [Size] <= 4096", mp
+				.getConstraints()[0]);
+		assertEquals("IF [OS_2] = \"WinXP\" THEN [SKU_2] = \"Professional\"",
+				mp.getConstraints()[1]);
+
 		MetaParameter mp2 = new MetaParameter(3);
 		assertEquals(3, mp2.getStrength());
 
@@ -160,7 +168,7 @@ public class TestPairwiseTesting extends TestCase {
 			fail("Should not throw EngineException" + e);
 		}
 	}
-	
+
 	public void testJennyEngine() throws MetaParameterException {
 		Engine engine = new JennyEngine();
 		IMetaParameterProvider provider = new MockMetaParameterProvider();
@@ -371,7 +379,7 @@ public class TestPairwiseTesting extends TestCase {
 				rawTestData));
 
 	}
-	
+
 	public void testRp_OLS_pu_OAProvider() {
 		OAProvider provider = new Rp_OLS_pu_OAProvider(3);
 
@@ -383,42 +391,23 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
 				rawTestData));
-		
+
 		// L27(3^5)
 		rawTestData = provider.get(5);
-		int[][] expected2 = {
-				{1, 1, 1, 1, 1}, 
-				{1, 1, 2, 2, 2}, 
-				{1, 1, 3, 3, 3}, 
-				{1, 2, 1, 2, 3}, 
-				{1, 2, 2, 3, 1}, 
-				{1, 2, 3, 1, 2}, 
-				{1, 3, 1, 3, 2}, 
-				{1, 3, 2, 1, 3}, 
-				{1, 3, 3, 2, 1}, 
-				{2, 1, 1, 1, 1}, 
-				{2, 1, 2, 2, 2}, 
-				{2, 1, 3, 3, 3}, 
-				{2, 2, 1, 2, 3}, 
-				{2, 2, 2, 3, 1}, 
-				{2, 2, 3, 1, 2}, 
-				{2, 3, 1, 3, 2}, 
-				{2, 3, 2, 1, 3}, 
-				{2, 3, 3, 2, 1}, 
-				{3, 1, 1, 1, 1}, 
-				{3, 1, 2, 2, 2}, 
-				{3, 1, 3, 3, 3}, 
-				{3, 2, 1, 2, 3}, 
-				{3, 2, 2, 3, 1}, 
-				{3, 2, 3, 1, 2}, 
-				{3, 3, 1, 3, 2}, 
-				{3, 3, 2, 1, 3}, 
-				{3, 3, 3, 2, 1}
-				};
+		int[][] expected2 = { { 1, 1, 1, 1, 1 }, { 1, 1, 2, 2, 2 },
+				{ 1, 1, 3, 3, 3 }, { 1, 2, 1, 2, 3 }, { 1, 2, 2, 3, 1 },
+				{ 1, 2, 3, 1, 2 }, { 1, 3, 1, 3, 2 }, { 1, 3, 2, 1, 3 },
+				{ 1, 3, 3, 2, 1 }, { 2, 1, 1, 1, 1 }, { 2, 1, 2, 2, 2 },
+				{ 2, 1, 3, 3, 3 }, { 2, 2, 1, 2, 3 }, { 2, 2, 2, 3, 1 },
+				{ 2, 2, 3, 1, 2 }, { 2, 3, 1, 3, 2 }, { 2, 3, 2, 1, 3 },
+				{ 2, 3, 3, 2, 1 }, { 3, 1, 1, 1, 1 }, { 3, 1, 2, 2, 2 },
+				{ 3, 1, 3, 3, 3 }, { 3, 2, 1, 2, 3 }, { 3, 2, 2, 3, 1 },
+				{ 3, 2, 3, 1, 2 }, { 3, 3, 1, 3, 2 }, { 3, 3, 2, 1, 3 },
+				{ 3, 3, 3, 2, 1 } };
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				rawTestData));
-		
+
 		provider = new Rp_OLS_pu_OAProvider(5);
 		// L25(5^6)
 		rawTestData = provider.get(6);
@@ -438,37 +427,35 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
 				rawTestData));
-		
+
 		provider = new Rp_OLS_pu_OAProvider(2);
 		// L8(2^4)
 		rawTestData = provider.get(4);
-		int[][] expected4 = { 
-			{1, 1, 1, 1},
-			{1, 1, 2, 2},
-			{1, 2, 1, 2},
-			{1, 2, 2, 1}, 
-			{2, 1, 1, 1},
-			{2, 1, 2, 2},
-			{2, 2, 1, 2},
-			{2, 2, 2, 1}
-		};
+		int[][] expected4 = { { 1, 1, 1, 1 }, { 1, 1, 2, 2 }, { 1, 2, 1, 2 },
+				{ 1, 2, 2, 1 }, { 2, 1, 1, 1 }, { 2, 1, 2, 2 }, { 2, 2, 1, 2 },
+				{ 2, 2, 2, 1 } };
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
 				rawTestData));
 	}
-	
+
 	public void testOAProviderFactory() {
 		OAProviderFactory factory = new OAProviderFactory();
-		assertTrue("It should create H_2s_OAProvider object", factory.create(2, 3) instanceof H_2s_OAProvider);
-		assertTrue("It should create Rp_OLS_p2_OAProvider object", factory.create(3, 4) instanceof Rp_OLS_p2_OAProvider);
-		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(2, 4) instanceof Rp_OLS_pu_OAProvider);
-		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory.create(3, 5) instanceof Rp_OLS_pu_OAProvider);
+		assertTrue("It should create H_2s_OAProvider object", factory.create(2,
+				3) instanceof H_2s_OAProvider);
+		assertTrue("It should create Rp_OLS_p2_OAProvider object", factory
+				.create(3, 4) instanceof Rp_OLS_p2_OAProvider);
+		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory
+				.create(2, 4) instanceof Rp_OLS_pu_OAProvider);
+		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory
+				.create(3, 5) instanceof Rp_OLS_pu_OAProvider);
 	}
 
 	public void testAMEngine() throws EngineException {
 		Engine engine = new AMEngine(new MockOAProviderFactory());
-		String[][] testData = engine.generateTestData(new MockMetaParameterProvider().get());
-		
+		String[][] testData = engine
+				.generateTestData(new MockMetaParameterProvider().get());
+
 		String[][] expected = { { "Windows XP", "IE", "255M", "MySQL" },
 				{ "Windows XP", "Firefox", "1G", "Oracle" },
 				{ "Windows XP", "Opera", "2G", "DB2" },
@@ -481,7 +468,7 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
 				testData));
-		
+
 		engine = new AMEngine();
 		//
 		// AMEngine with H_2s_OAProvider
@@ -520,7 +507,7 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
 				testData));
-		
+
 		//
 		// AMEngine with Rp_OLS_p2_OAProvider
 		//
@@ -538,20 +525,20 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				testData));
-		
+
 		// with missing values
 		f1 = new Factor("OS");
 		f1.addLevel("Windows XP");
 		f1.addLevel("Solaris 10");
-		f2 = new Factor("Browser", new String[] { "IE", "Firefox"});
-		f3 = new Factor("Memory", new String[] {"255M", "1G", "2G"});
-		f4 = new Factor("DB", new String[] {"MySQL", "Oracle"});
+		f2 = new Factor("Browser", new String[] { "IE", "Firefox" });
+		f3 = new Factor("Memory", new String[] { "255M", "1G", "2G" });
+		f4 = new Factor("DB", new String[] { "MySQL", "Oracle" });
 		mp = new MetaParameter(2);
 		mp.addFactor(f1);
 		mp.addFactor(f2);
 		mp.addFactor(f3);
 		mp.addFactor(f4);
-		
+
 		testData = engine.generateTestData(mp);
 		String[][] expected3 = { { "Windows XP", "IE", "255M", "MySQL" },
 				{ "Windows XP", "Firefox", "1G", "Oracle" },
@@ -565,16 +552,16 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
 				testData));
-		
+
 		//
 		// AMEngine with Rp_OLS_pu_OAProvider
 		//
 		f1 = new Factor("OS");
 		f1.addLevel("Windows XP");
 		f1.addLevel("Solaris 10");
-		f2 = new Factor("Browser", new String[] { "IE", "Firefox"});
-		f3 = new Factor("Memory", new String[] {"255M", "1G"});
-		f4 = new Factor("DB", new String[] {"MySQL", "Oracle"});
+		f2 = new Factor("Browser", new String[] { "IE", "Firefox" });
+		f3 = new Factor("Memory", new String[] { "255M", "1G" });
+		f4 = new Factor("DB", new String[] { "MySQL", "Oracle" });
 		mp = new MetaParameter(2);
 		mp.addFactor(f1);
 		mp.addFactor(f2);
@@ -582,29 +569,27 @@ public class TestPairwiseTesting extends TestCase {
 		mp.addFactor(f4);
 
 		testData = engine.generateTestData(mp);
-		String[][] expected4 = {
-			{"Windows XP", "IE", "255M", "MySQL"},
-			{"Windows XP", "IE", "1G", "Oracle"},
-			{"Windows XP", "Firefox", "255M", "Oracle"},
-			{"Windows XP", "Firefox", "1G", "MySQL"}, 
-			{"Solaris 10", "IE", "255M", "MySQL"},
-			{"Solaris 10", "IE", "1G", "Oracle"},
-			{"Solaris 10", "Firefox", "255M", "Oracle"},
-			{"Solaris 10", "Firefox", "1G", "MySQL"}
-		};
+		String[][] expected4 = { { "Windows XP", "IE", "255M", "MySQL" },
+				{ "Windows XP", "IE", "1G", "Oracle" },
+				{ "Windows XP", "Firefox", "255M", "Oracle" },
+				{ "Windows XP", "Firefox", "1G", "MySQL" },
+				{ "Solaris 10", "IE", "255M", "MySQL" },
+				{ "Solaris 10", "IE", "1G", "Oracle" },
+				{ "Solaris 10", "Firefox", "255M", "Oracle" },
+				{ "Solaris 10", "Firefox", "1G", "MySQL" } };
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
 				testData));
-		
+
 	}
-	
+
 	public void testUtil() {
 		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(1));
 		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(3));
 		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(7));
 		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(63));
 		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(255));
-		
+
 		assertTrue("It should be a prime", MathUtil.isPrime(2));
 		assertTrue("It should be a prime", MathUtil.isPrime(7));
 		assertTrue("It should be a prime", MathUtil.isPrime(17));
@@ -612,46 +597,194 @@ public class TestPairwiseTesting extends TestCase {
 		assertFalse("It should not be a prime", MathUtil.isPrime(4));
 		assertFalse("It should not be a prime", MathUtil.isPrime(6));
 		assertFalse("It should not be a prime", MathUtil.isPrime(10));
+
+		String[][] expected = new String[][] { { "1", "2", "3" },
+				{ "4", "5", "6" } };
+		int[][] testArray = new int[][] { { 1, 2, 3 }, { 4, 5, 6 } };
+		assertTrue("They should be equal", Arrays.deepEquals(expected,
+				ArrayUtil.int2DArrayToString2DArray(testArray)));
 		
-		String[][] expected = new String[][] {{"1", "2", "3"}, {"4", "5", "6"}};
-		int[][] testArray = new int[][] {{1, 2, 3}, {4, 5, 6}};
-		assertTrue("They should be equal", Arrays.deepEquals(expected, ArrayUtil.int2DArrayToString2DArray(testArray)));
+		String text = TextFile.read("testdata/data1.txt");
+		assertEquals("This is a string.\n", text);
 	}
-	
+
 	public void testMetaParameterProvider() throws MetaParameterException {
-		MetaParameter expected = new MockMetaParameterProvider().get();
-		String xmlData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+		String xmlData = "<?xml version='1.0' encoding='UTF-8'?>" +
 				"<metaparameter>" +
 				"	<strength>2</strength>" +
 				"	<factor>" +
-				"	<name>OS</name>" +
-				"	<level>Windows XP</level>" +
-				"	<level>Solaris 10</level>" +
-				"	<level>Red Hat 9</level>" +
+				"		<name>OS</name>" +
+				"		<level>Windows XP</level>" +
+				"		<level>Solaris 10</level>" +
+				"		<level>Red Hat 9</level>" +
 				"	</factor>" +
 				"	<factor>" +
-				"	<name>Browser</name>" +
-				"	<level>IE</level>" +
-				"	<level>Firefox</level>" +
-				"	<level>Opera</level>" +
+				"		<name>Browser</name>" +
+				"		<level>IE</level>" +
+				"		<level>Firefox</level>" +
+				"		<level>Opera</level>" +
 				"	</factor>" +
 				"	<factor>" +
-				"	<name>Memory</name>" +
-				"	<level>255M</level>" +
-				"	<level>1G</level>" +
-				"	<level>2G</level>" +
+				"		<name>Memory</name>" +
+				"		<level>255M</level>" +
+				"		<level>1G</level>" +
+				"		<level>2G</level>" +
 				"	</factor>" +
 				"	<factor>" +
-				"	<name>DB</name>" +
-				"	<level>MySQL</level>" +
-				"	<level>Oracle</level>" +
-				"	<level>DB2</level>" +
+				"		<name>DB</name>" +
+				"		<level>MySQL</level>" +
+				"		<level>Oracle</level>" +
+				"		<level>DB2</level>" +
 				"	</factor>" +
 				"</metaparameter>";
-		MetaParameter mp = new XMLMetaParameterProvider(xmlData).get();
-		// System.out.println(Arrays.toString(mp.getFactors()));
+		IMetaParameterProvider provider = new XMLMetaParameterProvider(xmlData);
+		MetaParameter mp = provider.get();
+		MetaParameter expected = new MockMetaParameterProvider().get();
+		// System.out.println(mp);
 		assertEquals(expected, mp);
+		
+		String dataFile = "testdata/MetaParameter.xml";
+		provider = new XMLMetaParameterProvider(TextFile.read(dataFile));
+		mp = provider.get();
+		// System.out.println(mp);
+		assertEquals(expected, mp);
+		
+		// Invalid XML
+		for (int i = 1; i <= 3; i++) {
+			try {
+				dataFile = "testdata/InvalidMetaParameter" + i + ".xml";
+				provider = new XMLMetaParameterProvider(TextFile.read(dataFile));
+				mp = provider.get();
+				fail(dataFile + ": Should throw MetaParameterException");
+			} catch (MetaParameterException e) {
+				;
+			}
+		}
 	}
+	
+	public void testMetaParameterXMLSerializer() throws MetaParameterException {
+		MetaParameter mp = new MockMetaParameterProvider().get();
+		
+		MetaParameterXMLSerializer serializer = new MetaParameterXMLSerializer();
+		// System.out.println(serializer.serialize(mp));
+		IMetaParameterProvider provider = new XMLMetaParameterProvider(serializer.serialize(mp));
+		
+		MetaParameter mp2 = provider.get();
+		assertEquals(mp, mp2);
+		
+		// Escape special characters
+		mp = new MetaParameter();
+		Factor f = new Factor("<&OS&>", new String[] {"Windows", "Linux"});
+		Factor f2 = new Factor("DB", new String[] {"<=MySQL=>", ">=DB2<="});
+		mp.addFactor(f);
+		mp.addFactor(f2);
+		mp.addConstraint("IF [File system] = \"FAT\" THEN [Size] <= 4096");
+		String xmlData = serializer.serialize(mp);
+		String expected = "<?xml version=\"1.0\"?>\n" + 
+		"<metaparameter>" +
+		"<strength>2</strength>" +
+		"<factor><name>&lt;&amp;OS&amp;&gt;</name>" +
+		"<level>Windows</level>" +
+		"<level>Linux</level>" +
+		"</factor>" +
+		"<factor><name>DB</name>" +
+		"<level>&lt;=MySQL=&gt;</level>" +
+		"<level>&gt;=DB2&lt;=</level>" +
+		"</factor>" +
+		"<constraint>IF [File system] = \"FAT\" THEN [Size] &lt;= 4096</constraint>" + 
+		"</metaparameter>\n";
+		assertEquals(expected, xmlData);
+		provider = new XMLMetaParameterProvider(xmlData);
+		mp2 = provider.get();
+		assertEquals(mp, mp2);
+	}
+	
+	public void testTestCasesGenerator() throws EngineException {
+		ITestCasesGenerator generator = new TXTTestCasesGenerator();
+		MetaParameter mp = new MockMetaParameterProvider().get();
+		String[][] testData = new MockOAEngine().generateTestData(mp);
+		String testCases = generator.generate(mp, testData);
+		String expectedTestCases = "OS	Browser	Memory	DB\n"
+			+ "Windows XP	IE	255M	MySQL\n"
+			+ "Windows XP	Firefox	1G	Oracle\n"
+			+ "Windows XP	Opera	2G	DB2\n"
+			+ "Solaris 10	IE	1G	DB2\n"
+			+ "Solaris 10	Firefox	2G	MySQL\n"
+			+ "Solaris 10	Opera	255M	Oracle\n"
+			+ "Red Hat 9	IE	2G	Oracle\n"
+			+ "Red Hat 9	Firefox	255M	DB2\n"
+			+ "Red Hat 9	Opera	1G	MySQL\n";
+		// System.out.println(testCases);
+		assertEquals(expectedTestCases, testCases);
+		
+		generator = new XMLTestCasesGenerator();
+		testCases = generator.generate(mp, testData);
+		
+		String expectedTestCases2 = "<?xml version=\"1.0\"?>\n" +
+				"<testcases>" +
+				"<factor>OS</factor>" +
+				"<factor>Browser</factor>" +
+				"<factor>Memory</factor>" +
+				"<factor>DB</factor>" +
+				"<run>" +
+				"<level>Windows XP</level>" +
+				"<level>IE</level>" +
+				"<level>255M</level>" +
+				"<level>MySQL</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Windows XP</level>" +
+				"<level>Firefox</level>" +
+				"<level>1G</level>" +
+				"<level>Oracle</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Windows XP</level>" +
+				"<level>Opera</level>" +
+				"<level>2G</level>" +
+				"<level>DB2</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Solaris 10</level>" +
+				"<level>IE</level>" +
+				"<level>1G</level>" +
+				"<level>DB2</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Solaris 10</level>" +
+				"<level>Firefox</level>" +
+				"<level>2G</level>" +
+				"<level>MySQL</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Solaris 10</level>" +
+				"<level>Opera</level>" +
+				"<level>255M</level>" +
+				"<level>Oracle</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>" + "Red Hat 9</level>" +
+				"<level>IE</level>" +
+				"<level>2G</level>" +
+				"<level>Oracle</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Red Hat 9</level>" +
+				"<level>Firefox</level>" +
+				"<level>255M</level>" +
+				"<level>DB2</level>" +
+				"</run>" +
+				"<run>" +
+				"<level>Red Hat 9</level>" +
+				"<level>Opera</level>" +
+				"<level>1G</level>" +
+				"<level>MySQL</level>" +
+				"</run>" +
+				"</testcases>\n";
+		// System.out.println(testCases);
+		assertEquals(expectedTestCases2, testCases);
+	}
+
 	
 	protected void tearDown() throws Exception {
 		super.tearDown();

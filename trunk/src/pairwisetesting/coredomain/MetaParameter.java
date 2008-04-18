@@ -80,4 +80,13 @@ public class MetaParameter implements Serializable{
 		MetaParameter mp = (MetaParameter) other;
 		return (strength == mp.strength) && (factorMap.equals(mp.factorMap));
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder res = new StringBuilder();
+		res.append("Strength: " + this.getStrength()).append("\n");
+		res.append("Factors: " + this.factorMap.values()).append("\n");
+		res.append("Constraints: " + this.constraints);
+		return res.toString();
+	}
 }

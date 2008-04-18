@@ -67,7 +67,6 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 				testCases = generator.generate(mp, result);
 				
 			} catch (EngineException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

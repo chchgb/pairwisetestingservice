@@ -6,4 +6,8 @@ public class EngineException extends Exception {
 	public EngineException(String msg) {
 		super(msg);
 	}
+	
+	public EngineException(Exception e) {
+		super(e);
+	}
 }
