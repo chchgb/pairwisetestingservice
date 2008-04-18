@@ -24,8 +24,7 @@ public class OATestDataTransformer implements ITestDataTransformer {
 					testData[rowIndex][columnIndex] = factor.getLevel(nextIndexForEmpty);
 					// next index of the level to fill the missing value
 					nextIndexForEmpty = (nextIndexForEmpty + 1) % factor.getNumOfLevels();
-				}
-					
+				}					
 			}
 		}
 		return testData;

@@ -66,7 +66,10 @@ public class Factor implements Serializable {
 	
 	@Override
 	public String toString() {
-		return this.name + " " + this.levelList;
+		StringBuilder res = new StringBuilder();
+		res.append("Name: " + this.getName()).append(" ");
+		res.append("Levels: " + this.levelList);
+		return res.toString();
 	}
 
 }
