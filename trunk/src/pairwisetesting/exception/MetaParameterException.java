@@ -6,4 +6,8 @@ public class MetaParameterException extends Exception {
 	public MetaParameterException(String msg) {
 		super(msg);
 	}
+	
+	public MetaParameterException(Exception e) {
+		super(e);
+	}
 }

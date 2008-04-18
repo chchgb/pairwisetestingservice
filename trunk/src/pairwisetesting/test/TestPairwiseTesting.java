@@ -20,6 +20,7 @@ import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.exception.EngineException;
 import pairwisetesting.exception.MetaParameterException;
+import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockOAProviderFactory;
@@ -615,6 +616,41 @@ public class TestPairwiseTesting extends TestCase {
 		String[][] expected = new String[][] {{"1", "2", "3"}, {"4", "5", "6"}};
 		int[][] testArray = new int[][] {{1, 2, 3}, {4, 5, 6}};
 		assertTrue("They should be equal", Arrays.deepEquals(expected, ArrayUtil.int2DArrayToString2DArray(testArray)));
+	}
+	
+	public void testMetaParameterProvider() throws MetaParameterException {
+		MetaParameter expected = new MockMetaParameterProvider().get();
+		String xmlData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+				"<metaparameter>" +
+				"	<strength>2</strength>" +
+				"	<factor>" +
+				"	<name>OS</name>" +
+				"	<level>Windows XP</level>" +
+				"	<level>Solaris 10</level>" +
+				"	<level>Red Hat 9</level>" +
+				"	</factor>" +
+				"	<factor>" +
+				"	<name>Browser</name>" +
+				"	<level>IE</level>" +
+				"	<level>Firefox</level>" +
+				"	<level>Opera</level>" +
+				"	</factor>" +
+				"	<factor>" +
+				"	<name>Memory</name>" +
+				"	<level>255M</level>" +
+				"	<level>1G</level>" +
+				"	<level>2G</level>" +
+				"	</factor>" +
+				"	<factor>" +
+				"	<name>DB</name>" +
+				"	<level>MySQL</level>" +
+				"	<level>Oracle</level>" +
+				"	<level>DB2</level>" +
+				"	</factor>" +
+				"</metaparameter>";
+		MetaParameter mp = new XMLMetaParameterProvider(xmlData).get();
+		// System.out.println(Arrays.toString(mp.getFactors()));
+		assertEquals(expected, mp);
 	}
 	
 	protected void tearDown() throws Exception {
