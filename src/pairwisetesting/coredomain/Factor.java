@@ -3,14 +3,20 @@ package pairwisetesting.coredomain;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Factor implements Serializable{
+public class Factor implements Serializable {
 
 	private static final long serialVersionUID = -4146558040253604753L;
+
 	private String name = "";
+
 	private ArrayList<String> levelList = new ArrayList<String>();
 
 	public Factor(String name) {
 		this.name = name;
+	}
+
+	public Factor() {
+
 	}
 
 	public Factor(String name, String[] levels) {
@@ -22,6 +28,10 @@ public class Factor implements Serializable{
 
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void addLevel(String level) {
@@ -39,8 +49,8 @@ public class Factor implements Serializable{
 	public String[] getLevels() {
 		return levelList.toArray(new String[0]);
 	}
-	
-	public ArrayList<String> getLevelList(){
+
+	public ArrayList<String> getLevelList() {
 		return levelList;
 	}
 
@@ -52,6 +62,11 @@ public class Factor implements Serializable{
 			return false;
 		Factor f = (Factor) other;
 		return (name.equals(f.name) && (levelList.equals(f.levelList)));
+	}
+	
+	@Override
+	public String toString() {
+		return this.name + " " + this.levelList;
 	}
 
 }
