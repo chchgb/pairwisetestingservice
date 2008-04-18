@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metaparameter>
+	<strength>-2</strength>
+	<factor>
+		<name>OS</name>
+		<level>Windows XP</level>
+		<level>Solaris 10</level>
+		<level>Red Hat 9</level>
+	</factor>
+	<factor>
+		<name>Browser</name>
+		<level>IE</level>
+		<level>Firefox</level>
+		<level>Opera</level>
+	</factor>
+	<factor>
+		<name>Memory</name>
+		<level>255M</level>
+		<level>1G</level>
+		<level>2G</level>
+	</factor>
+	<factor>
+		<name>DB</name>
+		<level>MySQL</level>
+		<level>Oracle</level>
+		<level>DB2</level>
+	</factor>
+</metaparameter>

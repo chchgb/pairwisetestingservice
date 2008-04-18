@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metaparameter>
+	<strength>2</strength>
+	<factor>
+		<name>OS</name>
+		<level>Windows XP</level>
+		<level>Solaris 10</level>
+		<level>Red Hat 9</level>
+	</factor>
+</metaparameter>

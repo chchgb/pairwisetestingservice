@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema targetNamespace="" 
+	xmlns="" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified">
+  <xsd:element name="metaparameter" type="metaparameter"/>
+  <xsd:complexType name="metaparameter">
+    <xsd:sequence>
+      <xsd:element name="strength" type="xsd:positiveInteger"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="2" name="factor" type="factor"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="constraint" type="xsd:token"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="factor">
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:token"/>
+      <xsd:element maxOccurs="unbounded" minOccurs="2" name="level" type="xsd:token"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
