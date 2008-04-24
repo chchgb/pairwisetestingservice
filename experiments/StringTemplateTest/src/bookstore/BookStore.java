@@ -5,6 +5,32 @@ import java.util.HashMap;
 import com.google.common.collect.Maps;
 
 public class BookStore {
+	
+	private String name;
+	private int milesAway;
+	private double result;
+	
+	public BookStore(String name, int milesAway) {
+		this.name = name;
+		this.milesAway = milesAway;
+	}
+	
+	public BookStore() {
+		
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getMilesAway() {
+		return this.milesAway;
+	}
+	
+	public double getDiscountedPrice() {
+		return result;
+	}
+	
 	public double computeDiscountedPrice(int level, AccountType accountType, String coupon) {
 		double fixedPrice = 100;
 		HashMap<Integer, Integer> levelMap = Maps.newHashMap();
@@ -35,7 +61,7 @@ public class BookStore {
 //			 }
 			break;
 		}
-
+		this.result = discountedPrice;
 		return discountedPrice;
 	}
 }

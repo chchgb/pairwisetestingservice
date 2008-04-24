@@ -6,4 +6,15 @@ public class Range {
 		else
 			return false;
 	}
+	
+	private Range() {
+		
+	}
+	
+	public static Range getInstance() {
+		return range;
+	}
+	
+	public static Range range = new Range();
+	
 }

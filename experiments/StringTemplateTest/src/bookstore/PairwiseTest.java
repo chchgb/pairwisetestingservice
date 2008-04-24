@@ -16,8 +16,10 @@ import util.Converter;
 
 public class PairwiseTest {
 	@Test(dataProvider = "PairwiseTestingDataProvider")
-	public void testcomputeDiscountedPrice(int level, AccountType accountType, String coupon) {
-		Assert.assertEquals(new BookStore().computeDiscountedPrice(level, accountType, coupon), Converter.convertTo(Expectation.getExpectedResult("bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
+	public void testComputeDiscountedPrice(int level, AccountType accountType, String coupon) {
+		BookStore bookStore = new BookStore(Converter.convertTo("DangDang", String.class), Converter.convertTo("100", int.class));
+		bookStore.computeDiscountedPrice(level, accountType, coupon);
+		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
 	}
 
 	@DataProvider(name = "PairwiseTestingDataProvider")

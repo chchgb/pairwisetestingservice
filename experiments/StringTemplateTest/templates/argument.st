@@ -1,1 +1,1 @@
-$it.type$ $it.name$
+Converter.convertTo("$it.value$", $it.type$.class)
