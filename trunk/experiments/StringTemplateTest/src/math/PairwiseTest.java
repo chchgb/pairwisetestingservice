@@ -18,7 +18,7 @@ import java.io.*;
 
 public class PairwiseTest {
 	@Test(dataProvider = "PairwiseTestingDataProvider")
-	public void testisBetween(int n, int lower, int upper) {
+	public void testIsBetween(int n, int lower, int upper) {
 		Assert.assertEquals(Range.isBetween(n, lower, upper), Converter.convertTo(Expectation.getExpectedResult("math.Range.isBetween_" + n + "_" + lower + "_" + upper), boolean.class));
 	}
 

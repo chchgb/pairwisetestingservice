@@ -17,8 +17,14 @@ $imports: {import $it$;}; separator="\n"$
 
 public class PairwiseTest {
 	@Test(dataProvider = "$dataProviderName; null="PairwiseTestingDataProvider"$")
-	public void test$methodUnderTest; format="capitalize"$($args:argument(); separator=", "$) {
-		Assert.assertEquals($invoker()$.$methodUnderTest$($args: {$it.name$}; separator=", "$), Converter.convertTo(Expectation.getExpectedResult("$packageName$.$classUnderTest$.$methodUnderTest$_" + $args: {$it.name$}; separator=" + \"_\" + "$), $returnType$.class)$delta()$);
+	public void test$methodUnderTest; format="capitalize"$($params:parameter(); separator=", "$) {
+		$if(checkStateMethod)$
+		$classUnderTest$ $classUnderTest; format="camelize"$ = new $classUnderTest$($constructorArgs: argument(); separator=", "$);
+		$classUnderTest; format="camelize"$.$methodUnderTest$($params: {$it.name$}; separator=", "$);
+		Assert.assertEquals($classUnderTest; format="camelize"$.$checkStateMethod$(), $expected()$);
+		$else$
+		Assert.assertEquals($invoker()$.$methodUnderTest$($params: {$it.name$}; separator=", "$), $expected()$);
+		$endif$
 	}
 
 	@DataProvider(name = "$dataProviderName; null="PairwiseTestingDataProvider"$")
@@ -44,7 +50,7 @@ public class PairwiseTest {
                 Object[][] testDataObjects = new Object[testData.length][testData[0].length];
                 for (int i = 0; i < testData.length; i++) {
                         String[] row = testData[i];
-                        $args: {testDataObjects[i][$i0$] = Converter.convertTo(row[$i0$], $it.type$.class);}; separator="\n"$
+                        $params: {testDataObjects[i][$i0$] = Converter.convertTo(row[$i0$], $it.type$.class);}; separator="\n"$
                 }
                 return testDataObjects;
 	}
