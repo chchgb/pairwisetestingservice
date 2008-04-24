@@ -1,0 +1,1 @@
+$if(isStaticMethod)$$classUnderTest$$else$new $classUnderTest$()$endif$

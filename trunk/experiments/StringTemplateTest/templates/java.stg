@@ -1,0 +1,19 @@
+group Java;
+
+class(name,fields,methods) ::= <<
+class <name> {
+  <fields:field(); separator="\n">
+  <methods:method(); separator="\n">
+}
+>>
+
+field() ::= "public <type(t=it.type)> <it.name>;"
+
+method() ::= <<
+public <it.returnType> <it.name>(<it.parameterTypes:{<type(t=it)> arg<i>}; separator=", ">);
+>>
+
+type(t) ::= <<
+<if(t.componentType)><t.componentType>[]
+<else><t.name><endif>
+>>
