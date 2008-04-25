@@ -1,4 +1,8 @@
 package util;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import bookstore.AccountType;
 
 
@@ -48,14 +52,28 @@ public class Converter {
 		return Enum.valueOf(enumType, input);
 	}
 	
+	public static Date convertTo(String input, Class<Date> dateType) {
+		Date date = null;
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			date = dateFormat.parse(input);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return date;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println(Converter.convertTo("345", int.class));
 		System.out.println(Converter.convertTo("345", long.class));
 		System.out.println(Converter.convertTo("345.7f", float.class));
 		System.out.println(Converter.convertTo("345.88", double.class));
-		System.out.println(Converter.convertTo("STUDENT", AccountType.class));
+		System.out.println(Converter.convertTo("A", Character.class));
+		System.out.println(Converter.convertTo("STUDENT", AccountType.class).getClass());
 		System.out.println(Converter.convertTo("Name", String.class));
 		System.out.println(Converter.convertTo("True", Boolean.class));
+		System.out.println(Converter.convertTo("2008-4-25", Date.class).getClass());
 	}
 }
 
