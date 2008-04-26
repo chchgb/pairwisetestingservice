@@ -1,49 +1,37 @@
 package pairwisetesting;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.IMetaParameterProvider;
 import pairwisetesting.coredomain.ITestCasesGenerator;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.engine.tvg.TVGEngine;
 import pairwisetesting.exception.EngineException;
+import pairwisetesting.exception.MetaParameterException;
+import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
 
 public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 	
 	public String PariwiseTesting(String inputMetaParameter,String engineName) {
+
 		
-		
-		
-		/*
 		Engine engine = null;
 		
+		//MetaParameter mp = (MetaParameter)ObjectSerializ.String2Object(inputMetaParameter);
+		
+		
+		
+		IMetaParameterProvider provider = new XMLMetaParameterProvider(inputMetaParameter);
+		
+		MetaParameter mp = null;
 		try {
-			pts = (PTSInterface) Class.forName("pts." + engine).newInstance();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			mp = provider.get();
+		} catch (MetaParameterException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
-		if(pts != null){
-			pts.initEngine(inputNamesList, dataValues, nWay);
-			boolean result = pts.startAlgorithm();
-			ArrayList<String>  temp = pts.getOutputList();
-			if(result == true){
-				return ArrayListSerializ.ArrayList2String(temp);
-			}else{
-				return null;
-			}			
-		}else{
-			return null;
-		}
-		*/
-		
-		Engine engine = null;
-		
-		MetaParameter mp = (MetaParameter)ObjectSerializ.String2Object(inputMetaParameter);
 		
 		System.out.print("Strength : "+ mp.getStrength());
 		System.out.println();
@@ -57,6 +45,7 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 			System.out.println("Engine none select!!");
 			return null;
 		}
+		
 		
 		ITestCasesGenerator generator = new MockTestCasesGenerator();
 		String testCases = null;
@@ -78,7 +67,8 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 		
 		
 		
-		return testCases;
+		return testCases;	
+		
 	}
 	
 }
