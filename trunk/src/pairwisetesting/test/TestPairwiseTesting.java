@@ -895,7 +895,7 @@ public class TestPairwiseTesting extends TestCase {
 		te.setPairwiseTestCasesXmlData(pairwiseTestCasesXmlData);
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		
-		System.out.println(te.generateTestNGTestCase());
+		// System.out.println(te.generateTestNGTestCase());
 		assertNotNull(te.generateTestNGTestCase());
 		
 	}
