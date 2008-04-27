@@ -15,7 +15,6 @@ public class FirstCharRenderer implements AttributeRenderer {
         }
     }
 
-	@Override
 	public String toString(Object o) {
 		return o.toString();
 	}
