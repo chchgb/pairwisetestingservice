@@ -20,8 +20,10 @@ import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.exception.EngineException;
 import pairwisetesting.exception.MetaParameterException;
+import pairwisetesting.execution.TestCaseTemplateEngine;
 import pairwisetesting.execution.TestCaseTemplateParameter;
 import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
+import pairwisetesting.test.bookstore.AccountType;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockOAProviderFactory;
@@ -800,6 +802,7 @@ public class TestPairwiseTesting extends TestCase {
 		tp.addConstructorArgument("String", "Tom");
 		tp.setSingletonMethod("getInstance");
 		tp.setCheckStateMethod("getComputeResult");
+		tp.setDelta(0.2);
 		
 		assertTrue(tp.isSingleton());
 		assertTrue(tp.isStaticMethod());
@@ -807,12 +810,94 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue(tp.hasConstructorArguments());
 		assertEquals(2, tp.getConstructorArguments().length);
 		assertEquals(3, tp.getMethodParameters().length);
+		assertTrue(tp.hasDelta());
 		// System.out.println(tp.toXML());
 		assertNotNull(tp.toXML());
 		
 		TestCaseTemplateParameter tp2 = new TestCaseTemplateParameter(tp.toXML());
 		// System.out.println(tp2.toXML());
 		assertEquals(tp, tp2);
+		
+		String pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
+            + "<testcases>"
+            + "<factor>Level</factor>"
+            + "<factor>AccountType</factor><"
+            + "factor>Coupon</factor>"
+            + "<run><level>1</level><level>NORMAL</level><level>C001</level></run>"
+            + "<run><level>1</level><level>STUDENT</level><level>C002</level></run>"
+            + "<run><level>1</level><level>INTERNAL</level><level>C003</level></run>"
+            + "<run><level>2</level><level>NORMAL</level><level>C002</level></run>"
+            + "<run><level>2</level><level>STUDENT</level><level>C003</level></run>"
+            + "<run><level>2</level><level>INTERNAL</level><level>C001</level></run>"
+            + "<run><level>3</level><level>NORMAL</level><level>C003</level></run>"
+            + "<run><level>3</level><level>STUDENT</level><level>C001</level></run>"
+            + "<run><level>3</level><level>INTERNAL</level><level>C002</level></run>"
+            + "</testcases>";
+		TestCaseTemplateEngine te = new TestCaseTemplateEngine();
+		te.setTemplateDir("templates");
+		te.setPairwiseTestCasesXmlData(pairwiseTestCasesXmlData);
+		te.setTestCaseTemplateParameterXmlData(tp.toXML());
+		// System.out.println(te.generateTestNGTestCase());
+		assertNotNull(te.generateTestNGTestCase());
+		
+		
+		pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
+            + "<testcases>"
+            + "<factor>n</factor>"
+            + "<factor>lower</factor><"
+            + "factor>upper</factor>"
+            + "<run><level>3</level><level>1</level><level>4</level></run>"
+            + "<run><level>3</level><level>3</level><level>4</level></run>"
+            + "<run><level>4</level><level>3</level><level>4</level></run>"
+            + "</testcases>";
+		tp = new TestCaseTemplateParameter();
+		tp.setPackageName("pairwisetesting.test.math");
+		tp.setClassUnderTest("Range");
+		tp.setMethodUnderTest("isBetween");
+		// tp.setStaticMethod(true);
+		tp.addMethodParameter("int", "n");
+		tp.addMethodParameter("int", "lower");
+		tp.addMethodParameter("int", "upper");
+		tp.setSingletonMethod("getInstance");
+		tp.setReturnType("boolean");
+		
+		te.setPairwiseTestCasesXmlData(pairwiseTestCasesXmlData);
+		te.setTestCaseTemplateParameterXmlData(tp.toXML());
+		
+		assertNotNull(te.generateTestNGTestCase());
+		
+		pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
+            + "<testcases>"
+            + "<factor>Level</factor>"
+            + "<factor>AccountType</factor><"
+            + "factor>Coupon</factor>"
+            + "<run><level>1</level><level>NORMAL</level><level>C001</level></run>"
+            + "<run><level>1</level><level>STUDENT</level><level>C002</level></run>"
+            + "<run><level>1</level><level>INTERNAL</level><level>C003</level></run>"
+            + "<run><level>2</level><level>NORMAL</level><level>C002</level></run>"
+            + "<run><level>2</level><level>STUDENT</level><level>C003</level></run>"
+            + "<run><level>2</level><level>INTERNAL</level><level>C001</level></run>"
+            + "<run><level>3</level><level>NORMAL</level><level>C003</level></run>"
+            + "<run><level>3</level><level>STUDENT</level><level>C001</level></run>"
+            + "<run><level>3</level><level>INTERNAL</level><level>C002</level></run>"
+            + "</testcases>";
+		
+		tp = new TestCaseTemplateParameter();
+		tp.setPackageName("pairwisetesting.test.bookstore");
+		tp.setClassUnderTest("BookStore");
+		tp.setMethodUnderTest("computeDiscountedPrice");
+		tp.addMethodParameter("int", "level");
+		tp.addMethodParameter("AccountType", "accountType");
+		tp.addMethodParameter("String", "coupon");
+		tp.setReturnType("double");
+		tp.setCheckStateMethod("getDiscountedPrice");
+		tp.setDelta(0.001);
+		te.setPairwiseTestCasesXmlData(pairwiseTestCasesXmlData);
+		te.setTestCaseTemplateParameterXmlData(tp.toXML());
+		
+		System.out.println(te.generateTestNGTestCase());
+		assertNotNull(te.generateTestNGTestCase());
+		
 	}
 	
 	protected void tearDown() throws Exception {

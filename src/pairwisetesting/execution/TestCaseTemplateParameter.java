@@ -18,6 +18,8 @@ public class TestCaseTemplateParameter {
 	private boolean isSingleton = false;
 	private String checkStateMethod = "";
 	private String returnType = "";
+	private double delta = 0;
+	private boolean hasDelta = false;
 
 	public TestCaseTemplateParameter() {
 	}
@@ -52,6 +54,10 @@ public class TestCaseTemplateParameter {
 		this.setSingletonMethod(root.getFirstChildElement("singletonMethod").getValue());
 		this.setCheckStateMethod(root.getFirstChildElement("checkStateMethod").getValue());
 		this.setReturnType(root.getFirstChildElement("returnType").getValue());
+		
+		if (root.getFirstChildElement("delta") != null) {
+			this.setDelta(Double.parseDouble(root.getFirstChildElement("delta").getValue()));
+		}
 	}
 
 	public String toXML() {
@@ -106,6 +112,12 @@ public class TestCaseTemplateParameter {
 		Element returnTypeElement = new Element("returnType");
 		returnTypeElement.appendChild(this.getReturnType());
 		root.appendChild(returnTypeElement);
+		
+		if (this.hasDelta()) {
+			Element deltaElement = new Element("delta");
+			deltaElement.appendChild("" + this.getDelta());
+			root.appendChild(deltaElement);
+		}
 		
 		Document doc = new Document(root);
 		return doc.toXML();
@@ -201,6 +213,19 @@ public class TestCaseTemplateParameter {
 		this.checkStateMethod = checkStateMethod;
 	}
 
+	public double getDelta() {
+		return delta;
+	}
+	
+	public boolean hasDelta() {
+		return hasDelta;
+	}
+	
+	public void setDelta(double delta) {
+		this.delta = delta;
+		this.hasDelta = true;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -210,6 +235,10 @@ public class TestCaseTemplateParameter {
 				+ ((checkStateMethod == null) ? 0 : checkStateMethod.hashCode());
 		result = prime * result
 				+ ((classUnderTest == null) ? 0 : classUnderTest.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(delta);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + (hasDelta ? 1231 : 1237);
 		result = prime * result + (isSingleton ? 1231 : 1237);
 		result = prime * result + (isStaticMethod ? 1231 : 1237);
 		result = prime * result
@@ -245,6 +274,11 @@ public class TestCaseTemplateParameter {
 			if (other.classUnderTest != null)
 				return false;
 		} else if (!classUnderTest.equals(other.classUnderTest))
+			return false;
+		if (Double.doubleToLongBits(delta) != Double
+				.doubleToLongBits(other.delta))
+			return false;
+		if (hasDelta != other.hasDelta)
 			return false;
 		if (isSingleton != other.isSingleton)
 			return false;
@@ -282,5 +316,4 @@ public class TestCaseTemplateParameter {
 			return false;
 		return true;
 	}
-
 }
