@@ -50,9 +50,9 @@ public class TestCaseTemplateEngine {
 		
 		t.setAttribute("returnType", tp.getReturnType());
 		
-//		if (tp.hasDelta()) {
-//			t.setAttribute("delta", tp.getDelta());
-//		}
+		if (tp.hasDelta()) {
+			t.setAttribute("delta", tp.getDelta());
+		}
 		
 		t.setAttribute("testCases", pairwiseTestCasesXmlData);
 		
@@ -64,7 +64,7 @@ public class TestCaseTemplateEngine {
 	}
 
 	public void setPairwiseTestCasesXmlData(String xmlData) {
-		this.pairwiseTestCasesXmlData = xmlData.replaceAll("(\"|\n)", "'");
+		this.pairwiseTestCasesXmlData = xmlData.replaceAll("\"", "'").replace("\n", "");
 	}
 
 	public void setTemplateDir(String templateDir) {
