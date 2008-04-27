@@ -18,7 +18,7 @@ public class PairwiseTest {
 	public void testComputeDiscountedPrice(int level, AccountType accountType, String coupon) {
 		BookStore bookStore = new BookStore();
 		bookStore.computeDiscountedPrice(level, accountType, coupon);
-		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class));
+		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
 	}
 
 	@DataProvider(name = "PairwiseTestingDataProvider")
