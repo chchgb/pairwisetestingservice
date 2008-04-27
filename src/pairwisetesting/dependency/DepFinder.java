@@ -3,63 +3,79 @@ package pairwisetesting.dependency;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+/**
+ * 
+ * Class Name:	DepFinder
+ * 
+ * Author:		Alex Wang
+ * 
+ * Email:		A0717220@pub.ss.pku.edu.cn
+ * 
+ * Date:		2008 Apr 27
+ * 
+ * Description:	Wrapper of DependencyFinder tools
+ * 
+ * Prerequist:	1. Download DependencyFinder-1.2.0.bin.zip
+ * 				2. Unzip & setup environment referring to DependencyFinder\docs\Manual.html
+ * 				3. Make sure DependencyFinder\bin is in your PATH, and JAVA_HOME exists
+ * 
+ * Warning:		This class may not be that flexible since it was tailor made for Group IV.
+ * 				Feel free to modify to meet your needs.
+ * 
+ * Usage:		ArrayList<String> list = DepFinder.findDependentClasses(pathName, packName, className);
+ * 
+ * Parameters:	pathName:	Where to find the .class file
+ * 				packName:	Top level package name of the project to test
+ * 				className:	Class name of the method to test
+ */
 public class DepFinder {
 	/**
-	 * Constructor
-	 *
+	 * Default constructor is private
+	 * Don't instantiate it.
 	 */
-	public DepFinder(){
+	private DepFinder(){
 		
-	}
-	
-	public static void main(String args[]){
-		DepFinder df = new DepFinder();
-		
-		String path = "bin\\pairwisetesting\\test";
-		String name = "TestPairwiseTesting";
-		String func = "test";
-		
-		df.findMethodDependency(path, name, func);
 	}
 	
 	/**
-	 *  Find dependencies of a specific class
+	 * 
+	 * @param pathName	Path of the .class file
+	 * @param packName	Top level package name of the project
+	 * @param className	Name of the class to test
+	 * @return Array of paths of the source file to send to server
+	 * 
 	 */
-	public String findDependency(String classPath, String className){
-		StringBuilder outputFileName = new StringBuilder();
-		outputFileName.append(classPath).append("\\");
-		outputFileName.append(className).append(".xml");
+	public static ArrayList<String> findDependentClasses(String pathName, String packName, String className) {
+		String xmlFileName = buildFileName(pathName, className, ".xml");
+		String classFileName = buildFileName(pathName, className, ".class");
 		
-		c2c(className, outputFileName.toString());
-		c2p(outputFileName.toString());
-		p2p(outputFileName.toString());
+		extract(classFileName, xmlFileName);
+		ArrayList<String> rawOutput = c2c(className, xmlFileName);
 		
-		return null;
+		return rearrangeResults(packName, rawOutput);
 	}
 	
-	public String findMethodDependency(String classPath, String className, String methodName){
-		StringBuilder classFileName = new StringBuilder();
-		classFileName.append(classPath).append("\\").append(className).append(".class");
-		
-		StringBuilder xmlFileName = new StringBuilder();
-		xmlFileName.append(classPath).append("\\").append(className).append(".xml");
-		
-		extract(classFileName.toString(), xmlFileName.toString());
-		f2f(xmlFileName.toString(), methodName);
-		return null;
+	private static String buildFileName(String path, String className, String suffix) {
+		StringBuilder fileName = new StringBuilder();
+		fileName.append(path);
+		fileName.append("\\");
+		fileName.append(className);
+		fileName.append(suffix);
+		return fileName.toString();
 	}
 	
 	/**
 	 *  Call DependencyExtractor.bat
-	 *  to generate a XML file
+	 *  to generate XML file
 	 */
-	private void extract(String classFileName, String xmlFileName){
+	private static void extract(String classFileName, String xmlFileName) {
 		StringBuilder extCommand = new StringBuilder();
 		extCommand.append("DependencyExtractor.bat -xml -out ");
 		extCommand.append(xmlFileName).append(" ");
 		extCommand.append(classFileName);
-		
 		
 		try {
 			String command = extCommand.toString();
@@ -80,12 +96,14 @@ public class DepFinder {
 	 * Call c2c.bat to handle XML file
 	 * Get Class-to-Class dependencies
 	 */
-	private void c2c(String className, String xmlFileName){
+	private static ArrayList<String> c2c(String className, String xmlFileName){
 		// Command line for c2c
 		StringBuilder c2cCommand = new StringBuilder();
-		c2cCommand.append("c2c.bat -scope-includes ");
+		c2cCommand.append("c2c.bat ").append("-scope-includes ");
 		c2cCommand.append("\\").append(className).append("\\ ");
 		c2cCommand.append(xmlFileName);
+		
+		ArrayList<String> resultList = new ArrayList<String>();
 		
 		try {
 			String command = c2cCommand.toString();
@@ -97,92 +115,36 @@ public class DepFinder {
 			
 			String str = null;
 			while(null != (str = in.readLine())){
+				resultList.add(str);
 				System.out.println(str);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return resultList;
 	}
 	
-	/**
-	 * Call c2p.bat to handle XML file
-	 * Get Class-to-Package dependencies
-	 */
-	private void c2p(String xmlFileName){
-		// Command line for c2p
-		StringBuilder c2pCommand = new StringBuilder();
-		c2pCommand.append("c2p.bat -show-outbounds ").append(xmlFileName);
+	private static ArrayList<String> rearrangeResults(String projName, ArrayList<String> list) {
+		ArrayList<String> results = new ArrayList<String>();
+		Iterator<String> iter = list.iterator();
 		
-		try {
-			String command = c2pCommand.toString();
-			System.out.println(command);
+		while (iter.hasNext()) {
+			String line = iter.next();
+			String str = line.trim();
 			
-			Process p = Runtime.getRuntime().exec(command);
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(p.getInputStream()));
+			if (!str.startsWith("--> ")) continue;
 			
-			String str = null;
-			while(null != (str = in.readLine())){
-				System.out.println(str);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			String dep = str.substring(4);
+			String classPath = dep.endsWith(" *") ? dep.substring(0, dep.length() - 2) : dep;
+			String[] paths = classPath.split("\\.");
+
+			if (!projName.equals(paths[0])) continue;
+
+			String path = classPath.replace('.', '\\');
+			String fileName = buildFileName("src", path, ".java");
+			results.add(fileName);
 		}
-	}
-	
-	/**
-	 * Call p2p.bat to handle XML file
-	 * Get Package-to-Package dependencies
-	 */
-	private void p2p(String xmlFileName){
-		// Command line for p2p
-		StringBuilder p2pCommand = new StringBuilder();
-		p2pCommand.append("p2p.bat -show-outbounds ").append(xmlFileName);
-		
-		try {
-			String command = p2pCommand.toString();
-			System.out.println(command);
-			
-			Process p = Runtime.getRuntime().exec(command);
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(p.getInputStream()));
-			
-			String str = null;
-			while(null != (str = in.readLine())){
-				System.out.println(str);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private void f2f(String xmlFileName, String methodName){
-		// Command for f2f
-		StringBuilder f2fCommand = new StringBuilder();
-		f2fCommand.append("f2f.bat -show-outbounds ");
-		
-		//f2fCommand.append("-scope-includes ");
-		//f2fCommand.append("/").append(className).append("/ ");
-		
-		f2fCommand.append("-feature-scope-includes ");
-		f2fCommand.append("/").append(methodName).append("/ ");
-		f2fCommand.append(xmlFileName);
-		
-		try {
-			String command = f2fCommand.toString();
-			System.out.println(command);
-			
-			Process p = Runtime.getRuntime().exec(command);
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(p.getInputStream()));
-			
-			String str = null;
-			while(null != (str = in.readLine())){
-				System.out.println(str);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return results;
 	}
 }
