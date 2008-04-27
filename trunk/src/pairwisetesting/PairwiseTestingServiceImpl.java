@@ -10,6 +10,7 @@ import pairwisetesting.exception.EngineException;
 import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
+import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 
 public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 	
@@ -47,7 +48,7 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 		}
 		
 		
-		ITestCasesGenerator generator = new MockTestCasesGenerator();
+		ITestCasesGenerator generator = new XMLTestCasesGenerator();
 		String testCases = null;
 		if(engine != null){
 			try {
