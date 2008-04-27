@@ -64,7 +64,7 @@ public class TestCaseTemplateEngine {
 	}
 
 	public void setPairwiseTestCasesXmlData(String xmlData) {
-		this.pairwiseTestCasesXmlData = xmlData.replaceAll("\"", "'");
+		this.pairwiseTestCasesXmlData = xmlData.replaceAll("(\"|\n)", "'");
 	}
 
 	public void setTemplateDir(String templateDir) {
