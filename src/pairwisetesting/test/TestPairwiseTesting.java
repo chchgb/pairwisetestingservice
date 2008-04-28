@@ -3,6 +3,7 @@ package pairwisetesting.test;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
+import pairwisetesting.PairwiseTestingServiceImpl;
 import pairwisetesting.PairwiseTestingToolkit;
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.Factor;
@@ -903,6 +904,56 @@ public class TestPairwiseTesting extends TestCase {
 		assertNotNull(te.generateTestNGTestCase());
 		
 	}
+	
+//	public void testPairwiseTestingService() {
+//		String xmlData = "<?xml version='1.0' encoding='UTF-8'?>" +
+//		"<metaparameter>" +
+//		"	<strength>2</strength>" +
+//		"	<factor>" +
+//		"		<name>OS</name>" +
+//		"		<level>Windows XP</level>" +
+//		"		<level>Solaris 10</level>" +
+//		"	</factor>" +
+//		"	<factor>" +
+//		"		<name>Browser</name>" +
+//		"		<level>IE</level>" +
+//		"		<level>Firefox</level>" +
+//		"	</factor>" +
+//		"	<factor>" +
+//		"		<name>Memory</name>" +
+//		"		<level>255M</level>" +
+//		"		<level>1G</level>" +
+//		"	</factor>" +
+//		"</metaparameter>";
+//		String expectedTestCases = "<?xml version=\"1.0\"?>\n" +
+//		"<testcases>" +
+//		"<factor>OS</factor>" +
+//		"<factor>Browser</factor>" +
+//		"<factor>Memory</factor>" +
+//		"<run>" +
+//		"<level>Windows XP</level>" +
+//		"<level>IE</level>" +
+//		"<level>255M</level>" +
+//		"</run>" +
+//		"<run>" +
+//		"<level>Solaris 10</level>" +
+//		"<level>IE</level>" +
+//		"<level>1G</level>" +
+//		"</run>" +
+//		"<run>" +
+//		"<level>Windows XP</level>" +
+//		"<level>Firefox</level>" +
+//		"<level>1G</level>" +
+//		"</run>" +
+//		"<run>" +
+//		"<level>Solaris 10</level>" +
+//		"<level>Firefox</level>" +
+//		"<level>255M</level>" +
+//		"</run>" +
+//		"</testcases>\n";
+//		PairwiseTestingServiceImpl service = new PairwiseTestingServiceImpl();
+//		assertEquals(expectedTestCases, service.PariwiseTesting(xmlData, "AMEngine"));
+//	}
 	
 	protected void tearDown() throws Exception {
 		super.tearDown();
