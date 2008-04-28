@@ -3,6 +3,7 @@ package pairwisetesting;
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.ITestCasesGenerator;
 import pairwisetesting.coredomain.MetaParameter;
+import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.engine.tvg.TVGEngine;
@@ -41,6 +42,8 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 			engine = new PICTEngine();
 		} else if ("JennyEngine".equals(engineName)) {
 			engine = new JennyEngine();
+		} else if ("AMEngine".equals(engineName)) {
+			engine = new AMEngine();
 		} else {
 			System.out.println("Engine none select!!");
 			return null;

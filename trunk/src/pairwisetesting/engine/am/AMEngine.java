@@ -25,7 +25,9 @@ public class AMEngine extends Engine {
 		
 		int numOfLevels = mp.getMaxNumOfLevels();
 		OAProvider provider = factory.create(numOfLevels, mp.getNumOfFactors());
-		
+		if (provider == null) {
+			throw new EngineException("No OA provider available.");
+		}
 		int[][] rawTestData = provider.get(mp.getNumOfFactors());
 		return ArrayUtil.int2DArrayToString2DArray(rawTestData);
 	}
