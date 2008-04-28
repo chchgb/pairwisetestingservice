@@ -24,4 +24,9 @@ public class MockMetaParameterProvider implements IMetaParameterProvider {
 		return mp;
 	}
 
+	public void setSchemaPath(String schemaPath) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
