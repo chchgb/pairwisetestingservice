@@ -19,9 +19,15 @@ import pairwisetesting.exception.MetaParameterException;
 
 public class XMLMetaParameterProvider implements IMetaParameterProvider {
 	private String xmlData;
+	
+	private String schemaPath = "";
 
 	public XMLMetaParameterProvider(String xmlData) {
 		this.xmlData = xmlData;
+	}
+	
+	public void setSchemaPath(String schemaPath){
+		this.schemaPath = schemaPath;
 	}
 
 	public MetaParameter get() throws MetaParameterException {
@@ -29,7 +35,7 @@ public class XMLMetaParameterProvider implements IMetaParameterProvider {
 		try {
 		   	// Get Schema
 	        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	        Source schemaSource = new StreamSource("schema/MetaParameter.xsd");
+	        Source schemaSource = new StreamSource(schemaPath + "MetaParameter.xsd");
 	        Schema schema = schemaFactory.newSchema(schemaSource);
 	    	
 	        // Get SAX Parser Factory and configure it
