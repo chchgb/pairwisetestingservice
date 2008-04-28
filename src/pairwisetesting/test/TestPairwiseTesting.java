@@ -23,7 +23,6 @@ import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.execution.TestCaseTemplateEngine;
 import pairwisetesting.execution.TestCaseTemplateParameter;
 import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
-import pairwisetesting.test.bookstore.AccountType;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockOAProviderFactory;
@@ -640,14 +639,15 @@ public class TestPairwiseTesting extends TestCase {
 				"		<level>DB2</level>" +
 				"	</factor>" +
 				"</metaparameter>";
-		IMetaParameterProvider provider = new XMLMetaParameterProvider(xmlData);
+		String schemaPath = "schema/MetaParameter.xsd";
+		IMetaParameterProvider provider = new XMLMetaParameterProvider(xmlData, schemaPath);
 		MetaParameter mp = provider.get();
 		MetaParameter expected = new MockMetaParameterProvider().get();
 		// System.out.println(mp);
 		assertEquals(expected, mp);
 		
 		String dataFile = "testdata/MetaParameter.xml";
-		provider = new XMLMetaParameterProvider(TextFile.read(dataFile));
+		provider = new XMLMetaParameterProvider(TextFile.read(dataFile), schemaPath);
 		mp = provider.get();
 		// System.out.println(mp);
 		assertEquals(expected, mp);
@@ -670,7 +670,9 @@ public class TestPairwiseTesting extends TestCase {
 		
 		MetaParameterXMLSerializer serializer = new MetaParameterXMLSerializer();
 		// System.out.println(serializer.serialize(mp));
-		IMetaParameterProvider provider = new XMLMetaParameterProvider(serializer.serialize(mp));
+
+		String schemaPath = "schema/MetaParameter.xsd";
+		IMetaParameterProvider provider = new XMLMetaParameterProvider(serializer.serialize(mp), schemaPath);
 		
 		MetaParameter mp2 = provider.get();
 		assertEquals(mp, mp2);
@@ -697,7 +699,7 @@ public class TestPairwiseTesting extends TestCase {
 		"<constraint>IF [File system] = \"FAT\" THEN [Size] &lt;= 4096</constraint>" + 
 		"</metaparameter>\n";
 		assertEquals(expected, xmlData);
-		provider = new XMLMetaParameterProvider(xmlData);
+		provider = new XMLMetaParameterProvider(xmlData, schemaPath);
 		mp2 = provider.get();
 		assertEquals(mp, mp2);
 	}
@@ -885,6 +887,8 @@ public class TestPairwiseTesting extends TestCase {
 		tp = new TestCaseTemplateParameter();
 		tp.setPackageName("pairwisetesting.test.bookstore");
 		tp.setClassUnderTest("BookStore");
+		tp.addConstructorArgument("String", "PKU");
+		tp.addConstructorArgument("int", "40");
 		tp.setMethodUnderTest("computeDiscountedPrice");
 		tp.addMethodParameter("int", "level");
 		tp.addMethodParameter("AccountType", "accountType");

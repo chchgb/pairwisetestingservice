@@ -22,11 +22,8 @@ public class XMLMetaParameterProvider implements IMetaParameterProvider {
 	
 	private String schemaPath = "";
 
-	public XMLMetaParameterProvider(String xmlData) {
+	public XMLMetaParameterProvider(String xmlData, String schemaPath) {
 		this.xmlData = xmlData;
-	}
-	
-	public void setSchemaPath(String schemaPath){
 		this.schemaPath = schemaPath;
 	}
 
@@ -35,7 +32,7 @@ public class XMLMetaParameterProvider implements IMetaParameterProvider {
 		try {
 		   	// Get Schema
 	        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	        Source schemaSource = new StreamSource(schemaPath + "MetaParameter.xsd");
+	        Source schemaSource = new StreamSource(schemaPath);
 	        Schema schema = schemaFactory.newSchema(schemaSource);
 	    	
 	        // Get SAX Parser Factory and configure it
