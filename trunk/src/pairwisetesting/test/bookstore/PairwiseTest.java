@@ -16,7 +16,7 @@ import pairwisetesting.util.Converter;
 public class PairwiseTest {
 	@Test(dataProvider = "PairwiseTestingDataProvider")
 	public void testComputeDiscountedPrice(int level, AccountType accountType, String coupon) {
-		BookStore bookStore = new BookStore();
+		BookStore bookStore = new BookStore(Converter.convertTo("PKU", String.class), Converter.convertTo("40", int.class));
 		bookStore.computeDiscountedPrice(level, accountType, coupon);
 		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
 	}
