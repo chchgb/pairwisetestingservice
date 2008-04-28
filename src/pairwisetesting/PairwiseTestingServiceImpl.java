@@ -4,6 +4,7 @@ import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.IMetaParameterProvider;
 import pairwisetesting.coredomain.ITestCasesGenerator;
 import pairwisetesting.coredomain.MetaParameter;
+import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.engine.tvg.TVGEngine;
 import pairwisetesting.exception.EngineException;
@@ -44,6 +45,8 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 			engine = new TVGEngine();
 		}else if("PICTEngine".equals(engineName)){
 			engine = new PICTEngine();
+		}else if("JennyEngine".equals(engineName)){
+			engine = new JennyEngine();
 		}else{
 			
 			System.out.println("Engine none select!!");
