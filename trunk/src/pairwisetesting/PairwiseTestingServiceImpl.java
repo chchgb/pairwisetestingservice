@@ -14,6 +14,8 @@ import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 
 public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 	
+	private String schemaPath = "D:/MyShare/Tomcat/schema/";
+	
 	public String PariwiseTesting(String inputMetaParameter,String engineName) {
 
 		
@@ -24,6 +26,7 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 		
 		
 		IMetaParameterProvider provider = new XMLMetaParameterProvider(inputMetaParameter);
+		provider.setSchemaPath(schemaPath);
 		
 		MetaParameter mp = null;
 		try {
