@@ -3,7 +3,6 @@ package pairwisetesting.test;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
-import pairwisetesting.PairwiseTestingServiceImpl;
 import pairwisetesting.PairwiseTestingToolkit;
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.Factor;
