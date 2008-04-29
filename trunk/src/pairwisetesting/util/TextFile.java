@@ -8,6 +8,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Borrowed from Thinking in Java 4th
+ * 
+ */
 public class TextFile extends ArrayList<String> {
 	
 	private static final long serialVersionUID = -20207102858888293L;
