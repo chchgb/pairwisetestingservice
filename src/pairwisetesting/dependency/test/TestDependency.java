@@ -1,6 +1,7 @@
 package pairwisetesting.dependency.test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -19,7 +20,7 @@ public class TestDependency extends TestCase {
 		super.setUp();
 		
 		String className = "pairwisetesting.dependency.test.TestDependency";
-		depFinder = new DependencyFinder(className);
+		depFinder = new DependencyFinder(className,"src","WebRoot/WEB-INF/classes");
 		
 		manager = new AccountManager();
 		manager.store("Andy");
@@ -41,6 +42,16 @@ public class TestDependency extends TestCase {
 		
 		ArrayList<String> expectedMockList = new ArrayList<String>();
 		expectedMockList.add("pairwisetesting.dependency.test.AbstractAccountManager");
+		
+		
+		// Sort the ArrayLists
+		Collections.sort(res.srcList);
+		Collections.sort(res.libList);
+		Collections.sort(res.mockList);
+		
+		Collections.sort(expectedSrcList);
+		Collections.sort(expectedLibList);
+		Collections.sort(expectedMockList);
 		
 		assertTrue(expectedSrcList.equals(res.srcList));
 		assertTrue(expectedLibList.equals(res.libList));

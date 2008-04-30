@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Arrays;
@@ -55,6 +56,7 @@ public class DependencyFinder {
 		ArrayList<String> list = formatC2COutput(output);
 		DependencyResult result = generateResult(list);
 		feedMockList(result);
+		
 		return result;
 	}
 
