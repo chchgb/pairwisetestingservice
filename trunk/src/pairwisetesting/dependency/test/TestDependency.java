@@ -15,12 +15,15 @@ public class TestDependency extends TestCase {
 	private IAccountManager manager;
 	private AbstractAccountManager absMan;
 	private StringTemplate t = new StringTemplate();
-	
+	//String endPath = "D:/MyShare/Workspace/MyEclipse/PariwiseTesting/";
+	String endPath = "";
 	protected void setUp() throws Exception {
 		super.setUp();
 		
 		String className = "pairwisetesting.dependency.test.TestDependency";
-		depFinder = new DependencyFinder(className,"src","WebRoot/WEB-INF/classes");
+		
+		
+		depFinder = new DependencyFinder(className,"src","WebRoot/WEB-INF/classes",endPath);
 		
 		manager = new AccountManager();
 		manager.store("Andy");
@@ -42,7 +45,9 @@ public class TestDependency extends TestCase {
 		
 		ArrayList<String> expectedMockList = new ArrayList<String>();
 		expectedMockList.add("pairwisetesting.dependency.test.AbstractAccountManager");
-		
+		System.out.println(res.libList);
+		ArrayList<String> result = DependencyResult.transferPath(endPath,res.libList);
+		System.out.println("After Transfer: " + result);
 		
 		// Sort the ArrayLists
 		Collections.sort(res.srcList);
