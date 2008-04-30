@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Arrays;
+
 import pairwisetesting.util.Directory;
 
 public class DependencyFinder {
@@ -18,6 +21,12 @@ public class DependencyFinder {
 
 	private HashSet<String> packagePrefix;
 	private HashSet<String> directory;
+	
+	private ArrayList<Class<?>> interfaceList = new ArrayList<Class<?>>();
+	private ArrayList<Class<?>> abstractClassList = new ArrayList<Class<?>>();
+	private ArrayList<Class<?>> concreteClassList = new ArrayList<Class<?>>();
+	
+	private HashSet<String> srcFullClassNameSet = new HashSet<String>();
 
 	public DependencyFinder(String fullClassName) {
 		className = fullClassName;
@@ -45,7 +54,7 @@ public class DependencyFinder {
 		ArrayList<String> output = c2c();
 		ArrayList<String> list = formatC2COutput(output);
 		DependencyResult result = generateResult(list);
-
+		feedMockList(result);
 		return result;
 	}
 
@@ -86,7 +95,7 @@ public class DependencyFinder {
 
 		try {
 			String command = extCommand.toString();
-			System.out.println(command);
+			//System.out.println(command);
 
 			Process p = Runtime.getRuntime().exec(command);
 
@@ -115,7 +124,7 @@ public class DependencyFinder {
 
 		try {
 			String command = c2cCommand.toString();
-			System.out.println(command);
+			//System.out.println(command);
 
 			Process p = Runtime.getRuntime().exec(command);
 			BufferedReader in = new BufferedReader(new InputStreamReader(p
@@ -124,7 +133,7 @@ public class DependencyFinder {
 			String str = null;
 			while (null != (str = in.readLine())) {
 				resultList.add(str);
-				System.out.println(str);
+				//System.out.println(str);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -149,7 +158,7 @@ public class DependencyFinder {
 					dep.length() - 2) : dep;
 
 			String[] name = string.split("[$]");
-			System.out.println(name[0]);
+			//System.out.println(name[0]);
 			results.add(name[0]);
 		}
 		return new ArrayList<String>(results);
@@ -166,18 +175,62 @@ public class DependencyFinder {
 		return result;
 	}
 
-	private void feedResultList(DependencyResult result, String path) {
-		String file = buildSourcePath(path);
-
+	private void feedResultList(DependencyResult result, String fullClassName) {
+		String file = buildSourcePath(fullClassName);
+		
 		if (directory.contains(file)) {
-			System.out.println(file);
+			//System.out.println(file);
 			result.srcList.add(file);
+			srcFullClassNameSet.add(fullClassName);
 		} else {
-			String lib = resolveLibraryName(path);
-			if (lib != null)
-				System.out.println(lib);
+			String lib = resolveLibraryName(fullClassName);
+			//if (lib != null)
+				//System.out.println(lib);
 			if (lib != null)
 				result.libList.add(lib);
+		}
+	}
+
+	private void feedMockList(DependencyResult result) {
+		for (String fullClassName : srcFullClassNameSet) {
+			
+			// Collect interfaces & abstract & concrete classes
+			try {
+				Class<?> clazz = Class.forName(fullClassName);
+				if (clazz.isInterface()) {
+					interfaceList.add(clazz);
+				} else if (Modifier.isAbstract(clazz.getModifiers())) {
+					abstractClassList.add(clazz);
+				} else {
+					concreteClassList.add(clazz);
+				}				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// Remove implemented interfaces & extended abstract classes
+		for (Class<?> c : concreteClassList) {
+			Iterator<Class<?>> iter = interfaceList.iterator();
+			while (iter.hasNext()) {
+				if (Arrays.asList(c.getInterfaces()).contains(iter.next())) {
+					iter.remove();
+				}
+			}
+			iter = abstractClassList.iterator();
+			while (iter.hasNext()) {
+				if (c.getSuperclass() == iter.next()) {
+					iter.remove();
+				}
+			}
+		}
+		
+		// Left interfaces & abstract classes need mock
+		for (Class<?> c : interfaceList) {
+			result.mockList.add(c.getName());
+		}
+		for (Class<?> c : abstractClassList) {
+			result.mockList.add(c.getName());
 		}
 	}
 
@@ -217,10 +270,10 @@ public class DependencyFinder {
 
 	private HashSet<String> enumPrefix() {
 		HashSet<String> prefix = new HashSet<String>();
-		prefix.add("java");
-		prefix.add("javax");
 		prefix.add("org");
+		prefix.add("java");
 		prefix.add("com");
+		prefix.add("nu");
 		return prefix;
 	}
 }
