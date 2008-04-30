@@ -19,6 +19,8 @@ public class DependencyFinder {
 	private String binPath;
 	private String className;
 	private String classPath;
+	
+	private String endPath;
 
 	private HashSet<String> packagePrefix;
 	private HashSet<String> directory;
@@ -45,6 +47,18 @@ public class DependencyFinder {
 		classPath = className.replace('.', '/');
 		srcPath = sourcePath;
 		binPath = binaryPath;
+
+		directory = walkDirectory();
+		packagePrefix = enumPrefix();
+	}
+	
+	public DependencyFinder(String fullClassName, String sourcePath,
+			String binaryPath,String endPath) {
+		className = fullClassName;
+		classPath = className.replace('.', '/');
+		srcPath = endPath + sourcePath;
+		binPath = endPath + binaryPath;
+		this.endPath = endPath;
 
 		directory = walkDirectory();
 		packagePrefix = enumPrefix();
