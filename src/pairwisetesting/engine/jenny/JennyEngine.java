@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.exception.EngineException;
 
 public class JennyEngine extends Engine {
 

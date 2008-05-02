@@ -1,4 +1,4 @@
-package pairwisetesting.exception;
+package pairwisetesting.coredomain;
 
 public class EngineException extends Exception {
 	private static final long serialVersionUID = -2629492456304056136L;

@@ -1,8 +1,8 @@
 package pairwisetesting.test.mock;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.exception.EngineException;
 
 
 public class MockOAEngine extends Engine {

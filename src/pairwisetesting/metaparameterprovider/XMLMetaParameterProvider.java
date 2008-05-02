@@ -15,7 +15,7 @@ import nu.xom.Elements;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.IMetaParameterProvider;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.exception.MetaParameterException;
+import pairwisetesting.coredomain.MetaParameterException;
 
 public class XMLMetaParameterProvider implements IMetaParameterProvider {
 	private String xmlData;

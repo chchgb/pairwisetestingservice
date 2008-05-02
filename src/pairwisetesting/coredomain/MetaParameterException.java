@@ -1,4 +1,4 @@
-package pairwisetesting.exception;
+package pairwisetesting.coredomain;
 
 public class MetaParameterException extends Exception {
 	private static final long serialVersionUID = 5851204815295097203L;
