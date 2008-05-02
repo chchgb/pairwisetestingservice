@@ -12,17 +12,31 @@ import org.testng.annotations.Test;
 import pairwisetesting.test.expect.Expectation;
 import pairwisetesting.util.Converter;
 
+$if(needMock)$
+import org.jmock.Expectations;
+import org.jmock.integration.junit3.MockObjectTestCase;
+$endif$
+
 $imports: {import $it$;}; separator="\n"$
 
-public class PairwiseTest {
+public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
 	@Test(dataProvider = "$dataProviderName; null="PairwiseTestingDataProvider"$")
 	public void test$methodUnderTest; format="capitalize"$($params:parameter(); separator=", "$) {
+		$if(isStaticMethod)$
+		Assert.assertEquals($classUnderTest$.$invokeMethodUnderTest()$, $expected()$);
+		$elseif(isSingleton)$
+		Assert.assertEquals($classUnderTest$.$singletonMethod; null="getInstance"$().$invokeMethodUnderTest()$, $expected()$);
+		$else$
+		$if(needMock)$$createMockObjects()$$endif$
+		$instanceClassUnderTest()$
+		$if(needMock)$$injectMockObjects()$$endif$
 		$if(checkStateMethod)$
-		$classUnderTest$ $classUnderTest; format="camelize"$ = new $classUnderTest$($constructorArgs: argument(); separator=", "$);
-		$classUnderTest; format="camelize"$.$methodUnderTest$($params: {$it.name$}; separator=", "$);
+		$classUnderTest; format="camelize"$.$invokeMethodUnderTest()$;
 		Assert.assertEquals($classUnderTest; format="camelize"$.$checkStateMethod$(), $expected()$);
 		$else$
-		Assert.assertEquals($invoker()$.$methodUnderTest$($params: {$it.name$}; separator=", "$), $expected()$);
+		$returnType$ testResult = $classUnderTest; format="camelize"$.$invokeMethodUnderTest()$;
+		Assert.assertEquals(testResult, $expected()$);
+		$endif$
 		$endif$
 	}
 

@@ -1,1 +1,0 @@
-$if(isStaticMethod)$$classUnderTest$$elseif(isSingleton)$$classUnderTest$.$singletonMethod; null="getInstance"$()$else$new $classUnderTest$($constructorArgs: argument(); separator=", "$)$endif$

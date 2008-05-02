@@ -20,7 +20,11 @@ public class Expectation {
 		ExpectedResults.put("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_3_NORMAL_C003", "50");
 		ExpectedResults.put("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_3_STUDENT_C001", "65");
 		ExpectedResults.put("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_3_INTERNAL_C002", "50");
-
+		ExpectedResults.put("pairwisetesting.test.bank.AccountService.withdraw_A001_1000.0", "9000");
+		ExpectedResults.put("pairwisetesting.test.bank.AccountService.withdraw_A002_2000.0", "8000");
+		ExpectedResults.put("pairwisetesting.test.bank.AccountService.withdraw_A001_2000.0", "8000");
+		ExpectedResults.put("pairwisetesting.test.bank.AccountService.withdraw_A002_1000.0", "9000");
+		
 	}
 	
 	public static String getExpectedResult(String key) {

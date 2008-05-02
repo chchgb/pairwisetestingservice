@@ -9,6 +9,7 @@ public class BookStore {
 	private String name;
 	private int milesAway;
 	private double result;
+	private Logger logger;
 	
 	public BookStore(String name, int milesAway) {
 		this.name = name;
@@ -32,6 +33,11 @@ public class BookStore {
 	}
 	
 	public double computeDiscountedPrice(int level, AccountType accountType, String coupon) {
+		
+		logger.log(level);
+		logger.log(accountType);
+		logger.log(coupon);
+		
 		double fixedPrice = 100;
 		HashMap<Integer, Integer> levelMap = Maps.newHashMap();
 		levelMap.put(1, 90);
@@ -63,5 +69,9 @@ public class BookStore {
 		}
 		this.result = discountedPrice;
 		return discountedPrice;
+	}
+
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 }
