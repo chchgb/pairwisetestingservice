@@ -1,4 +1,4 @@
-package pairwisetesting.metaparameterprovider;
+package pairwisetesting.metaparameterparser;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;

@@ -25,7 +25,8 @@ import pairwisetesting.execution.Invoke;
 import pairwisetesting.execution.InvokeSequence;
 import pairwisetesting.execution.TestCaseTemplateEngine;
 import pairwisetesting.execution.TestCaseTemplateParameter;
-import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
+import pairwisetesting.metaparameterparser.MetaParameterXMLSerializer;
+import pairwisetesting.metaparameterparser.XMLMetaParameterProvider;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockOAProviderFactory;
@@ -36,7 +37,6 @@ import pairwisetesting.util.ArrayUtil;
 import pairwisetesting.util.ClassUtil;
 import pairwisetesting.util.MathUtil;
 import pairwisetesting.util.TextFile;
-import pairwisetesting.xml.MetaParameterXMLSerializer;
 
 public class TestPairwiseTesting extends TestCase {
 	private Factor f1, f2, f3, f4, f5;
