@@ -1,4 +1,4 @@
-package pairwisetesting.execution;
+package pairwisetesting.execution.testcasetemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
