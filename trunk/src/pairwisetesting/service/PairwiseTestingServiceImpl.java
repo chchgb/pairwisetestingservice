@@ -1,4 +1,4 @@
-package pairwisetesting;
+package pairwisetesting.service;
 
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.EngineException;

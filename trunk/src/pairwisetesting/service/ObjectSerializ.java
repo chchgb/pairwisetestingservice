@@ -1,4 +1,4 @@
-package pairwisetesting;
+package pairwisetesting.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
