@@ -9,7 +9,7 @@ import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.engine.tvg.TVGEngine;
-import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
+import pairwisetesting.metaparameterparser.XMLMetaParameterProvider;
 import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 
 public class PairwiseTestingServiceImpl implements IPairwiseTestingService {

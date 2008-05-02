@@ -1,4 +1,4 @@
-package pairwisetesting.xml;
+package pairwisetesting.metaparameterparser;
 
 import nu.xom.Document;
 import nu.xom.Element;
