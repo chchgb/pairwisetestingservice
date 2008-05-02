@@ -1,14 +1,14 @@
 package pairwisetesting;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.ITestCasesGenerator;
 import pairwisetesting.coredomain.MetaParameter;
+import pairwisetesting.coredomain.MetaParameterException;
 import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.engine.tvg.TVGEngine;
-import pairwisetesting.exception.EngineException;
-import pairwisetesting.exception.MetaParameterException;
 import pairwisetesting.metaparameterprovider.XMLMetaParameterProvider;
 import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 

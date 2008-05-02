@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.PTSInterface;
-import pairwisetesting.exception.EngineException;
 
 public class PICTEngine extends Engine {
 

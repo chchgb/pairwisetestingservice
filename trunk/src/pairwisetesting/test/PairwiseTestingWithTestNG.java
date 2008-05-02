@@ -16,7 +16,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import pairwisetesting.exception.EngineException;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.util.TextFile;
 
 import com.google.common.collect.Lists;

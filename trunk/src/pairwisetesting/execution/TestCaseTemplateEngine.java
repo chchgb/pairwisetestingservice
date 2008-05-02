@@ -6,7 +6,6 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 
-import pairwisetesting.exception.TestCaseTemplateEngineException;
 import pairwisetesting.util.ClassUtil;
 
 

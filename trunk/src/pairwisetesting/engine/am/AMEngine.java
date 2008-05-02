@@ -1,9 +1,9 @@
 package pairwisetesting.engine.am;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
-import pairwisetesting.exception.EngineException;
 import pairwisetesting.util.ArrayUtil;
 
 public class AMEngine extends Engine {

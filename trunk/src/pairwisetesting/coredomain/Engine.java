@@ -1,6 +1,5 @@
 package pairwisetesting.coredomain;
 
-import pairwisetesting.exception.EngineException;
 
 public abstract class Engine {
 	protected ITestDataTransformer transformer = ITestDataTransformer.NULL;

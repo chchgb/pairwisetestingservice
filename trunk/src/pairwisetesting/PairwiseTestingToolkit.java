@@ -1,11 +1,11 @@
 package pairwisetesting;
 
 import pairwisetesting.coredomain.Engine;
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.IMetaParameterProvider;
 import pairwisetesting.coredomain.ITestCasesGenerator;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.exception.EngineException;
-import pairwisetesting.exception.MetaParameterException;
+import pairwisetesting.coredomain.MetaParameterException;
 
 public class PairwiseTestingToolkit {
 	private IMetaParameterProvider provider;
