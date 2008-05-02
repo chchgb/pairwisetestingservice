@@ -1,10 +1,13 @@
 package pairwisetesting.execution;
 
+import java.util.Map;
+
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 
 import pairwisetesting.exception.TestCaseTemplateEngineException;
+import pairwisetesting.util.ClassUtil;
 
 
 public class TestCaseTemplateEngine {
@@ -28,6 +31,19 @@ public class TestCaseTemplateEngine {
 		StringTemplate t = group.getInstanceOf(testCaseTemplateName);
 		t.registerRenderer(String.class, new FirstCharRenderer());
 		
+		if (tp.hasImports()) {
+			t.setAttribute("imports", tp.getImports());
+		}
+
+		if (tp.hasClassesToMock()) {
+			t.setAttribute("needMock", true);
+			for (Map.Entry<String, String> entry : tp.getClassToMockInstanceNameEntrySet()) {
+				t.setAttribute("classToMockNames", ClassUtil.getSimpleClassName(entry.getKey()));
+				t.setAttribute("classToMockInstanceNames", entry.getValue());
+				t.setAttribute("jmockInvokeSequences", tp.getJMockInvokeSequence(entry.getKey()));
+			}
+		}
+
 		t.setAttribute("packageName", tp.getPackageName());
 		t.setAttribute("classUnderTest", tp.getClassUnderTest());
 		

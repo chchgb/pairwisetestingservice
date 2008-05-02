@@ -13,11 +13,10 @@ import pairwisetesting.test.expect.Expectation;
 import pairwisetesting.util.Converter;
 
 
-public class PairwiseTest {
+public class PairwiseTest  {
 	@Test(dataProvider = "PairwiseTestingDataProvider")
-	public void testIsBetween(int n, int lower, int upper) {
-		Assert.assertEquals(Range.getInstance().isBetween(n, lower, upper), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.math.Range.isBetween_" + n + "_" + lower + "_" + upper), boolean.class));
-	}
+	public void testIsBetween(final int n, final int lower, final int upper) {
+		Assert.assertEquals(Range.isBetween(n, lower, upper), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.math.Range.isBetween_" + n + "_" + lower + "_" + upper), boolean.class));	}
 
 	@DataProvider(name = "PairwiseTestingDataProvider")
 	public Object[][] rangeData() throws Exception {

@@ -12,11 +12,21 @@ import org.testng.annotations.Test;
 import pairwisetesting.test.expect.Expectation;
 import pairwisetesting.util.Converter;
 
+import org.jmock.Expectations;
+import org.jmock.integration.junit3.MockObjectTestCase;
+import pairwisetesting.test.bookstore.Logger;
 
-public class PairwiseTest {
+public class PairwiseTest extends MockObjectTestCase {
 	@Test(dataProvider = "PairwiseTestingDataProvider")
-	public void testComputeDiscountedPrice(int level, AccountType accountType, String coupon) {
+	public void testComputeDiscountedPrice(final int level, final AccountType accountType, final String coupon) {
+		final Logger logger = mock(Logger.class, "MockLogger_" + level + "_" + accountType + "_" + coupon);
+		checking(new Expectations() {{
+			one (logger).log(level);
+			one (logger).log(accountType);
+			one (logger).log(coupon);
+		}});
 		BookStore bookStore = new BookStore(Converter.convertTo("PKU", String.class), Converter.convertTo("40", int.class));
+		bookStore.setLogger(logger);
 		bookStore.computeDiscountedPrice(level, accountType, coupon);
 		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
 	}

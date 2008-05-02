@@ -9,7 +9,6 @@ public class MetaParameterXMLSerializer {
 
 	public String serialize(MetaParameter mp) {
 		
-		// TODO XML namespace
 		Element root = new Element("metaparameter");
 
 		// Strength
