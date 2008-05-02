@@ -6,112 +6,105 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Arrays;
 
 import pairwisetesting.util.Directory;
 
 public class DependencyFinder {
 
-	private String srcPath;
-	private String binPath;
 	private String className;
-	private String classPath;
-	
-	private String endPath;
 
-	private HashSet<String> packagePrefix;
-	private HashSet<String> directory;
-	
-	private ArrayList<Class<?>> interfaceList = new ArrayList<Class<?>>();
-	private ArrayList<Class<?>> abstractClassList = new ArrayList<Class<?>>();
-	private ArrayList<Class<?>> concreteClassList = new ArrayList<Class<?>>();
-	
-	private HashSet<String> srcFullClassNameSet = new HashSet<String>();
+	// Short binary path, "bin"
+	private String binPath;
 
-	public DependencyFinder(String fullClassName) {
-		className = fullClassName;
-		classPath = className.replace('.', '/');
-		srcPath = "src";
-		binPath = "bin";
+	// Short source path, "src"
+	private String srcPath;
 
-		directory = walkDirectory();
-		packagePrefix = enumPrefix();
-	}
+	// All source file under srcPath
+	HashSet<String> directory;
 
+	// All dependent classes
+	HashSet<String> classSet;
+	HashSet<String> srcList;
+	HashSet<String> libList;
+
+	HashSet<String> stdLibSet;
+	HashSet<String> siteSet;
+
+	/**
+	 * 
+	 */
 	public DependencyFinder(String fullClassName, String sourcePath,
 			String binaryPath) {
 		className = fullClassName;
-		classPath = className.replace('.', '/');
+
 		srcPath = sourcePath;
 		binPath = binaryPath;
 
-		directory = walkDirectory();
-		packagePrefix = enumPrefix();
-	}
-	
-	public DependencyFinder(String fullClassName, String sourcePath,
-			String binaryPath,String endPath) {
-		className = fullClassName;
-		classPath = className.replace('.', '/');
-		srcPath = endPath + sourcePath;
-		binPath = endPath + binaryPath;
-		this.endPath = endPath;
+		classSet = new HashSet<String>();
+		srcList = new HashSet<String>();
+		libList = new HashSet<String>();
 
-		directory = walkDirectory();
-		packagePrefix = enumPrefix();
+		directory = walkDirectory(srcPath);
+
+		stdLibSet = new HashSet<String>();
+		stdLibSet.add("java");
+		stdLibSet.add("javax");
+
+		siteSet = new HashSet<String>();
+		siteSet.add("net");
+		siteSet.add("com");
+		siteSet.add("org");
+		siteSet.add("nu");
 	}
 
 	public DependencyResult findDependency() {
-		extract();
-		ArrayList<String> output = c2c();
-		ArrayList<String> list = formatC2COutput(output);
-		DependencyResult result = generateResult(list);
-		feedMockList(result);
+		findDependency(className);
 		
+		DependencyResult result = new DependencyResult();
+		result.srcList = new ArrayList<String>(srcList);
+		result.libList = new ArrayList<String>(libList);
+		result.mockList = new ArrayList<String>(generateMockList());
+
 		return result;
 	}
 
-	private String buildXMLPath() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(binPath).append("\\");
-		builder.append(classPath).append(".xml");
+	private void findDependency(String fullClassName) {
+		String xmlPath = extract(fullClassName);
+		HashSet<String> rawResult = c2c(fullClassName, xmlPath);
+		HashSet<String> classList = splitRawC2CResult(rawResult);
+		resolveKeyLibName(rawResult);
 
-		return builder.toString();
-	}
-
-	private String buildClassPath() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(binPath).append("\\");
-		builder.append(classPath).append(".class");
-
-		return builder.toString();
-	}
-
-	private String narrowClassName() {
-		String[] array = className.split("\\.");
-
-		// The last element in array is the narrowed name
-		return array[array.length - 1];
+		Iterator<String> iter = classList.iterator();
+		while (iter.hasNext()) {
+			String className = iter.next();
+			String classPath = buildSourcePath(className);
+			if (className.equals(this.className) || srcList.contains(classPath))
+				continue;
+			classSet.add(className);
+			srcList.add(classPath);
+			findDependency(className);
+		}
 	}
 
 	/**
-	 * Call DependencyExtractor.bat to generate xml file
+	 * Call DependencyExtractor.bat to generate xml file Return the path of the
+	 * generated xml file
 	 */
-	private void extract() {
-		String classPath = buildClassPath();
-		String xmlPath = buildXMLPath();
+	private String extract(String className) {
+		String fullBinaryPath = buildBinaryPath(className);
+		String xmlPath = buildXMLPath(className);
 
 		StringBuilder extCommand = new StringBuilder();
 		extCommand.append("DependencyExtractor.bat -xml -out ");
 		extCommand.append(xmlPath).append(" ");
-		extCommand.append(classPath);
+		extCommand.append(fullBinaryPath);
 
 		try {
 			String command = extCommand.toString();
-			//System.out.println(command);
+			// System.out.println(command);
 
 			Process p = Runtime.getRuntime().exec(command);
 
@@ -124,23 +117,24 @@ public class DependencyFinder {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		return xmlPath;
 	}
 
-	private ArrayList<String> c2c() {
-		String xmlPath = buildXMLPath();
-		String name = narrowClassName();
+	private HashSet<String> c2c(String className, String xmlPath) {
+		String name = shortClassName(className);
 
 		// Command line for c2c
 		StringBuilder c2cCommand = new StringBuilder();
 		c2cCommand.append("c2c.bat ").append("-scope-includes ");
-		c2cCommand.append("\\").append(name).append("\\ ");
+		c2cCommand.append("/").append(name).append("/ ");
 		c2cCommand.append(xmlPath);
 
-		ArrayList<String> resultList = new ArrayList<String>();
+		HashSet<String> resultList = new HashSet<String>();
 
 		try {
 			String command = c2cCommand.toString();
-			//System.out.println(command);
+			// System.out.println(command);
 
 			Process p = Runtime.getRuntime().exec(command);
 			BufferedReader in = new BufferedReader(new InputStreamReader(p
@@ -149,16 +143,17 @@ public class DependencyFinder {
 			String str = null;
 			while (null != (str = in.readLine())) {
 				resultList.add(str);
-				//System.out.println(str);
+				// System.out.println(str);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return resultList;
+		// Here return formated results
+		return formatC2COutput(resultList);
 	}
 
-	private ArrayList<String> formatC2COutput(ArrayList<String> c2cOutput) {
+	private HashSet<String> formatC2COutput(HashSet<String> c2cOutput) {
 		HashSet<String> results = new HashSet<String>();
 		Iterator<String> iter = c2cOutput.iterator();
 
@@ -173,106 +168,67 @@ public class DependencyFinder {
 			String string = dep.endsWith(" *") ? dep.substring(0,
 					dep.length() - 2) : dep;
 
+			// We only care about individual source file
 			String[] name = string.split("[$]");
-			//System.out.println(name[0]);
+			// System.out.println(name[0]);
 			results.add(name[0]);
 		}
-		return new ArrayList<String>(results);
+		return results;
 	}
 
-	private DependencyResult generateResult(ArrayList<String> list) {
-		DependencyResult result = new DependencyResult();
-		Iterator<String> iter = list.iterator();
-
+	// Remove all class under source dir from rawResult
+	private HashSet<String> splitRawC2CResult(HashSet<String> rawResult) {
+		HashSet<String> classList = new HashSet<String>();
+		Iterator<String> iter = rawResult.iterator();
 		while (iter.hasNext()) {
-			String path = iter.next();
-			feedResultList(result, path);
-		}
-		return result;
-	}
-
-	private void feedResultList(DependencyResult result, String fullClassName) {
-		String file = buildSourcePath(fullClassName);
-		
-		if (directory.contains(file)) {
-			//System.out.println(file);
-			result.srcList.add(file);
-			srcFullClassNameSet.add(fullClassName);
-		} else {
-			String lib = resolveLibraryName(fullClassName);
-			//if (lib != null)
-				//System.out.println(lib);
-			if (lib != null)
-				result.libList.add(lib);
-		}
-	}
-
-	private void feedMockList(DependencyResult result) {
-		for (String fullClassName : srcFullClassNameSet) {
-			
-			// Collect interfaces & abstract & concrete classes
-			try {
-				Class<?> clazz = Class.forName(fullClassName);
-				if (clazz.isInterface()) {
-					interfaceList.add(clazz);
-				} else if (Modifier.isAbstract(clazz.getModifiers())) {
-					abstractClassList.add(clazz);
-				} else {
-					concreteClassList.add(clazz);
-				}				
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+			String str = iter.next();
+			String path = buildSourcePath(str);
+			if (directory.contains(path)) {
+				classList.add(str);
+				iter.remove();
 			}
 		}
-		
-		// Remove implemented interfaces & extended abstract classes
-		for (Class<?> c : concreteClassList) {
-			Iterator<Class<?>> iter = interfaceList.iterator();
-			while (iter.hasNext()) {
-				if (Arrays.asList(c.getInterfaces()).contains(iter.next())) {
-					iter.remove();
-				}
-			}
-			iter = abstractClassList.iterator();
-			while (iter.hasNext()) {
-				if (c.getSuperclass() == iter.next()) {
-					iter.remove();
-				}
-			}
-		}
-		
-		// Left interfaces & abstract classes need mock
-		for (Class<?> c : interfaceList) {
-			result.mockList.add(c.getName());
-		}
-		for (Class<?> c : abstractClassList) {
-			result.mockList.add(c.getName());
-		}
+		return classList;
 	}
 
-	private String buildSourcePath(String path) {
-		String filePath = path.replace('.', '/');
+	private String buildSourcePath(String className) {
+		String classPath = className.replace('.', '/');
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(srcPath).append("/");
-		builder.append(filePath).append(".java");
+		builder.append(classPath).append(".java");
 
 		return builder.toString();
 	}
 
-	private String resolveLibraryName(String path) {
-		String[] str = path.split("\\.");
-		if (packagePrefix.contains(str[0])) {
-			if (str[0].equals("java"))
-				return null;
-			else
-				return str[1];
-		} else
-			return str[0];
+	private String buildBinaryPath(String className) {
+		String classPath = className.replace('.', '/');
 
+		StringBuilder builder = new StringBuilder();
+		builder.append(binPath).append("/");
+		builder.append(classPath).append(".class");
+
+		return builder.toString();
 	}
 
-	private HashSet<String> walkDirectory() {
+	private String buildXMLPath(String className) {
+		String classPath = className.replace('.', '/');
+
+		StringBuilder builder = new StringBuilder();
+		builder.append(binPath).append("/");
+		builder.append(classPath).append(".xml");
+
+		return builder.toString();
+	}
+
+	private String shortClassName(String className) {
+		String[] array = className.split("\\.");
+
+		// The last element in array is the narrowed name
+		return array[array.length - 1];
+	}
+
+	private HashSet<String> walkDirectory(String srcPath) {
 		HashSet<String> dir = new HashSet<String>();
 
 		Directory.TreeInfo treeInfo = Directory.walk(srcPath, ".*[.]java$");
@@ -284,12 +240,67 @@ public class DependencyFinder {
 		return dir;
 	}
 
-	private HashSet<String> enumPrefix() {
-		HashSet<String> prefix = new HashSet<String>();
-		prefix.add("org");
-		prefix.add("java");
-		prefix.add("com");
-		prefix.add("nu");
-		return prefix;
+	private void resolveKeyLibName(HashSet<String> libSet) {
+		Iterator<String> iter = libSet.iterator();
+		while (iter.hasNext()) {
+			String libName = iter.next();
+			String[] array = libName.split("[.]");
+			if (stdLibSet.contains(array[0]))
+				continue;
+			if (siteSet.contains(array[0]))
+				libList.add(array[1]);
+			else
+				libList.add(array[0]);
+		}
+	}
+
+	private HashSet<String> generateMockList() {
+		HashSet<String> mockSet = new HashSet<String>();
+
+		HashSet<Class<?>> concreteSet = new HashSet<Class<?>>();
+		HashSet<Class<?>> interfaceSet = new HashSet<Class<?>>();
+		HashSet<Class<?>> absClassSet = new HashSet<Class<?>>();
+
+		for (String fullClassName : classSet) {
+
+			// Collect interfaces & abstract & concrete classes
+			try {
+				Class<?> clazz = Class.forName(fullClassName);
+				if (clazz.isInterface()) {
+					interfaceSet.add(clazz);
+				} else if (Modifier.isAbstract(clazz.getModifiers())) {
+					absClassSet.add(clazz);
+				} else {
+					concreteSet.add(clazz);
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// Remove implemented interfaces & extended abstract classes
+		for (Class<?> c : concreteSet) {
+			Iterator<Class<?>> iter = interfaceSet.iterator();
+			while (iter.hasNext()) {
+				if (Arrays.asList(c.getInterfaces()).contains(iter.next())) {
+					iter.remove();
+				}
+			}
+			iter = absClassSet.iterator();
+			while (iter.hasNext()) {
+				if (c.getSuperclass() == iter.next()) {
+					iter.remove();
+				}
+			}
+		}
+
+		// Left interfaces & abstract classes need mock
+		for (Class<?> c : interfaceSet) {
+			mockSet.add(c.getName());
+		}
+		for (Class<?> c : absClassSet) {
+			mockSet.add(c.getName());
+		}
+		return mockSet;
 	}
 }
