@@ -1,4 +1,4 @@
-package pairwisetesting.execution;
+package pairwisetesting.execution.testcasetemplateengine;
 
 import java.util.Map;
 
@@ -6,6 +6,8 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 
+import pairwisetesting.execution.testcasetemplate.FirstCharRenderer;
+import pairwisetesting.execution.testcasetemplate.TestCaseTemplateParameter;
 import pairwisetesting.util.ClassUtil;
 
 

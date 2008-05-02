@@ -1,4 +1,4 @@
-package pairwisetesting.execution;
+package pairwisetesting.execution.testcasetemplateengine;
 
 public class TestCaseTemplateEngineException extends Exception {
 
