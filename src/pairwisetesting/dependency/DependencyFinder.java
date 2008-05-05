@@ -59,6 +59,36 @@ public class DependencyFinder {
 		siteSet.add("org");
 		siteSet.add("nu");
 	}
+	
+	public DependencyFinder(String fullClassName, String sourcePath,
+			String binaryPath,String endPath){
+		
+		if(!endPath.endsWith("/")){
+			endPath += "/";
+		}
+		
+		className = fullClassName;
+
+		srcPath = endPath + sourcePath;
+		binPath = endPath + binaryPath;
+
+		classSet = new HashSet<String>();
+		srcList = new HashSet<String>();
+		libList = new HashSet<String>();
+
+		directory = walkDirectory(srcPath);
+
+		stdLibSet = new HashSet<String>();
+		stdLibSet.add("java");
+		stdLibSet.add("javax");
+
+		siteSet = new HashSet<String>();
+		siteSet.add("net");
+		siteSet.add("com");
+		siteSet.add("org");
+		siteSet.add("nu");
+		
+	}
 
 	public DependencyResult findDependency() {
 		findDependency(className);
