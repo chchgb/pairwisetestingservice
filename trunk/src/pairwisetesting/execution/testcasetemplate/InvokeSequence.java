@@ -105,12 +105,16 @@ public class InvokeSequence {
 		Invoke[] invokes = findByFieldType(fieldClassName);
 		ArrayList<String> jMockInvokeSequence = new ArrayList<String>();
 		for (Invoke invoke : invokes) {
-			jMockInvokeSequence.add(invoke.getStatement().replaceFirst("(.*)[.](.*)", "one ($1).$2"));
+			jMockInvokeSequence.add(invoke.getStatement().replaceFirst("(.*)[.](.*)", "atLeast(1).of ($1).$2"));
 			if (! invoke.getReturnTypeName().equals("void")) {
 				jMockInvokeSequence.add("will(returnValue(<NeedFilled>))");
 			}
 		}
 		return jMockInvokeSequence.toArray(new String[0]);
 	}
+	
+//	private void collectInvokeSequence(String methodSignature, Pattern invokePattern, ArrayList<Invoke> invokeSequenceList) {
+//		
+//	}
 
 }
