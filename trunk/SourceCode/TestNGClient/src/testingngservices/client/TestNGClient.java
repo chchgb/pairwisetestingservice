@@ -16,7 +16,7 @@ public class TestNGClient {
 
 	private ArrayList<String> srcList;
 	private ArrayList<String> libList;
-	private LibManager libManager;
+	public LibManager libManager;
 	
 	public TestNGClient(){
 		classPath = "bin";
