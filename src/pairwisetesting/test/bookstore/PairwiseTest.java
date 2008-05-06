@@ -21,9 +21,9 @@ public class PairwiseTest extends MockObjectTestCase {
 	public void testComputeDiscountedPrice(final int level, final AccountType accountType, final String coupon) {
 		final Logger logger = mock(Logger.class, "MockLogger_" + level + "_" + accountType + "_" + coupon);
 		checking(new Expectations() {{
-			one (logger).log(level);
-			one (logger).log(accountType);
-			one (logger).log(coupon);
+			atLeast(1).of (logger).log(level);
+			atLeast(1).of (logger).log(accountType);
+			atLeast(1).of (logger).log(coupon);
 		}});
 		BookStore bookStore = new BookStore(Converter.convertTo("PKU", String.class), Converter.convertTo("40", int.class));
 		bookStore.setLogger(logger);

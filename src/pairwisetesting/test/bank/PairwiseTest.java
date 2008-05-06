@@ -23,12 +23,12 @@ public class PairwiseTest extends MockObjectTestCase {
 		final IAccountManager manager = mock(IAccountManager.class, "MockIAccountManager_" + accountId + "_" + amount);
 		final Logger logger = mock(Logger.class, "MockLogger_" + accountId + "_" + amount);
 		checking(new Expectations() {{
-			one (manager).beginTransaction();
-			one (manager).withdraw(accountId, amount);
+			atLeast(1).of (manager).beginTransaction();
+			atLeast(1).of (manager).withdraw(accountId, amount);
 			will(returnValue(10000 - amount));
-			one (manager).commit();
-			one (logger).log(accountId);
-			one (logger).log(amount);
+			atLeast(1).of (manager).commit();
+			atLeast(1).of (logger).log(accountId);
+			atLeast(1).of (logger).log(amount);
 		}});
 		AccountService accountService = new AccountService();
 		accountService.setIAccountManager(manager);
