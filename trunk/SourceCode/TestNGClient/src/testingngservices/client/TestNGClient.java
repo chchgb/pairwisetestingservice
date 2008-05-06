@@ -37,11 +37,6 @@ public class TestNGClient {
 
 	}
 
-	public LibManager getLibManager() {
-		getDependencyFile();
-		return this.libManager;
-	}
-
 	public void setClassPath(String path) {
 		this.classPath = path;
 	}
@@ -59,12 +54,19 @@ public class TestNGClient {
 	}
 
 	private void getDependencyFile() {
-		 //DependencyFinder depFinder = new DependencyFinder(className, "src", classPath,endPath);
-		DependencyFinder depFinder = new DependencyFinder(className, "src", classPath);
+		System.out.println("1243124321");
+		DependencyFinder depFinder = new DependencyFinder(className, "src", "bin");
+		
+		//DependencyFinder depFinder = new DependencyFinder(className, "src", "bin",endPath);
 		DependencyResult res = depFinder.findDependency();
 		
+		
+		System.out.println("1243124321");
 		this.srcList = DependencyResult.transferPath(endPath, res.srcList);
-		this.libList = DependencyResult.transferPath(endPath, res.libList);
+		System.out.println("1243124321");
+		System.out.println("1243124321: " +res.libList);
+		this.libList = res.libList;
+		System.out.println("1243124321");
 		libManager.addNotFoundLibFromArrayList(this.libList);
 	}
 

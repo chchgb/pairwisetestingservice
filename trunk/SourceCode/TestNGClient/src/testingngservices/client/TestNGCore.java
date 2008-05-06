@@ -77,10 +77,16 @@ public class TestNGCore {
 		PairwiseTestingClient ptClient = new PairwiseTestingClient(serviceIP);
 		ptClient.setMetaParameter(mp);
 		ptClient.setEngine(engineName);
+		
+		System.out.println("getTestCase");
+		
+		
 		String pairwiseXML = ptClient.execute();
 
 
 		this.testCaseString = service.getTestCase(tp.toXML(), pairwiseXML);
+		
+		System.out.println("this.testCaseString" + this.testCaseString);
 
 		testCasePath = "src/" + tp.getPackageName().replace(".", "/")
 				+ "/" + "PairwiseTest.java";

@@ -24,18 +24,18 @@ public class PairwiseTestingServiceClient {
 
     public PairwiseTestingServiceClient() {
         create0();
-        Endpoint PairwiseTestingServicePortTypeLocalEndpointEP = service0 .addEndpoint(new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalBinding"), "xfire.local://PairwiseTestingService");
-        endpoints.put(new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), PairwiseTestingServicePortTypeLocalEndpointEP);
-        Endpoint PairwiseTestingServiceHttpPortEP = service0 .addEndpoint(new QName("http://pairwisetesting", "PairwiseTestingServiceHttpPort"), new QName("http://pairwisetesting", "PairwiseTestingServiceHttpBinding"), "http://liuwei-t61:8080/PairwiseTestingService/services/PairwiseTestingService");
-        endpoints.put(new QName("http://pairwisetesting", "PairwiseTestingServiceHttpPort"), PairwiseTestingServiceHttpPortEP);
+        Endpoint PairwiseTestingServiceHttpPortEP = service0 .addEndpoint(new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpPort"), new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpBinding"), "http://192.168.201.126:8080/PariwiseTesting/services/PairwiseTestingService");
+        endpoints.put(new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpPort"), PairwiseTestingServiceHttpPortEP);
+        Endpoint PairwiseTestingServicePortTypeLocalEndpointEP = service0 .addEndpoint(new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalBinding"), "xfire.local://PairwiseTestingService");
+        endpoints.put(new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), PairwiseTestingServicePortTypeLocalEndpointEP);
     }
     
     public PairwiseTestingServiceClient(String url) {
         create0();
-        Endpoint PairwiseTestingServicePortTypeLocalEndpointEP = service0 .addEndpoint(new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalBinding"), "xfire.local://PairwiseTestingService");
-        endpoints.put(new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), PairwiseTestingServicePortTypeLocalEndpointEP);
-        Endpoint PairwiseTestingServiceHttpPortEP = service0 .addEndpoint(new QName("http://pairwisetesting", "PairwiseTestingServiceHttpPort"), new QName("http://pairwisetesting", "PairwiseTestingServiceHttpBinding"), url);
-        endpoints.put(new QName("http://pairwisetesting", "PairwiseTestingServiceHttpPort"), PairwiseTestingServiceHttpPortEP);
+        Endpoint PairwiseTestingServiceHttpPortEP = service0 .addEndpoint(new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpPort"), new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpBinding"), url);
+        endpoints.put(new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpPort"), PairwiseTestingServiceHttpPortEP);
+        Endpoint PairwiseTestingServicePortTypeLocalEndpointEP = service0 .addEndpoint(new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalBinding"), "xfire.local://PairwiseTestingService");
+        endpoints.put(new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint"), PairwiseTestingServicePortTypeLocalEndpointEP);
     }
 
     public Object getEndpoint(Endpoint endpoint) {
@@ -66,29 +66,29 @@ public class PairwiseTestingServiceClient {
         asf.setBindingCreationEnabled(false);
         service0 = asf.create((pairwisetesting.client.PairwiseTestingServicePortType.class), props);
         {
-            AbstractSoapBinding soapBinding = asf.createSoap11Binding(service0, new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalBinding"), "urn:xfire:transport:local");
+            AbstractSoapBinding soapBinding = asf.createSoap11Binding(service0, new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalBinding"), "urn:xfire:transport:local");
         }
         {
-            AbstractSoapBinding soapBinding = asf.createSoap11Binding(service0, new QName("http://pairwisetesting", "PairwiseTestingServiceHttpBinding"), "http://schemas.xmlsoap.org/soap/http");
+            AbstractSoapBinding soapBinding = asf.createSoap11Binding(service0, new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpBinding"), "http://schemas.xmlsoap.org/soap/http");
         }
-    }
-
-    public PairwiseTestingServicePortType getPairwiseTestingServicePortTypeLocalEndpoint() {
-        return ((PairwiseTestingServicePortType)(this).getEndpoint(new QName("http://pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint")));
-    }
-
-    public PairwiseTestingServicePortType getPairwiseTestingServicePortTypeLocalEndpoint(String url) {
-        PairwiseTestingServicePortType var = getPairwiseTestingServicePortTypeLocalEndpoint();
-        org.codehaus.xfire.client.Client.getInstance(var).setUrl(url);
-        return var;
     }
 
     public PairwiseTestingServicePortType getPairwiseTestingServiceHttpPort() {
-        return ((PairwiseTestingServicePortType)(this).getEndpoint(new QName("http://pairwisetesting", "PairwiseTestingServiceHttpPort")));
+        return ((PairwiseTestingServicePortType)(this).getEndpoint(new QName("http://service.pairwisetesting", "PairwiseTestingServiceHttpPort")));
     }
 
     public PairwiseTestingServicePortType getPairwiseTestingServiceHttpPort(String url) {
         PairwiseTestingServicePortType var = getPairwiseTestingServiceHttpPort();
+        org.codehaus.xfire.client.Client.getInstance(var).setUrl(url);
+        return var;
+    }
+
+    public PairwiseTestingServicePortType getPairwiseTestingServicePortTypeLocalEndpoint() {
+        return ((PairwiseTestingServicePortType)(this).getEndpoint(new QName("http://service.pairwisetesting", "PairwiseTestingServicePortTypeLocalEndpoint")));
+    }
+
+    public PairwiseTestingServicePortType getPairwiseTestingServicePortTypeLocalEndpoint(String url) {
+        PairwiseTestingServicePortType var = getPairwiseTestingServicePortTypeLocalEndpoint();
         org.codehaus.xfire.client.Client.getInstance(var).setUrl(url);
         return var;
     }

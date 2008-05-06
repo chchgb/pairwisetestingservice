@@ -26,10 +26,10 @@ public class TestNGServiceClient {
         create0();
         Endpoint TestNGServicePortTypeLocalEndpointEP = service0 .addEndpoint(new QName("http://testingngservices", "TestNGServicePortTypeLocalEndpoint"), new QName("http://testingngservices", "TestNGServicePortTypeLocalBinding"), "xfire.local://TestNGService");
         endpoints.put(new QName("http://testingngservices", "TestNGServicePortTypeLocalEndpoint"), TestNGServicePortTypeLocalEndpointEP);
-        Endpoint TestNGServiceHttpPortEP = service0 .addEndpoint(new QName("http://testingngservices", "TestNGServiceHttpPort"), new QName("http://testingngservices", "TestNGServiceHttpBinding"), "http://localhost:8080/TestNGServices/services/TestNGService");
+        Endpoint TestNGServiceHttpPortEP = service0 .addEndpoint(new QName("http://testingngservices", "TestNGServiceHttpPort"), new QName("http://testingngservices", "TestNGServiceHttpBinding"), "http://192.168.201.126:8080/TestNGServices/services/TestNGService");
         endpoints.put(new QName("http://testingngservices", "TestNGServiceHttpPort"), TestNGServiceHttpPortEP);
     }
-
+    
     public TestNGServiceClient(String url) {
         create0();
         Endpoint TestNGServicePortTypeLocalEndpointEP = service0 .addEndpoint(new QName("http://testingngservices", "TestNGServicePortTypeLocalEndpoint"), new QName("http://testingngservices", "TestNGServicePortTypeLocalBinding"), "xfire.local://TestNGService");
@@ -38,7 +38,7 @@ public class TestNGServiceClient {
         endpoints.put(new QName("http://testingngservices", "TestNGServiceHttpPort"), TestNGServiceHttpPortEP);
     }
 
-	public Object getEndpoint(Endpoint endpoint) {
+    public Object getEndpoint(Endpoint endpoint) {
         try {
             return proxyFactory.create((endpoint).getBinding(), (endpoint).getUrl());
         } catch (MalformedURLException e) {
