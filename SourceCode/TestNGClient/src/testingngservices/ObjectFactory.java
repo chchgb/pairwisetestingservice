@@ -30,11 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetLibList }
+     * Create an instance of {@link TestExecuteResponse }
      * 
      */
-    public GetLibList createGetLibList() {
-        return new GetLibList();
+    public TestExecuteResponse createTestExecuteResponse() {
+        return new TestExecuteResponse();
     }
 
     /**
@@ -46,19 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TestExecute }
+     * Create an instance of {@link GetTestCaseResponse }
      * 
      */
-    public TestExecute createTestExecute() {
-        return new TestExecute();
-    }
-
-    /**
-     * Create an instance of {@link UploadLib }
-     * 
-     */
-    public UploadLib createUploadLib() {
-        return new UploadLib();
+    public GetTestCaseResponse createGetTestCaseResponse() {
+        return new GetTestCaseResponse();
     }
 
     /**
@@ -70,11 +62,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TestExecuteResponse }
+     * Create an instance of {@link UploadLib }
      * 
      */
-    public TestExecuteResponse createTestExecuteResponse() {
-        return new TestExecuteResponse();
+    public UploadLib createUploadLib() {
+        return new UploadLib();
     }
 
     /**
@@ -86,11 +78,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetTestCaseResponse }
+     * Create an instance of {@link TestExecute }
      * 
      */
-    public GetTestCaseResponse createGetTestCaseResponse() {
-        return new GetTestCaseResponse();
+    public TestExecute createTestExecute() {
+        return new TestExecute();
+    }
+
+    /**
+     * Create an instance of {@link GetLibList }
+     * 
+     */
+    public GetLibList createGetLibList() {
+        return new GetLibList();
     }
 
 }

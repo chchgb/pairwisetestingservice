@@ -12,6 +12,7 @@ public class PairwiseTestingClient {
 	
 	public PairwiseTestingClient(){
 		this.url = "http://localhost:8080/PariwiseTesting/services/PairwiseTestingService";
+		           
 	}
 	
 	public PairwiseTestingClient(String url){
