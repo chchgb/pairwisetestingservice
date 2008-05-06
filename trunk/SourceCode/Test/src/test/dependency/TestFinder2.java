@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 public class TestFinder2 extends TestCase{
 
 	public void testFindDependency(){
-		String className = "pairwisetesting.dependency.test.TestFinder2";
+		String className = "test.TestFinder2";
 		DependencyFinder df = new DependencyFinder(className, "src", "bin");
 		DependencyResult result = df.findDependency();
 		

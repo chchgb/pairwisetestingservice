@@ -800,15 +800,15 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue(ClassUtil.isInterface(List.class));
 		assertFalse(ClassUtil.isInterface(TestCase.class));
 		assertEquals("boolean", ClassUtil.getReturnTypeName(
-				"pairwisetesting.test.math.Range", "isBetween", "int", "int",
+				"test.math.Range", "isBetween", "int", "int",
 				"int"));
 		assertEquals("boolean", ClassUtil.getReturnTypeName(
-				"pairwisetesting.test.math.Range", "isBetween"));
+				"test.math.Range", "isBetween"));
 		assertEquals("void", ClassUtil.getReturnTypeName(
 				"junit.framework.TestCase", "tearDown"));
 		assertEquals("java.lang.String", ClassUtil.getReturnTypeName(
 				"junit.framework.TestCase", "toString"));
-		assertEquals("Range", ClassUtil.getSimpleClassName("pairwisetesting.test.math.Range"));
+		assertEquals("Range", ClassUtil.getSimpleClassName("test.math.Range"));
 		assertEquals("Range", ClassUtil.getSimpleClassName("Range"));
 	}
 	
@@ -816,12 +816,12 @@ public class TestPairwiseTesting extends TestCase {
 	public void testInvokeSequence() {
 		InvokeSequence is = new InvokeSequence("src/pairwisetesting/test/bank/AccountService.java");
 		
-		assertEquals("manager", is.getFieldName("pairwisetesting.test.bank.IAccountManager"));
+		assertEquals("manager", is.getFieldName("test.bank.IAccountManager"));
 		assertEquals("manager", is.getFieldName("IAccountManager"));
 		
 		// is.setScopeByMethod("double", "withdraw", new Parameter("String", "accountId"), new Parameter("double", "amount"));
 		is.setScopeByMethod("double", "withdraw");	
-		Invoke[] sequences = is.findByFieldType("pairwisetesting.test.bank.IAccountManager");
+		Invoke[] sequences = is.findByFieldType("test.bank.IAccountManager");
 		Invoke[] expectedSequences = new Invoke[3];
 		expectedSequences[0] = new Invoke("manager.beginTransaction()", "void");
 		expectedSequences[1] = new Invoke("manager.withdraw(accountId, amount)", "double");
@@ -834,7 +834,7 @@ public class TestPairwiseTesting extends TestCase {
 		expectedJMockSequences[1] = "atLeast(1).of (manager).withdraw(accountId, amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
 		expectedJMockSequences[3] = "atLeast(1).of (manager).commit()";
-		String[] jMockSequences = is.generateJMockInvokeSequenceByFieldType("pairwisetesting.test.bank.IAccountManager");
+		String[] jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
 		// System.out.println(Arrays.toString(jMockSequences));
 		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
 	}
@@ -863,15 +863,15 @@ public class TestPairwiseTesting extends TestCase {
 		tp.setDelta(0.2);
 		tp.addImport("java.io.*");
 		tp.addImport("java.net.*");
-		tp.addImport("pairwisetesting.test.bank.IAccountManager");
-		tp.addClassToMockInstanceName("pairwisetesting.test.bank.IAccountManager", "manager");
+		tp.addImport("test.bank.IAccountManager");
+		tp.addClassToMockInstanceName("test.bank.IAccountManager", "manager");
 		String[] jMockSequences = new String[4];
 		jMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
 		jMockSequences[1] = "atLeast(1).of (manager).withdraw(accountId, amount)";
 		jMockSequences[2] = "will(returnValue(<NeedFilled>)";
 		jMockSequences[3] = "atLeast(1).of (manager).commit()";
-		tp.addJMockInvokeSequence("pairwisetesting.test.bank.IAccountManager", jMockSequences);
-		// tp.addClassToMockInstanceName("pairwisetesting.test.bank.AbstractAccountRepository", "repository");
+		tp.addJMockInvokeSequence("test.bank.IAccountManager", jMockSequences);
+		// tp.addClassToMockInstanceName("test.bank.AbstractAccountRepository", "repository");
 		
 		assertTrue(tp.isSingleton());
 		assertTrue(tp.isStaticMethod());
@@ -922,7 +922,7 @@ public class TestPairwiseTesting extends TestCase {
             + "<run><level>4</level><level>3</level><level>4</level></run>"
             + "</testcases>";
 		tp = new TestCaseTemplateParameter();
-		tp.setPackageName("pairwisetesting.test.math");
+		tp.setPackageName("test.math");
 		tp.setClassUnderTest("Range");
 		tp.setMethodUnderTest("isBetween");
 		tp.setStaticMethod(true);
@@ -958,7 +958,7 @@ public class TestPairwiseTesting extends TestCase {
             + "</testcases>";
 		
 		tp = new TestCaseTemplateParameter();
-		tp.setPackageName("pairwisetesting.test.bookstore");
+		tp.setPackageName("test.bookstore");
 		tp.setClassUnderTest("BookStore");
 		tp.addConstructorArgument("String", "PKU");
 		tp.addConstructorArgument("int", "40");
@@ -977,13 +977,13 @@ public class TestPairwiseTesting extends TestCase {
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		assertTrue(te.generateTestNGTestCase().contains("bookStore.getDiscountedPrice()"));
 		
-		tp.addImport("pairwisetesting.test.bookstore.Logger");
-		tp.addClassToMockInstanceName("pairwisetesting.test.bookstore.Logger", "logger");
+		tp.addImport("test.bookstore.Logger");
+		tp.addClassToMockInstanceName("test.bookstore.Logger", "logger");
 		jMockSequences = new String[3];
 		jMockSequences[0] = "atLeast(1).of (logger).log(level)";
 		jMockSequences[1] = "atLeast(1).of (logger).log(accountType)";
 		jMockSequences[2] = "atLeast(1).of (logger).log(coupon)";
-		tp.addJMockInvokeSequence("pairwisetesting.test.bookstore.Logger", jMockSequences);
+		tp.addJMockInvokeSequence("test.bookstore.Logger", jMockSequences);
 		
 		tp.setCheckStateMethod("");
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
@@ -1002,7 +1002,7 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue(te.generateTestNGTestCase().contains("bookStore.getDiscountedPrice()"));
 		
 		tp = new TestCaseTemplateParameter();
-		tp.setPackageName("pairwisetesting.test.bank");
+		tp.setPackageName("test.bank");
 		tp.setClassUnderTest("AccountService");
 		tp.setMethodUnderTest("withdraw");
 		tp.addMethodParameter("String", "accountId");
@@ -1010,13 +1010,13 @@ public class TestPairwiseTesting extends TestCase {
 		tp.setReturnType("double");
 		tp.setDelta(0.001);
 		
-		tp.addImport("pairwisetesting.test.bank.IAccountManager");
-		tp.addClassToMockInstanceName("pairwisetesting.test.bank.IAccountManager", "manager");
+		tp.addImport("test.bank.IAccountManager");
+		tp.addClassToMockInstanceName("test.bank.IAccountManager", "manager");
 		
 		InvokeSequence is = new InvokeSequence("src/pairwisetesting/test/bank/AccountService.java");
 		is.setScopeByMethod("double", "withdraw");
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("pairwisetesting.test.bank.IAccountManager");
-		tp.addJMockInvokeSequence("pairwisetesting.test.bank.IAccountManager", jMockSequences);
+		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
+		tp.addJMockInvokeSequence("test.bank.IAccountManager", jMockSequences);
 		
 		pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
             + "<testcases>"
@@ -1041,10 +1041,10 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[2]));
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[3]));
 		
-		tp.addImport("pairwisetesting.test.bank.Logger");
-		tp.addClassToMockInstanceName("pairwisetesting.test.bank.Logger", "logger");
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("pairwisetesting.test.bank.Logger");
-		tp.addJMockInvokeSequence("pairwisetesting.test.bank.Logger", jMockSequences);
+		tp.addImport("test.bank.Logger");
+		tp.addClassToMockInstanceName("test.bank.Logger", "logger");
+		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.Logger");
+		tp.addJMockInvokeSequence("test.bank.Logger", jMockSequences);
 
 		expectedJMockSequences = new String[6];
 		expectedJMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
