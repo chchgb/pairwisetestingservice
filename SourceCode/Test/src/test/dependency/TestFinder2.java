@@ -20,7 +20,7 @@ public class TestFinder2 extends TestCase{
 	}
 
 	public void testFindDependency(){
-		String className = "test.TestFinder2";
+		String className = "test.A";
 		DependencyFinder df = new DependencyFinder(className, "src", "bin","D:/MyShare/Workspace/MyEclipse/PairwiseTest");
 		DependencyResult result = df.findDependency();
 		
