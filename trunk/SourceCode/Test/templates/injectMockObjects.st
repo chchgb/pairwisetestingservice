@@ -1,1 +1,0 @@
-$classToMockNames, classToMockInstanceNames: {classToMockName, classToMockInstanceName |$if(needMock)$$classUnderTest; format="camelize"$.set$classToMockName$($classToMockInstanceName$);$endif$}; separator="\n"$

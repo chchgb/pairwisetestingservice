@@ -1,1 +1,0 @@
-$classUnderTest$ $classUnderTest; format="camelize"$ = new $classUnderTest$($constructorArgs: argument(); separator=", "$);
