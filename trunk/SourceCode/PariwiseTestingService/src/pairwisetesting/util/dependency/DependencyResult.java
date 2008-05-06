@@ -12,8 +12,10 @@ public class DependencyResult {
 			ArrayList<String> transfer) {
 		ArrayList<String> result = new ArrayList<String>();
 		for (String source : transfer) {
+
 			String temp = source.substring(endPath.length(), source.length());
 			result.add(temp);
+
 		}
 		return result;
 	}
