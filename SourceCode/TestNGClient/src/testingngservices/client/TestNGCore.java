@@ -169,6 +169,8 @@ public class TestNGCore {
 	public Set<String> getLibList(){
 		Set<String> resultSet = new HashSet<String>();
 		String[] temp = service.getLibList().split(";");
+		
+		System.out.println("getLibList" +temp);
 		for(int index = 0;index<temp.length;index++){
 			resultSet.add(temp[index]);
 		}
