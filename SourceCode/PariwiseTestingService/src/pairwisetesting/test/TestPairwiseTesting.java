@@ -21,10 +21,6 @@ import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
 import pairwisetesting.engine.am.oaprovider.Rp_OLS_pu_OAProvider;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
-import pairwisetesting.execution.testcasetemplate.Invoke;
-import pairwisetesting.execution.testcasetemplate.InvokeSequence;
-import pairwisetesting.execution.testcasetemplate.TestCaseTemplateParameter;
-import pairwisetesting.execution.testcasetemplateengine.TestCaseTemplateEngine;
 import pairwisetesting.metaparameterparser.MetaParameterXMLSerializer;
 import pairwisetesting.metaparameterparser.XMLMetaParameterProvider;
 import pairwisetesting.test.mock.MockMetaParameterProvider;
@@ -816,6 +812,7 @@ public class TestPairwiseTesting extends TestCase {
 		assertEquals("Range", ClassUtil.getSimpleClassName("Range"));
 	}
 	
+	/*
 	public void testInvokeSequence() {
 		InvokeSequence is = new InvokeSequence("src/pairwisetesting/test/bank/AccountService.java");
 		
@@ -1065,6 +1062,8 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[4]));
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[5]));
 	}
+	
+	*/
 	
 //	public void testPairwiseTestingService() {
 //		String xmlData = "<?xml version='1.0' encoding='UTF-8'?>" +
