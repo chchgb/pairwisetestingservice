@@ -53,7 +53,7 @@ public class TestSample {
 		client.initTestNGClient(tp, mp, "PICTEngine", "localhost");
 		//client.setEndPath(filePath);
 		client.setClassPath("bin");
-		client.setEndPath("D:/MyShare/Workspace/MyEclipse/PairwiseTest/");
+		//client.setEndPath("D:/MyShare/Workspace/MyEclipse/PairwiseTest/");
 //		client.setEndPath("D:/MyShare/Workspace/MyEclipse/TestNGClient/");
 		
 		
