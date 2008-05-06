@@ -59,14 +59,14 @@ public class DependencyFinder {
 		siteSet.add("org");
 		siteSet.add("nu");
 	}
-	
+
 	public DependencyFinder(String fullClassName, String sourcePath,
-			String binaryPath,String endPath){
-		
-		if(!endPath.endsWith("/")){
+			String binaryPath, String endPath) {
+
+		if (!endPath.endsWith("/")) {
 			endPath += "/";
 		}
-		
+
 		className = fullClassName;
 
 		srcPath = endPath + sourcePath;
@@ -87,12 +87,12 @@ public class DependencyFinder {
 		siteSet.add("com");
 		siteSet.add("org");
 		siteSet.add("nu");
-		
+
 	}
 
 	public DependencyResult findDependency() {
 		findDependency(className);
-		
+
 		DependencyResult result = new DependencyResult();
 		result.srcList = new ArrayList<String>(srcList);
 		result.libList = new ArrayList<String>(libList);
@@ -197,9 +197,11 @@ public class DependencyFinder {
 			String dep = str.substring(4);
 			String string = dep.endsWith(" *") ? dep.substring(0,
 					dep.length() - 2) : dep;
+			String s = string.endsWith("[]") ? string.substring(0, string
+					.length() - 2) : string;
 
 			// We only care about individual source file
-			String[] name = string.split("[$]");
+			String[] name = s.split("[$]");
 			// System.out.println(name[0]);
 			results.add(name[0]);
 		}
