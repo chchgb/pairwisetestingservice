@@ -6,12 +6,11 @@ import java.util.Set;
 
 import pairwisetesting.client.PairwiseTestingClient;
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.execution.TestCaseTemplateParameter;
-import pairwisetesting.util.Dependence;
 import pairwisetesting.util.LibDependence;
 import pairwisetesting.util.ObjectSerializ;
 import pairwisetesting.util.TestingMetaParameter;
 import pairwisetesting.util.TextFile;
+import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 
 
 public class TestNGCore {

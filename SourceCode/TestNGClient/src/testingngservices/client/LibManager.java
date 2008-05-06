@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import pairwisetesting.util.Dependence;
+import pairwisetesting.client.Dependence;
+
+
 
 public class LibManager {
 	private Set<String> partLibNameOfNotFound;

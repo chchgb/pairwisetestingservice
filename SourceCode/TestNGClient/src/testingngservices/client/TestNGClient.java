@@ -3,9 +3,9 @@ package testingngservices.client;
 import java.util.ArrayList;
 
 import pairwisetesting.coredomain.MetaParameter;
-import pairwisetesting.execution.TestCaseTemplateParameter;
-import pairwisetesting.util.DependencyFinder;
-import pairwisetesting.util.DependencyResult;
+import pairwisetesting.util.dependency.DependencyFinder;
+import pairwisetesting.util.dependency.DependencyResult;
+import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 
 public class TestNGClient {
 	private TestNGCore client;
