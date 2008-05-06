@@ -1,6 +1,7 @@
 package pairwisetesting.client;
 
 import pairwisetesting.coredomain.MetaParameter;
+import pairwisetesting.metaparameterparser.MetaParameterXMLSerializer;
 
 public class PairwiseTestingClient {
 	
@@ -35,8 +36,9 @@ public class PairwiseTestingClient {
 		PairwiseTestingServicePortType service = client.getPairwiseTestingServiceHttpPort();
 
 		//String input = ObjectSerializ.Object2String(mp);
+		MetaParameterXMLSerializer metaSeri = new MetaParameterXMLSerializer();
 		 
-		String input = MetaParameterXMLSerializer.serialize(mp);
+		String input = metaSeri.serialize(mp);
 		testCases = service.pariwiseTesting(input, engineName);
 		return testCases;
 
