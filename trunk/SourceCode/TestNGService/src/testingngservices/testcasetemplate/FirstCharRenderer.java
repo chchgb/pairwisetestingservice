@@ -1,4 +1,4 @@
-package pairwisetesting.execution.testcasetemplate;
+package testingngservices.testcasetemplate;
 
 
 
