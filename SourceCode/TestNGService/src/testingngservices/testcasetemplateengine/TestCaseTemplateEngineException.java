@@ -1,4 +1,4 @@
-package pairwisetesting.execution.testcasetemplateengine;
+package testingngservices.testcasetemplateengine;
 
 public class TestCaseTemplateEngineException extends Exception {
 
