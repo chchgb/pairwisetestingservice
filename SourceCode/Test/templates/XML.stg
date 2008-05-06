@@ -1,0 +1,26 @@
+group XML;
+
+class(name,fields,methods) ::= <<
+<class>
+  <name>$name$</name>
+  $fields:field(); separator="\n"$
+  $methods:method(); separator="\n"$
+</class>
+>>
+
+field() ::= <<
+<field>
+  <type>$type(t=it.type)$</type>
+  <name>$it.name$</name>
+</field>
+>>
+
+method() ::= <<
+<method>
+  <returnType>$it.returnType$</returnType>
+  <name>$it.name$</name>
+  $it.parameterTypes:{<arg><type>$type(t=it)$</type><name>arg$i$</name>}; separator="\n"$
+</method>
+>>
+
+type(t) ::= "$if(t.componentType)$$t.componentType$[]$else$$t.name$$endif$"
