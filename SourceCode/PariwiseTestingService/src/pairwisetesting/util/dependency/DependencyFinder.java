@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import pairwisetesting.util.Directory;
-import pairwisetesting.util.Directory.TreeInfo;
 
 public class DependencyFinder {
 
