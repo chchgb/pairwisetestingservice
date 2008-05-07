@@ -1,4 +1,4 @@
-package pairwisetesting.util;
+package testingngservices.testcasetemplate;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
