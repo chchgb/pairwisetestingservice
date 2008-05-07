@@ -43,40 +43,22 @@ public class InvokeSequence {
 		Class<?> fieldClass = ClassUtil.getClass(fieldClassName);
 
 		ArrayList<Invoke> invokeSequenceList = new ArrayList<Invoke>();
-		int scopeMark = 0;
-		boolean isMethodStart = false;
 
 		// Match fieldName.xxxxx(xxxxx)
-		String invokeRegex = "(" + fieldName + "[.](.*?)[(](.*?)[)])[; )]";
-		Pattern pattern = Pattern.compile(invokeRegex);
-
-		for (String line : fileContent) {
-
-			// Meet the end of the method
-			if (scopeMark == 0 && isMethodStart == true)
-				break;
-
-			if (line.contains(methodSignature)) {
-				isMethodStart = true;
-			}
-			if (line.contains("{")) {
-				scopeMark++;
-			}
-			if (line.contains("}")) {
-				scopeMark--;
-			}
-			if (isMethodStart) {
-				Matcher macher = pattern.matcher(line);
-				if (macher.find()) {
-					Invoke invoke = new Invoke();
-					invoke.setStatement(macher.group(1));
-					String methodName = macher.group(2);
-					invoke.setReturnTypeName(ClassUtil.getReturnTypeName(
-							fieldClass, methodName));
-					invokeSequenceList.add(invoke);
-				}
-			}
-		}
+		String fieldInvokeRegex = "(" + fieldName + "[.](.*?)[(](.*?)[)])[; )]";
+		Pattern fieldInvokePattern = Pattern.compile(fieldInvokeRegex);
+		
+		// Make field.invoke(xxxxx) -> field.invoke[(]xxxxx[)]
+		Pattern methodSignaturePattern = Pattern.compile(methodSignature.replaceAll("([(]|[)])", "[$1]"));
+		
+		// this.localMethod(xxxxx)
+		// localMethod(xxxxx)
+		// = this.localMethod(xxxxx)
+		// (this.localMethod(xxxxx))
+		Pattern localInvokePattern = Pattern.compile("((?<=this[.])|[(]|\\s|=)(\\w+)[(].*?[)]");
+		
+		collectInvokeSequence(methodSignaturePattern, localInvokePattern,
+				fieldInvokePattern, fieldClass, invokeSequenceList);
 
 		return invokeSequenceList.toArray(new Invoke[0]);
 	}
@@ -88,6 +70,7 @@ public class InvokeSequence {
 	 */
 	public String getFieldName(String fieldClassName) {
 		String simpleClassName = ClassUtil.getSimpleClassName(fieldClassName);
+		// AcountManager manager; | AcountManager manager = null;
 		String fieldDeclarationRegex = simpleClassName + "[ ](.*?)[; =]";
 		Pattern pattern = Pattern.compile(fieldDeclarationRegex);
 		String fieldName = null;
@@ -113,8 +96,58 @@ public class InvokeSequence {
 		return jMockInvokeSequence.toArray(new String[0]);
 	}
 	
-//	private void collectInvokeSequence(String methodSignature, Pattern invokePattern, ArrayList<Invoke> invokeSequenceList) {
-//		
-//	}
-
+	private void collectInvokeSequence(Pattern methodSignaturePattern, 
+			Pattern localInvokePattern, 
+			Pattern fieldInvokePattern, 
+			Class<?> fieldClass, 
+			ArrayList<Invoke> invokeSequenceList) {
+		
+		int scopeMark = 0;
+		boolean isMethodStart = false;
+		
+		for (String line : fileContent) {
+			
+			// Meet the end of the method
+			if (scopeMark == 0 && isMethodStart == true)
+				break;
+			
+			if (isMethodStart) {
+				// Find the filed Invoke
+				Matcher macher = fieldInvokePattern.matcher(line);
+				if (macher.find()) {
+					Invoke invoke = new Invoke();
+					invoke.setStatement(macher.group(1));
+					String methodName = macher.group(2);
+					invoke.setReturnTypeName(ClassUtil.getReturnTypeName(
+							fieldClass, methodName));
+					invokeSequenceList.add(invoke);
+				}
+				
+				// Find the local invoke
+				Matcher localInvokeMacher = localInvokePattern.matcher(line);
+				if (localInvokeMacher.find()) {
+					// group(2): the local method's name
+					Pattern localMethodSignaturePattern = Pattern
+							.compile("(public|private|protected) (.+?) " + localInvokeMacher.group(2));
+					collectInvokeSequence(localMethodSignaturePattern,
+							localInvokePattern, fieldInvokePattern, fieldClass, invokeSequenceList);
+				}
+			}
+			
+			// Check whether the current line is the start of the method
+			Matcher methodSignatureMacher = methodSignaturePattern.matcher(line);
+			if (methodSignatureMacher.find()) {
+				isMethodStart = true;
+			}
+			
+			// Mark of start of the block with the method scope
+			if (isMethodStart && line.contains("{")) {
+				scopeMark++;
+			}
+			// Mark of end of the block with the method scope
+			if (isMethodStart && line.contains("}")) {
+				scopeMark--;
+			}
+		}
+	}
 }
