@@ -112,7 +112,7 @@ public class InvokeSequence {
 				break;
 			
 			if (isMethodStart) {
-				// Find the filed Invoke
+				// Find the field Invoke
 				Matcher macher = fieldInvokePattern.matcher(line);
 				if (macher.find()) {
 					Invoke invoke = new Invoke();
@@ -124,11 +124,11 @@ public class InvokeSequence {
 				}
 				
 				// Find the local invoke
-				Matcher localInvokeMacher = localInvokePattern.matcher(line);
-				if (localInvokeMacher.find()) {
+				Matcher localInvokeMatcher = localInvokePattern.matcher(line);
+				if (localInvokeMatcher.find()) {
 					// group(2): the local method's name
 					Pattern localMethodSignaturePattern = Pattern
-							.compile("(public|private|protected) (.+?) " + localInvokeMacher.group(2));
+							.compile("(public|private|protected) (.+?) " + localInvokeMatcher.group(2));
 					collectInvokeSequence(localMethodSignaturePattern,
 							localInvokePattern, fieldInvokePattern, fieldClass, invokeSequenceList);
 				}
