@@ -9,7 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import pairwisetesting.test.expect.Expectation;
+import test.expect.Expectation;
 import pairwisetesting.util.Converter;
 
 $if(needMock)$
