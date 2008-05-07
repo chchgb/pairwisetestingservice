@@ -67,7 +67,7 @@ public class TestWorkflow {
 			
 			// Run Test with TestNG
 			//testingMeta.gettestCaseClassName()
-			Class clazz = ucl.loadClass(testingMeta.gettestCaseClassName());
+			Class<?> clazz = ucl.loadClass(testingMeta.gettestCaseClassName());
 			TestNG tng = new TestNG();
 			tng.setTestClasses(new Class[] { clazz });
 			TestListenerAdapter listener = new TestListenerAdapter();
