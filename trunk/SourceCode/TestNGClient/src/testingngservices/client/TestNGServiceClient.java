@@ -4,7 +4,9 @@ package testingngservices.client;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.HashMap;
+
 import javax.xml.namespace.QName;
+
 import org.codehaus.xfire.XFireRuntimeException;
 import org.codehaus.xfire.aegis.AegisBindingProvider;
 import org.codehaus.xfire.annotations.AnnotationServiceFactory;
