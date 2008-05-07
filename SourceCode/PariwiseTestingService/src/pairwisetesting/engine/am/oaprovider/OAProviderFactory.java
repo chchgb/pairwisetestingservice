@@ -2,7 +2,6 @@ package pairwisetesting.engine.am.oaprovider;
 
 import pairwisetesting.engine.am.IOAProviderFactory;
 import pairwisetesting.engine.am.OAProvider;
-import pairwisetesting.util.MathUtil;
 
 public class OAProviderFactory implements IOAProviderFactory {
 
