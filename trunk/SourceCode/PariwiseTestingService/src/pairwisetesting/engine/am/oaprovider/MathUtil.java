@@ -1,4 +1,4 @@
-package pairwisetesting.util;
+package pairwisetesting.engine.am.oaprovider;
 
 public class MathUtil {
 	
