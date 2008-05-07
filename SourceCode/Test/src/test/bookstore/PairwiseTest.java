@@ -26,7 +26,7 @@ public class PairwiseTest extends MockObjectTestCase {
 		BookStore bookStore = new BookStore(Converter.convertTo("PKU", String.class), Converter.convertTo("40", int.class));
 		bookStore.setLogger(logger);
 		bookStore.computeDiscountedPrice(level, accountType, coupon);
-		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("pairwisetesting.test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
+		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
 	}
 
 	@DataProvider(name = "PairwiseTestingDataProvider")
