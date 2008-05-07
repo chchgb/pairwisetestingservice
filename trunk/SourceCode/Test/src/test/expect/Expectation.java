@@ -24,7 +24,10 @@ public class Expectation {
 		ExpectedResults.put("test.bank.AccountService.withdraw_A002_2000.0", "8000");
 		ExpectedResults.put("test.bank.AccountService.withdraw_A001_2000.0", "8000");
 		ExpectedResults.put("test.bank.AccountService.withdraw_A002_1000.0", "9000");
-		
+		ExpectedResults.put("test.bank.AccountService.transfer_A001_A003_1000.0", "11000");
+		ExpectedResults.put("test.bank.AccountService.transfer_A001_A004_2000.0", "12000");
+		ExpectedResults.put("test.bank.AccountService.transfer_A002_A003_2000.0", "12000");
+		ExpectedResults.put("test.bank.AccountService.transfer_A002_A004_1000.0", "11000");
 	}
 	
 	public static String getExpectedResult(String key) {

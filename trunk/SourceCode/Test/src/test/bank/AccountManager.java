@@ -14,4 +14,8 @@ public class AccountManager implements IAccountManager {
 		return 0;
 	}
 
+	public double deposit(String accountId, double amount) {
+		return 0;
+	}
+
 }

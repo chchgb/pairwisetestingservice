@@ -15,6 +15,7 @@ import pairwisetesting.coredomain.MetaParameterException;
 import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.am.OAProvider;
 import pairwisetesting.engine.am.oaprovider.H_2s_OAProvider;
+import pairwisetesting.engine.am.oaprovider.MathUtil;
 import pairwisetesting.engine.am.oaprovider.Matrix;
 import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
 import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
@@ -25,14 +26,12 @@ import pairwisetesting.metaparameterparser.MetaParameterXMLSerializer;
 import pairwisetesting.metaparameterparser.XMLMetaParameterProvider;
 import pairwisetesting.testcasesgenerator.TXTTestCasesGenerator;
 import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
-import pairwisetesting.util.ArrayUtil;
-import pairwisetesting.util.ClassUtil;
-import pairwisetesting.util.MathUtil;
 import pairwisetesting.util.TextFile;
 import test.mock.MockMetaParameterProvider;
 import test.mock.MockOAEngine;
 import test.mock.MockOAProviderFactory;
 import test.mock.MockTestCasesGenerator;
+import testingngservices.testcasetemplate.ClassUtil;
 
 public class TestPairwiseTesting extends TestCase {
 	private Factor f1, f2, f3, f4, f5;
@@ -599,12 +598,6 @@ public class TestPairwiseTesting extends TestCase {
 		assertFalse("It should not be a prime", MathUtil.isPrime(4));
 		assertFalse("It should not be a prime", MathUtil.isPrime(6));
 		assertFalse("It should not be a prime", MathUtil.isPrime(10));
-
-		String[][] expected = new String[][] { { "1", "2", "3" },
-				{ "4", "5", "6" } };
-		int[][] testArray = new int[][] { { 1, 2, 3 }, { 4, 5, 6 } };
-		assertTrue("They should be equal", Arrays.deepEquals(expected,
-				ArrayUtil.int2DArrayToString2DArray(testArray)));
 		
 		String text = TextFile.read("testdata/data1.txt");
 		assertEquals("This is a string.\n", text);

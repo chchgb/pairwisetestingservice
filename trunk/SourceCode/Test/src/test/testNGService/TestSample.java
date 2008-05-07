@@ -1,7 +1,7 @@
 package test.testNGService;
 import java.util.ArrayList;
 
-import org.junit.*;
+import org.junit.Test;
 
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
@@ -14,7 +14,7 @@ import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 public class TestSample {
 
 	@Test
-	public void TestNGClient() {
+	public void testNGClient() {
 		TestCaseTemplateParameter tp = new TestCaseTemplateParameter();
 		tp.setPackageName("test.math");
 		tp.setClassUnderTest("Range");
