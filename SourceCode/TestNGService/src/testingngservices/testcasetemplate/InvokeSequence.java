@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pairwisetesting.util.ClassUtil;
 import pairwisetesting.util.TextFile;
+
 
 public class InvokeSequence {
 	ArrayList<String> fileContent;
