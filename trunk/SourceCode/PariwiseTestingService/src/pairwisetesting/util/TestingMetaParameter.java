@@ -15,8 +15,6 @@ public class TestingMetaParameter implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<String, String> javaSource;
-	private String testCaseContent;
-	private String testCaseFileName;
 	private String testClassName;
 	private String endPath = "";
 	private Map<String, String> libList;
@@ -24,7 +22,6 @@ public class TestingMetaParameter implements Serializable {
 	public TestingMetaParameter() {
 		this.javaSource = new TreeMap<String, String>();
 		this.testClassName = null;
-		this.testCaseContent = null;
 		libList = new TreeMap<String, String>();
 		libList.put("testng-5.8-jdk15.jar", "testng-5.8-jdk15.jar");
 		libList.put("xom-1.1.jar", "xom-1.1.jar");
@@ -98,7 +95,6 @@ public class TestingMetaParameter implements Serializable {
 	}
 
 	public void setTestCase(String fileName) {
-		this.testCaseFileName = fileName;
 		this.testClassName = fileName.substring(fileName.indexOf("/") + 1,
 				fileName.lastIndexOf(".")).replace("/", ".");
 		// this.testCaseContent = TextFile.read(fileName);
