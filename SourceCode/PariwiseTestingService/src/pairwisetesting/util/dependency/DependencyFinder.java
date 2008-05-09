@@ -52,6 +52,13 @@ public class DependencyFinder {
 		stdLibSet = new HashSet<String>();
 		stdLibSet.add("java");
 		stdLibSet.add("javax");
+		stdLibSet.add("byte");
+		stdLibSet.add("int");
+		stdLibSet.add("long");
+		stdLibSet.add("short");
+		stdLibSet.add("char");
+		stdLibSet.add("float");
+		stdLibSet.add("double");
 
 		siteSet = new HashSet<String>();
 		siteSet.add("net");
@@ -81,6 +88,13 @@ public class DependencyFinder {
 		stdLibSet = new HashSet<String>();
 		stdLibSet.add("java");
 		stdLibSet.add("javax");
+		stdLibSet.add("byte");
+		stdLibSet.add("int");
+		stdLibSet.add("long");
+		stdLibSet.add("short");
+		stdLibSet.add("char");
+		stdLibSet.add("float");
+		stdLibSet.add("double");
 
 		siteSet = new HashSet<String>();
 		siteSet.add("net");
@@ -279,7 +293,7 @@ public class DependencyFinder {
 		Iterator<String> iter = libSet.iterator();
 		while (iter.hasNext()) {
 			String libName = iter.next();
-			System.out.println(libName);/////////////////////////////////////////////////////////
+			
 			String[] array = libName.split("[.]");
 			if (stdLibSet.contains(array[0]))
 				continue;
