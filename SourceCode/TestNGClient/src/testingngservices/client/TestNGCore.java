@@ -86,7 +86,6 @@ public class TestNGCore {
 
 		this.testCaseString = service.getTestCase(tp.toXML(), pairwiseXML);
 		
-		System.out.println("this.testCaseString" + this.testCaseString);
 
 		testCasePath = "src/" + tp.getPackageName().replace(".", "/")
 				+ "/" + "PairwiseTest.java";
