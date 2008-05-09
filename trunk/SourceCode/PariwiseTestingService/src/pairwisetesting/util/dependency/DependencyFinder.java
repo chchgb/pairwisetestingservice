@@ -198,14 +198,12 @@ public class DependencyFinder {
 			String dep = str.substring(4);
 			String string = dep.endsWith(" *") ? dep.substring(0,
 					dep.length() - 2) : dep;
-			
-			System.out.println(string);
-/*
-			while (string.endsWith("[]")) {
-				String s = string.substring(0, string.length() - 2);
-				string = s;
-			}
-*/
+
+			// System.out.println(string);
+			/*
+			 * while (string.endsWith("[]")) { String s = string.substring(0,
+			 * string.length() - 2); string = s; }
+			 */
 			// We only care about individual source file
 			String[] name = string.split("[$]");
 			// System.out.println(name[0]);
