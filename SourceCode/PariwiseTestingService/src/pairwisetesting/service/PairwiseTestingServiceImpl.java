@@ -1,5 +1,8 @@
 package pairwisetesting.service;
 
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.ITestCasesGenerator;
@@ -15,6 +18,8 @@ import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 
 	private String schemaPath = "D:/MyShare/Tomcat/schema/MetaParameter.xsd";
+	private Log log = LogFactory.getLog(PairwiseTestingServiceImpl.class);
+
 
 	public String PariwiseTesting(String inputMetaParameter, String engineName) {
 
@@ -32,9 +37,8 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 		} catch (MetaParameterException e1) {
 			e1.printStackTrace();
 		}
-
-		System.out.print("Strength : " + mp.getStrength());
-		System.out.println();
+		
+		log.info("\nStrength : " + mp.getStrength()+"\nEngineName : " + engineName);
 
 		if ("TVGEngine".equals(engineName)) {
 			engine = new TVGEngine();
@@ -45,7 +49,7 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 		} else if ("AMEngine".equals(engineName)) {
 			engine = new AMEngine();
 		} else {
-			System.out.println("Engine none select!!");
+			log.error(engineName + " is not found");
 			return null;
 		}
 
@@ -53,13 +57,15 @@ public class PairwiseTestingServiceImpl implements IPairwiseTestingService {
 		String testCases = null;
 		if (engine != null) {
 			try {
+				log.info("generatint Test Cases");
 				String[][] result = engine.generateTestData(mp);
+				
 				testCases = generator.generate(mp, result);
 			} catch (EngineException e) {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Engine error!!");
+			log.error("Engine error!!");
 			return null;
 		}
 		return testCases;
