@@ -2,6 +2,9 @@ package testingngservices;
 
 import java.io.File;
 
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
 import pairwisetesting.util.Directory;
 import pairwisetesting.util.LibDependence;
 import pairwisetesting.util.ObjectSerializ;
@@ -14,6 +17,7 @@ import testingngservices.testcasetemplateengine.TestCaseTemplateEngineException;
 
 public class TestNGServiceImpl implements ITestNGService {
 	private String workPath = "D:/MyShare/Tomcat/";
+	private Log log = LogFactory.getLog(TestNGServiceImpl.class);
 	//private String workPath = "";
 
 	public String testExecute(String testingMeta) {
@@ -22,6 +26,7 @@ public class TestNGServiceImpl implements ITestNGService {
 		TestingMetaParameter temp = (TestingMetaParameter) ObjectSerializ
 				.String2Object(testingMeta);
 		
+		log.info("TestNGService work Path : "+workPath);
 		temp.setEndPath(workPath);
 		
 		TestWorkflow workflow = new TestWorkflow(temp);
@@ -38,6 +43,7 @@ public class TestNGServiceImpl implements ITestNGService {
 		te.setTestCaseTemplateParameterXmlData(methodMeta);
 		
 		try {
+			log.info("Generate TestNG TestCase");
 			testCase = te.generateTestNGTestCase();
 		} catch (TestCaseTemplateEngineException e) {
 			// TODO Auto-generated catch block
@@ -49,19 +55,17 @@ public class TestNGServiceImpl implements ITestNGService {
 
 	public String getLibList() {
 		String libListString = "";
-		System.out.println("begine getLibList");
+		log.info("Get Service Lib List");
 		TreeInfo libList = Directory.walk(workPath + "lib/", ".*[.]jar$");
-		System.out.println(workPath);
 		for(File file:libList){
 			libListString += file.getName()+";";
 		}
 		
-		System.out.println(libListString);
 		return libListString.substring(0,libListString.length()-1);
 	}
 
 	public void uploadLib(String lib) {
-		
+		log.info("upload lib to Service");
 		LibDependence libDpend = (LibDependence) ObjectSerializ.String2Object(lib);
 		libDpend.writeLibList(workPath + "lib/");
 		
