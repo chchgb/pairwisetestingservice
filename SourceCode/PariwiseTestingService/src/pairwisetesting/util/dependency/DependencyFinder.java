@@ -200,10 +200,9 @@ public class DependencyFinder {
 					dep.length() - 2) : dep;
 
 			// System.out.println(string);
-			/*
-			 * while (string.endsWith("[]")) { String s = string.substring(0,
-			 * string.length() - 2); string = s; }
-			 */
+
+			string = string.replaceAll("(\\[\\])+$", "");
+
 			// We only care about individual source file
 			String[] name = string.split("[$]");
 			// System.out.println(name[0]);
