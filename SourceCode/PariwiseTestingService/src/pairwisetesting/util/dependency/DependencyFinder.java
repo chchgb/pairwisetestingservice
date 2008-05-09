@@ -142,6 +142,7 @@ public class DependencyFinder {
 			// Ensure the XML file is generated
 			// Or, we can't call c2c, c2p, ...
 			p.waitFor();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
@@ -197,11 +198,16 @@ public class DependencyFinder {
 			String dep = str.substring(4);
 			String string = dep.endsWith(" *") ? dep.substring(0,
 					dep.length() - 2) : dep;
-			String s = string.endsWith("[]") ? string.substring(0, string
-					.length() - 2) : string;
-
+			
+			System.out.println(string);
+/*
+			while (string.endsWith("[]")) {
+				String s = string.substring(0, string.length() - 2);
+				string = s;
+			}
+*/
 			// We only care about individual source file
-			String[] name = s.split("[$]");
+			String[] name = string.split("[$]");
 			// System.out.println(name[0]);
 			results.add(name[0]);
 		}
