@@ -279,6 +279,7 @@ public class DependencyFinder {
 		Iterator<String> iter = libSet.iterator();
 		while (iter.hasNext()) {
 			String libName = iter.next();
+			System.out.println(libName);/////////////////////////////////////////////////////////
 			String[] array = libName.split("[.]");
 			if (stdLibSet.contains(array[0]))
 				continue;
