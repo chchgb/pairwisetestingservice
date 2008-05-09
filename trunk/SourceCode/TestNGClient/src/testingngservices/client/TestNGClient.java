@@ -54,19 +54,21 @@ public class TestNGClient {
 	}
 
 	private void getDependencyFile() {
-		System.out.println("1243124321");
-		DependencyFinder depFinder = new DependencyFinder(className, "src", "bin");
+		//System.out.println("1243124321");
+		//DependencyFinder depFinder = new DependencyFinder(className, "src", "bin");
 		
+		
+		DependencyFinder depFinder = new DependencyFinder(className, "src", "D:/MyShare/Workspace/MyEclipse/TestNGClient/WebRoot/WEB-INF/classes");
 		//DependencyFinder depFinder = new DependencyFinder(className, "src", "bin",endPath);
 		DependencyResult res = depFinder.findDependency();
 		
 		
-		System.out.println("1243124321");
+		//System.out.println("1243124321");
 		this.srcList = DependencyResult.transferPath(endPath, res.srcList);
-		System.out.println("1243124321");
-		System.out.println("1243124321: " +res.libList);
+		//System.out.println("1243124321");
+		//System.out.println("1243124321: " +res.libList);
 		this.libList = res.libList;
-		System.out.println("1243124321");
+		//System.out.println("1243124321");
 		libManager.addNotFoundLibFromArrayList(this.libList);
 	}
 
