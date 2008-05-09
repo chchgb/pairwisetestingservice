@@ -2,12 +2,19 @@ package testingngservices.client;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
+
+
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.util.dependency.DependencyFinder;
 import pairwisetesting.util.dependency.DependencyResult;
 import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 
 public class TestNGClient {
+	
+	private Log log;
 	private TestNGCore client;
 	private String className;
 	private String sourceCode;
@@ -33,11 +40,12 @@ public class TestNGClient {
 		className = tp.getPackageName() + "." + tp.getClassUnderTest();
 		sourceCode = "src/" + className.replace(".", "/") + ".java";
 
-		
-
 	}
 
 	public void setClassPath(String path) {
+		if (!path.endsWith("/")) {
+			path += "/";
+		}
 		this.classPath = path;
 	}
 
@@ -54,21 +62,17 @@ public class TestNGClient {
 	}
 
 	private void getDependencyFile() {
-		//System.out.println("1243124321");
-		//DependencyFinder depFinder = new DependencyFinder(className, "src", "bin");
 		
-		
-		DependencyFinder depFinder = new DependencyFinder(className, "src", "D:/MyShare/Workspace/MyEclipse/TestNGClient/WebRoot/WEB-INF/classes");
-		//DependencyFinder depFinder = new DependencyFinder(className, "src", "bin",endPath);
+		DependencyFinder depFinder = new DependencyFinder(className, "src", classPath,endPath);
 		DependencyResult res = depFinder.findDependency();
 		
+		if(!endPath.equals("")){
+			this.srcList = DependencyResult.transferPath(endPath, res.srcList);
+		}else{
+			this.libList = res.libList;
+		}
 		
-		//System.out.println("1243124321");
-		this.srcList = DependencyResult.transferPath(endPath, res.srcList);
-		//System.out.println("1243124321");
-		//System.out.println("1243124321: " +res.libList);
-		this.libList = res.libList;
-		//System.out.println("1243124321");
+		
 		libManager.addNotFoundLibFromArrayList(this.libList);
 	}
 
@@ -81,6 +85,8 @@ public class TestNGClient {
 		getDependencyFile();
 		this.srcList.add(sourceCode);
 		String testResult = "";
+		
+		
 		if (libManager.isFoundAllLib() && !this.srcList.isEmpty()) {
 
 			// 得到测试结果
@@ -91,23 +97,8 @@ public class TestNGClient {
 			System.err.println("these lib can not found \n"
 					+ libManager.getNotFoundLib());
 		}
-
-		System.out.println("service.testExcute : \n\n" + testResult);
 		return testResult;
 
 	}
-
-	// String className = tp.getPackageName()+"."+tp.getClassUnderTest();
-	// String sourceCode = "src/"+className.replace(".", "/")+".java";
-
-	// String classPath = "WebRoot/WEB-INF/classes";
-
-	// System.out.println(className);
-
-	// System.out.println("srcList : " + res.srcList);
-
-	// LibManager libManager = new LibManager();
-	// libManager.addNotFoundLibFromArrayList(res.libList);
-	// libManager.addFoundedLibFromClasspath("D:/MyShare/.classpath");
 
 }

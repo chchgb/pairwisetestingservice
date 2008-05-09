@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
 import pairwisetesting.client.PairwiseTestingClient;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.util.LibDependence;
@@ -14,6 +17,8 @@ import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 
 
 public class TestNGCore {
+	
+	//private Log log = LogFactory.getLog(TestNGCore.class);
 	private String url;
 	private String testCaseString;
 	private TestingMetaParameter testingMeta;
@@ -78,7 +83,7 @@ public class TestNGCore {
 		ptClient.setMetaParameter(mp);
 		ptClient.setEngine(engineName);
 		
-		System.out.println("getTestCase");
+		//log.info("geting Testcase");
 		
 		
 		String pairwiseXML = ptClient.execute();
@@ -98,13 +103,14 @@ public class TestNGCore {
 		uploadLib(libList);
 		String result = null;
 		
-		
 		this.testingMeta.setEndPath(this.endPath);
+		
+		//log.info("File List: "+ fileList);
+		
+		System.out.println("File List: " + fileList);
 		this.testingMeta.addFileList(fileList);
 		
-		
 		testingMeta.setTestCase(testCasePath);
-
 
 		testingMeta.addFile(testCasePath);
 
@@ -134,42 +140,14 @@ public class TestNGCore {
 			service.uploadLib(libString);
 		}
 	}
-	/*
-	public void uploadAllProjectLib(String classpathFullName){
-		uploadLib(Dependence.getAllLibList(classpathFullName));
-	}
-	
-	//库文件的全路径名列表
-	public void uploadUserLib(ArrayList<String> userLib){
-		uploadLib(userLib);
-	}
-	
-	
-	//待测类所依赖的库文件的关键包名ArrayList（如：[junit, stringtemplate, testng]）
-	public void uploadDependenceLib(ArrayList<String> depLibName,String classpathFullName){
-		ArrayList<String> allLibList = Dependence.getAllLibList(classpathFullName);
-		ArrayList<String> depLib = new ArrayList<String>();
-		Set<String> tempSet = new HashSet<String>();
-		tempSet.addAll(depLibName);
-		String libName = "";
-		for(String fileFullName:allLibList){
-			libName = fileFullName.substring(fileFullName.lastIndexOf("/")+1, fileFullName.length()-3);
-			for(String depLibNameString:tempSet){
-				if(libName.toLowerCase().contains(depLibNameString.toLowerCase())){
-					depLib.add(fileFullName);
-					System.out.println(fileFullName);
-				}
-			}
-		}
-		uploadLib(depLib);
-		
-	}
-	*/
-	public Set<String> getLibList(){
+
+	private Set<String> getLibList(){
 		Set<String> resultSet = new HashSet<String>();
-		String[] temp = service.getLibList().split(";");
 		
-		System.out.println("getLibList" +temp);
+		
+		String[] temp = service.getLibList().split(";");
+
+		
 		for(int index = 0;index<temp.length;index++){
 			resultSet.add(temp[index]);
 		}
