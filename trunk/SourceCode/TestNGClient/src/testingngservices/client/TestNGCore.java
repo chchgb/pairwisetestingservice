@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
 
 import pairwisetesting.client.PairwiseTestingClient;
 import pairwisetesting.coredomain.MetaParameter;
