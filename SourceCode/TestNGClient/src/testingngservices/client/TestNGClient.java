@@ -2,11 +2,6 @@ package testingngservices.client;
 
 import java.util.ArrayList;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
-
-
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.util.dependency.DependencyFinder;
 import pairwisetesting.util.dependency.DependencyResult;
@@ -14,7 +9,6 @@ import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 
 public class TestNGClient {
 	
-	private Log log;
 	private TestNGCore client;
 	private String className;
 	private String sourceCode;
