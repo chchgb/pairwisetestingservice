@@ -139,7 +139,7 @@ public class TestNGCore {
 		}
 	}
 
-	private Set<String> getLibList(){
+	public Set<String> getLibList(){
 		Set<String> resultSet = new HashSet<String>();
 		
 		
