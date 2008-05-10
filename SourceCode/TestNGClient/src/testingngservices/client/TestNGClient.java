@@ -9,7 +9,7 @@ import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 
 public class TestNGClient {
 	
-	private TestNGCore client;
+	private TestNGCore testNGCore;
 	private String className;
 	private String sourceCode;
 	private String classPath;
@@ -30,7 +30,7 @@ public class TestNGClient {
 
 	public void initTestNGClient(TestCaseTemplateParameter tp, MetaParameter mp,
 			String engineName, String serviceIP) {
-		client = new TestNGCore(tp, mp, engineName, serviceIP);
+		testNGCore = new TestNGCore(tp, mp, engineName, serviceIP);
 		className = tp.getPackageName() + "." + tp.getClassUnderTest();
 		sourceCode = "src/" + className.replace(".", "/") + ".java";
 
@@ -51,7 +51,7 @@ public class TestNGClient {
 		if (!path.endsWith("/")) {
 			path += "/";
 		}
-		this.client.setEndPath(path);
+		this.testNGCore.setEndPath(path);
 		this.endPath = path;
 	}
 
@@ -71,8 +71,12 @@ public class TestNGClient {
 	}
 
 	public String getTestCase() {
-		return client.getTestCase();
+		return testNGCore.getTestCase();
 
+	}
+	
+	public ArrayList<String> getServiceLibList(){
+		return new ArrayList<String>(testNGCore.getLibList());
 	}
 
 	public String getTestResult() {
@@ -84,7 +88,7 @@ public class TestNGClient {
 		if (libManager.isFoundAllLib() && !this.srcList.isEmpty()) {
 
 			// 得到测试结果
-			testResult = client.testMethod(this.srcList, libManager
+			testResult = testNGCore.testMethod(this.srcList, libManager
 					.getNeededLib());
 
 		} else {
