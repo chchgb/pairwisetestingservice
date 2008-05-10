@@ -96,4 +96,8 @@ public class LibManager {
 		
 	}
 	
+	public ArrayList<String> getAllLocalLib(){
+		return new ArrayList<String>(this.fullPathOfFoundedLib);
+	}
+	
 }
