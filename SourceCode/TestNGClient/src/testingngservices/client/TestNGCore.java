@@ -20,10 +20,11 @@ public class TestNGCore {
 	private String url;
 	private String testCaseString;
 	private TestingMetaParameter testingMeta;
-	private TestCaseTemplateParameter tp;
-	private MetaParameter mp;
-	private String engineName;
+	//private TestCaseTemplateParameter tp;
+	//private MetaParameter mp;
+	//private String engineName;
 	private String testCasePath;
+	//private String pairwiseXML;
 	
 	private Set<String> libSet;
 	
@@ -34,7 +35,7 @@ public class TestNGCore {
 	TestNGServiceClient client;
 	TestNGServicePortType service;
 
-	public TestNGCore() {
+	private TestNGCore() {
 		libSet = new HashSet<String>();
 		this.url = "http://localhost:8080/TestNGServices/services/TestNGService";
 		client = new TestNGServiceClient(this.url);
@@ -43,13 +44,10 @@ public class TestNGCore {
 		service = client.getTestNGServiceHttpPort();
 	}
 
-	public TestNGCore(TestCaseTemplateParameter tp, MetaParameter mp,
-			String engineName,String url) {
+	public TestNGCore(String url) {
 		this.serviceIP = url;
 		this.url = "http://"+ url +":8080/TestNGServices/services/TestNGService";
-		this.tp = tp;
-		this.mp = mp;
-		this.engineName = engineName;
+		//this.engineName = engineName;
 		testingMeta = new TestingMetaParameter();
 		libSet = new HashSet<String>();
 
@@ -75,17 +73,10 @@ public class TestNGCore {
 		this.url = url;
 	}
 
-	public String getTestCase() {
+	
+	public String getTestCase(TestCaseTemplateParameter tp,String pairwiseXML) {
 
-		PairwiseTestingClient ptClient = new PairwiseTestingClient(serviceIP);
-		ptClient.setMetaParameter(mp);
-		ptClient.setEngine(engineName);
-		
-		//log.info("geting Testcase");
-		
-		
-		String pairwiseXML = ptClient.execute();
-
+		//getPairwiseResult();
 
 		this.testCaseString = service.getTestCase(tp.toXML(), pairwiseXML);
 		
@@ -105,7 +96,7 @@ public class TestNGCore {
 		
 		//log.info("File List: "+ fileList);
 		
-		System.out.println("File List: " + fileList);
+		//System.out.println("File List: " + fileList);
 		this.testingMeta.addFileList(fileList);
 		
 		testingMeta.setTestCase(testCasePath);
@@ -119,7 +110,7 @@ public class TestNGCore {
 
 	}
 	
-	private void uploadLib(ArrayList<String> libList){
+	public void uploadLib(ArrayList<String> libList){
 		this.libSet = getLibList();
 		String libPath = "";
 		String libName = "";
@@ -127,8 +118,16 @@ public class TestNGCore {
 		setLibList(libList);
 		LibDependence libNeededUpload = new LibDependence();
 		for(String lib:libList){
+			
+			System.out.println("lib : " + lib);
+			
 			libPath = lib.substring(0,lib.lastIndexOf("/")+1);
 			libName = lib.substring(lib.lastIndexOf("/")+1,lib.length());
+			
+			
+			System.out.println("libPath " +libPath);
+			System.out.println("libName : " + libName);
+			
 			if(!libSet.contains(libName)){
 				libNeededUpload.addJavaLib(libName, libPath);
 			}

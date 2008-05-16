@@ -18,6 +18,8 @@ public class TestNGClient {
 	private ArrayList<String> srcList;
 	private ArrayList<String> libList;
 	public LibManager libManager;
+	private TestCaseTemplateParameter tp;
+	private String pairwiseXML;
 	
 	public TestNGClient(){
 		classPath = "bin";
@@ -28,9 +30,9 @@ public class TestNGClient {
 		
 	}
 
-	public void initTestNGClient(TestCaseTemplateParameter tp, MetaParameter mp,
-			String engineName, String serviceIP) {
-		testNGCore = new TestNGCore(tp, mp, engineName, serviceIP);
+	public void initTestNGClient(TestCaseTemplateParameter tp,String serviceIP) {
+		testNGCore = new TestNGCore(serviceIP);
+		this.tp = tp;
 		className = tp.getPackageName() + "." + tp.getClassUnderTest();
 		sourceCode = "src/" + className.replace(".", "/") + ".java";
 
@@ -55,7 +57,7 @@ public class TestNGClient {
 		this.endPath = path;
 	}
 
-	private void getDependencyFile() {
+	public LibManager getDependency() {
 		
 		DependencyFinder depFinder = new DependencyFinder(className, "src", classPath,endPath);
 		DependencyResult res = depFinder.findDependency();
@@ -68,10 +70,30 @@ public class TestNGClient {
 		
 		
 		libManager.addNotFoundLibFromArrayList(this.libList);
+		return this.libManager;
+		
+	}
+	
+	
+	public void setLibManager(LibManager lib){
+		this.libManager = lib;
+	}
+	
+	public LibManager getLibManager(){
+		return this.libManager;
+	}
+	
+	
+	public String getPairwiseXML(){
+		return pairwiseXML;
+	}
+	
+	public void setPairwiseResult(String pairwiseXML){
+		this.pairwiseXML = pairwiseXML;
 	}
 
 	public String getTestCase() {
-		return testNGCore.getTestCase();
+		return testNGCore.getTestCase(tp,pairwiseXML);
 
 	}
 	
@@ -80,7 +102,7 @@ public class TestNGClient {
 	}
 
 	public String getTestResult() {
-		getDependencyFile();
+		//getDependencyFile();
 		this.srcList.add(sourceCode);
 		String testResult = "";
 		
@@ -88,8 +110,8 @@ public class TestNGClient {
 		if (libManager.isFoundAllLib() && !this.srcList.isEmpty()) {
 
 			// 得到测试结果
-			testResult = testNGCore.testMethod(this.srcList, libManager
-					.getNeededLib());
+			testResult = testNGCore.testMethod(this.srcList, new ArrayList<String>(libManager
+					.getFoundedLibSet()));
 
 		} else {
 			System.err.println("these lib can not found \n"
