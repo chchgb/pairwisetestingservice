@@ -15,6 +15,7 @@ import com.sun.org.apache.commons.logging.Log;
 import com.sun.org.apache.commons.logging.LogFactory;
 
 import pairwisetesting.util.TestingMetaParameter;
+import pairwisetesting.util.TextFile;
 
 public class TestWorkflow {
 	private TestingMetaParameter testingMeta;
@@ -49,6 +50,8 @@ public class TestWorkflow {
 				testingMeta.getEndPath() + "bin", "-classpath",
 				testingMeta.getLibString() };
 		
+		log.info("Build Path :" + testingMeta.getLibString());
+		
 		log.info("Compile source code");
 		compiler.getTask(null, fileManager, null, Arrays.asList(options), null,
 				compilationUnits1).call();
@@ -78,8 +81,9 @@ public class TestWorkflow {
 			
 			log.info("Excute test case");
 			tng.run();
-			result = "PASSED: " + listener.getPassedTests().size()
-					+ "\nFAILED: " + listener.getFailedTests().size();
+//			result = "PASSED: " + listener.getPassedTests().size()
+//					+ "\nFAILED: " + listener.getFailedTests().size();
+			result = TextFile.read(workPath + "testNG-Log/" + "emailable-report.html");
 
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
