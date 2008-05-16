@@ -5,7 +5,6 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 import testingngservices.testcasetemplate.Invoke;
 import testingngservices.testcasetemplate.InvokeSequence;
-import testingngservices.testcasetemplate.Parameter;
 import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngine;
 
