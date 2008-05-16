@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import pairwisetesting.util.TextFile;
 
-
+@Deprecated
 public class InvokeSequence {
 	ArrayList<String> fileContent;
 	private String methodSignature;
