@@ -1,5 +1,6 @@
 package testingngservices.testcasetemplate;
 
+@Deprecated
 public class Invoke {
 	private String statement;
 	private String returnTypeName;
