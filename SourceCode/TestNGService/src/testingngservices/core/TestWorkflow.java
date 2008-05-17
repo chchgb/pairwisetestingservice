@@ -11,8 +11,8 @@ import java.io.*;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import pairwisetesting.util.TestingMetaParameter;
 import pairwisetesting.util.TextFile;

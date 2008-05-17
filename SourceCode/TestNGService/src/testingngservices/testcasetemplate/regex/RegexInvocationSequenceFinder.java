@@ -5,10 +5,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import pairwisetesting.util.TextFile;
-import testingngservices.testcasetemplate.ClassUtil;
 import testingngservices.testcasetemplate.core.Invocation;
 import testingngservices.testcasetemplate.core.InvocationCount;
 import testingngservices.testcasetemplate.core.InvocationSequenceFinder;
+import testingngservices.testcasetemplate.util.ClassUtil;
 
 public class RegexInvocationSequenceFinder extends InvocationSequenceFinder {
 	

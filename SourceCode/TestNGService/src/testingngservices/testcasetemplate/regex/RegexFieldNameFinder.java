@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import pairwisetesting.util.TextFile;
-import testingngservices.testcasetemplate.ClassUtil;
 import testingngservices.testcasetemplate.core.IFieldNameFinder;
+import testingngservices.testcasetemplate.util.ClassUtil;
 
 /**
  * Finding field name based on Regular Expression
