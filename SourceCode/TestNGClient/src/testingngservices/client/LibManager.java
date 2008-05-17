@@ -12,6 +12,7 @@ public class LibManager {
 	private Set<String> fullPathOfFoundedLib;
 	private Set<String> notFoundLib;
 	private Set<String> foundedSet;
+	private Set<String> dependencyLib;
 
 	public LibManager() {
 		this.partLibNameOfNotFound = new HashSet<String>();
@@ -19,6 +20,15 @@ public class LibManager {
 		// this.serviceLibList = new HashSet<String>();
 		this.foundedSet = new HashSet<String>();
 		this.notFoundLib = new HashSet<String>();
+		this.dependencyLib = new HashSet<String>();
+	}
+	
+	public void setDependencyLib(ArrayList<String> libList){
+		this.dependencyLib.addAll(libList);
+	}
+	
+	public ArrayList<String> getDependencyLib(){
+		return new ArrayList<String>(this.dependencyLib);
 	}
 
 	public void addNotFoundLibFromArrayList(ArrayList<String> libList) {
