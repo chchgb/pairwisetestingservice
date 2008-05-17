@@ -1,12 +1,14 @@
 package testingngservices.testcasetemplate.core;
 
+import java.util.ArrayList;
+
 import testingngservices.testcasetemplate.Parameter;
 
 public class MethodSignature {
 	
 	private String returnTypeName = "<UNKNOWN>";
 	private String methodName = "<UNKNOWN>";
-	private Parameter[] parameters = new Parameter[0];
+	private ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 	
 	public MethodSignature() {
 	}
@@ -15,7 +17,7 @@ public class MethodSignature {
 			String methodName, Parameter... parameters) {
 		this.returnTypeName = returnTypeName;
 		this.methodName = methodName;
-		this.parameters = parameters;
+		setParameters(parameters);
 	}
 	
 	public String getReturnTypeName() {
@@ -34,12 +36,18 @@ public class MethodSignature {
 		this.methodName = methodName;
 	}
 	
+	public void addParameter(String type, String name) {
+		this.parameters.add(new Parameter(type, name));
+	}
+	
 	public Parameter[] getParameters() {
-		return parameters;
+		return this.parameters.toArray(new Parameter[0]);
 	}
 	
 	public void setParameters(Parameter[] parameters) {
-		this.parameters = parameters;
+		for (Parameter p : parameters) {
+			this.parameters.add(p);
+		}
 	}
 	
 	@Override
@@ -54,7 +62,7 @@ public class MethodSignature {
 				methodSignature += ", " + p.getType() + " " + p.getName();
 			}
 		}
-		if (parameters.length != 0)
+		if (parameters.size() != 0)
 			methodSignature += ")";
 		return methodSignature;
 	}
