@@ -2,12 +2,12 @@ package testingngservices.testcasetemplate.core;
 
 public class Invocation {
 	private String content;
-	private boolean hasReturnType;
+	private boolean hasReturnValue;
 	private InvocationCount count;
 	
-	public Invocation(String content, boolean hasReturnType, InvocationCount count) {
+	public Invocation(String content, boolean hasReturnValue, InvocationCount count) {
 		this.content = content;
-		this.hasReturnType = hasReturnType;
+		this.hasReturnValue = hasReturnValue;
 		this.count = count;
 	}
 	
@@ -18,12 +18,12 @@ public class Invocation {
 		return content;
 	}
 	
-	public boolean hasReturnType() {
-		return hasReturnType;
+	public boolean hasReturnValue() {
+		return hasReturnValue;
 	}
 
-	public void hasReturnType(boolean hasReturnType) {
-		this.hasReturnType = hasReturnType;
+	public void hasReturnValue(boolean hasReturnValue) {
+		this.hasReturnValue = hasReturnValue;
 	}
 
 	public void setContent(String content) {
@@ -45,7 +45,7 @@ public class Invocation {
 		int result = 1;
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((count == null) ? 0 : count.hashCode());
-		result = prime * result + (hasReturnType ? 1231 : 1237);
+		result = prime * result + (hasReturnValue ? 1231 : 1237);
 		return result;
 	}
 
@@ -68,14 +68,14 @@ public class Invocation {
 				return false;
 		} else if (!count.equals(other.count))
 			return false;
-		if (hasReturnType != other.hasReturnType)
+		if (hasReturnValue != other.hasReturnValue)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return this.hasReturnType + " " + this.content + " " + this.count;
+		return this.hasReturnValue + " " + this.content + " " + this.count;
 	}
 
 }

@@ -70,9 +70,9 @@ public class RegexInvocationSequenceFinder extends InvocationSequenceFinder {
 					invocation.setContent(macher.group(1));
 					String methodName = macher.group(2);
 					if (ClassUtil.getReturnTypeName(fieldClass, methodName).equals("void")) {
-						invocation.hasReturnType(false);
+						invocation.hasReturnValue(false);
 					} else {
-						invocation.hasReturnType(true);
+						invocation.hasReturnValue(true);
 					}
 					invocation.setCount(InvocationCount.ONCE);
 					invocationCollector.add(invocation);
