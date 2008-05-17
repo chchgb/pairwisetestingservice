@@ -52,7 +52,7 @@ public abstract class InvocationSequenceFinder {
 			}
 			jMockInvocations.add(invocation.getContent().replaceFirst(
 					"(.*)[.](.*)", invocationCount + " ($1).$2"));
-			if (invocation.hasReturnType()) {
+			if (invocation.hasReturnValue()) {
 				jMockInvocations.add("will(returnValue(<NeedFilled>))");
 			}
 		}
