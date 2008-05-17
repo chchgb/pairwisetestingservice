@@ -2,8 +2,6 @@ package testingngservices.testcasetemplate.core;
 
 import java.util.ArrayList;
 
-import testingngservices.testcasetemplate.Parameter;
-
 public class MethodSignature {
 	
 	private String returnTypeName = "<UNKNOWN>";

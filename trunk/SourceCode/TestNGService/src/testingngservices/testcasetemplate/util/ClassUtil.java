@@ -1,4 +1,4 @@
-package testingngservices.testcasetemplate;
+package testingngservices.testcasetemplate.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

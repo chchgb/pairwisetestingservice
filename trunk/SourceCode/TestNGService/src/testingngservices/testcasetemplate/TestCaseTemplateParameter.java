@@ -11,6 +11,8 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import testingngservices.testcasetemplate.core.Argument;
+import testingngservices.testcasetemplate.core.Parameter;
 
 public class TestCaseTemplateParameter {
 	private String packageName = "";

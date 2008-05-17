@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import pairwisetesting.util.TextFile;
+import testingngservices.testcasetemplate.core.Parameter;
+import testingngservices.testcasetemplate.util.ClassUtil;
 
 @Deprecated
 public class InvokeSequence {
