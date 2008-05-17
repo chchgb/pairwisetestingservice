@@ -70,6 +70,7 @@ public class TestNGClient {
 		
 		
 		libManager.addNotFoundLibFromArrayList(this.libList);
+		libManager.setDependencyLib(res.impList);
 		return this.libManager;
 		
 	}
