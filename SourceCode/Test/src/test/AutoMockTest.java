@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import pairwisetesting.util.TextFile;
+import testingngservices.testcasetemplate.MethodSignatureFinder;
 import testingngservices.testcasetemplate.Parameter;
 import testingngservices.testcasetemplate.ast.ASTFieldNameFinder;
 import testingngservices.testcasetemplate.ast.ASTInvocationSequenceFinder;
@@ -16,6 +17,7 @@ import testingngservices.testcasetemplate.core.IFieldNameFinder;
 import testingngservices.testcasetemplate.core.Invocation;
 import testingngservices.testcasetemplate.core.InvocationCount;
 import testingngservices.testcasetemplate.core.InvocationSequenceFinder;
+import testingngservices.testcasetemplate.core.MethodSignature;
 import testingngservices.testcasetemplate.regex.RegexFieldNameFinder;
 import testingngservices.testcasetemplate.regex.RegexInvocationSequenceFinder;
 
@@ -354,5 +356,18 @@ public class AutoMockTest extends TestCase {
 		jMockInvocations = regexFinder.getJMockInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(jMockInvocations));
 		assertTrue(Arrays.equals(jMockInvocations, expectedJMockInvocations));
+	}
+	
+	public void testMethodSignatureFinder() {
+		MethodSignatureFinder finder = new MethodSignatureFinder(sourceFilePath);
+		MethodSignature ms = finder.getMethodSignature("double", "transfer");
+		assertEquals("double", ms.getReturnTypeName());
+		assertEquals("transfer", ms.getMethodName());
+		Parameter[] expectedPrams = new Parameter[3];
+		expectedPrams[0] = new Parameter("String", "accountIdA");
+		expectedPrams[1] = new Parameter("String", "accountIdB");
+		expectedPrams[2] = new Parameter("double", "amount");
+		// System.out.println(ms);
+		assertTrue("They should be equal", Arrays.equals(expectedPrams, ms.getParameters()));
 	}
 }
