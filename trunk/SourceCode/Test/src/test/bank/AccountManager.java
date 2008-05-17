@@ -19,19 +19,14 @@ public class AccountManager implements IAccountManager {
 	}
 
 	public void rollback() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void releaseCollection() {
-		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public boolean needClose() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
