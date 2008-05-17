@@ -10,7 +10,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import pairwisetesting.util.TextFile;
 import testingngservices.testcasetemplate.MethodSignatureFinder;
-import testingngservices.testcasetemplate.Parameter;
 import testingngservices.testcasetemplate.ast.ASTFieldNameFinder;
 import testingngservices.testcasetemplate.ast.ASTInvocationSequenceFinder;
 import testingngservices.testcasetemplate.core.IFieldNameFinder;
@@ -18,6 +17,7 @@ import testingngservices.testcasetemplate.core.Invocation;
 import testingngservices.testcasetemplate.core.InvocationCount;
 import testingngservices.testcasetemplate.core.InvocationSequenceFinder;
 import testingngservices.testcasetemplate.core.MethodSignature;
+import testingngservices.testcasetemplate.core.Parameter;
 import testingngservices.testcasetemplate.regex.RegexFieldNameFinder;
 import testingngservices.testcasetemplate.regex.RegexInvocationSequenceFinder;
 

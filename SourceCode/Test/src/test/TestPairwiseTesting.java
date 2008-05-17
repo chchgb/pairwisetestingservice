@@ -31,7 +31,7 @@ import test.mock.MockMetaParameterProvider;
 import test.mock.MockOAEngine;
 import test.mock.MockOAProviderFactory;
 import test.mock.MockTestCasesGenerator;
-import testingngservices.testcasetemplate.ClassUtil;
+import testingngservices.testcasetemplate.util.ClassUtil;
 
 public class TestPairwiseTesting extends TestCase {
 	private Factor f1, f2, f3, f4, f5;
