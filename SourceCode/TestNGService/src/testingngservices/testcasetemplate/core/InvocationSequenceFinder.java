@@ -36,7 +36,7 @@ public abstract class InvocationSequenceFinder {
 		for (Invocation invocation : invocations) {
 			switch (invocation.getCount()) {
 			case ONCE:
-				invocationCount = "once";
+				invocationCount = "one";
 				break;
 			case ATLEAST_ONCE:
 				invocationCount = "atLeast(1).of";
