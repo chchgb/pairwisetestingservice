@@ -23,7 +23,7 @@ public abstract class InvocationSequenceFinder {
 		return this.fieldNameFinder.getFieldName(fieldClassName);
 	}
 	
-	public void setScopeByMethodDeclaration(String returnTypeName,
+	public void setScopeByMethodSignature(String returnTypeName,
 			String methodName, Parameter... parameters) {
 		this.scopeMethodSignature = new MethodSignature(returnTypeName,
 				methodName, parameters);
