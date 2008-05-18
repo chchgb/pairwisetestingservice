@@ -5,27 +5,37 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 
-import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import pairwisetesting.util.Converter;
 import test.expect.Expectation;
+import pairwisetesting.util.Converter;
+
+import org.testng.annotations.BeforeMethod;
+import org.jmock.Expectations;
+import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.lib.legacy.ClassImposteriser;
+import test.bookstore.Logger;
 
 public class PairwiseTest extends MockObjectTestCase {
+	@BeforeMethod
+	public void setUp() {
+		setImposteriser(ClassImposteriser.INSTANCE);
+	}
+
 	@Test(dataProvider = "PairwiseTestingDataProvider")
 	public void testComputeDiscountedPrice(final int level, final AccountType accountType, final String coupon) {
 		final Logger logger = mock(Logger.class, "MockLogger_" + level + "_" + accountType + "_" + coupon);
 		checking(new Expectations() {{
-			atLeast(1).of (logger).log(level);
-			atLeast(1).of (logger).log(accountType);
-			atLeast(1).of (logger).log(coupon);
+			one (logger).log(level);
+			one (logger).log(accountType);
+			one (logger).log(coupon);
 		}});
 		BookStore bookStore = new BookStore(Converter.convertTo("PKU", String.class), Converter.convertTo("40", int.class));
 		bookStore.setLogger(logger);
 		bookStore.computeDiscountedPrice(level, accountType, coupon);
+		verify();
 		Assert.assertEquals(bookStore.getDiscountedPrice(), Converter.convertTo(Expectation.getExpectedResult("test.bookstore.BookStore.computeDiscountedPrice_" + level + "_" + accountType + "_" + coupon), double.class), 0.0010);
 	}
 
