@@ -403,12 +403,12 @@ public class AutoMockTest extends TestCase {
 	public void testJMockInvocations() {
 		// ASTInvocationSequenceFinder
 		String[] expectedJMockInvocations = new String[8];
-		expectedJMockInvocations[0] = "once (manager).beginTransaction()";
+		expectedJMockInvocations[0] = "one (manager).beginTransaction()";
 		expectedJMockInvocations[1] = "allowing (manager).withdraw(accountId,amount)";
 		expectedJMockInvocations[2] = "will(returnValue(<NeedFilled>))";
 		expectedJMockInvocations[3] = "allowing (manager).commit()";
 		expectedJMockInvocations[4] = "ignoring (manager).rollback()";
-		expectedJMockInvocations[5] = "once (manager).needClose()";
+		expectedJMockInvocations[5] = "one (manager).needClose()";
 		expectedJMockInvocations[6] = "will(returnValue(<NeedFilled>))";
 		expectedJMockInvocations[7] = "allowing (manager).releaseCollection()";
 		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
@@ -422,16 +422,16 @@ public class AutoMockTest extends TestCase {
 		
 		// RegexInvocationSequenceFinder
 		expectedJMockInvocations = new String[10];
-		expectedJMockInvocations[0] = "once (manager).beginTransaction()";
-		expectedJMockInvocations[1] = "once (manager).beginTransaction()";
-		expectedJMockInvocations[2] = "once (manager).withdraw(accountId, amount)";
+		expectedJMockInvocations[0] = "one (manager).beginTransaction()";
+		expectedJMockInvocations[1] = "one (manager).beginTransaction()";
+		expectedJMockInvocations[2] = "one (manager).withdraw(accountId, amount)";
 		expectedJMockInvocations[3] = "will(returnValue(<NeedFilled>))";
-		expectedJMockInvocations[4] = "once (manager).commit()";
-		expectedJMockInvocations[5] = "once (manager).beginTransaction()";
-		expectedJMockInvocations[6] = "once (manager).deposit(accountId, amount)";
+		expectedJMockInvocations[4] = "one (manager).commit()";
+		expectedJMockInvocations[5] = "one (manager).beginTransaction()";
+		expectedJMockInvocations[6] = "one (manager).deposit(accountId, amount)";
 		expectedJMockInvocations[7] = "will(returnValue(<NeedFilled>))";
-		expectedJMockInvocations[8] = "once (manager).commit()";
-		expectedJMockInvocations[9] = "once (manager).commit()";
+		expectedJMockInvocations[8] = "one (manager).commit()";
+		expectedJMockInvocations[9] = "one (manager).commit()";
 		InvocationSequenceFinder regexFinder = new RegexInvocationSequenceFinder(sourceFilePath);
 		regexFinder.setScopeByMethodSignature("double", "transfer");
 		jMockInvocations = regexFinder.getJMockInvocations(fieldClassName1);
