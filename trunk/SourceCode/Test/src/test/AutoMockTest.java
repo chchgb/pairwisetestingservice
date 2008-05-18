@@ -73,9 +73,9 @@ public class AutoMockTest extends TestCase {
 				InvocationCount.ONCE);
 		expectedInvocations[1] = new Invocation("logger.log(amount)", false,
 				InvocationCount.ONCE);
-		finder.setScopeByMethodDeclaration("double", "withdraw", new Parameter(
+		finder.setScopeByMethodSignature("double", "withdraw", new Parameter(
 				"String", "accountId"), new Parameter("double", "amount"));
-		finder.setScopeByMethodDeclaration("double", "withdraw");
+		finder.setScopeByMethodSignature("double", "withdraw");
 		Invocation[] invocations = finder.getInvocations(fieldClassName2);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
@@ -91,7 +91,7 @@ public class AutoMockTest extends TestCase {
 		expectedInvocations[5] = new Invocation("manager.deposit(accountId, amount)", true, InvocationCount.ONCE);
 		expectedInvocations[6] = new Invocation("manager.commit()", false, InvocationCount.ONCE);
 		expectedInvocations[7] = new Invocation("manager.commit()", false, InvocationCount.ONCE);
-		finder.setScopeByMethodDeclaration("double", "transfer");	
+		finder.setScopeByMethodSignature("double", "transfer");	
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue(Arrays.equals(invocations, expectedInvocations));
@@ -110,16 +110,16 @@ public class AutoMockTest extends TestCase {
 				InvocationCount.ONCE);
 		expectedInvocations[1] = new Invocation("logger.log(amount)", false,
 				InvocationCount.ONCE);
-		finder.setScopeByMethodDeclaration("double", "withdraw", new Parameter(
+		finder.setScopeByMethodSignature("double", "withdraw", new Parameter(
 				"String", "accountId"), new Parameter("double", "amount"));
-		finder.setScopeByMethodDeclaration("double", "withdraw");
+		finder.setScopeByMethodSignature("double", "withdraw");
 		Invocation[] invocations = finder.getInvocations(fieldClassName2);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
 				invocations));
 		
 		// Contain return value
-		expectedInvocations = new Invocation[13];
+		expectedInvocations = new Invocation[14];
 		for (int i = 0; i < 8; i++) {
 			expectedInvocations[i] = new Invocation(
 					"manager.withdraw(accountId,amount)", true,
@@ -138,10 +138,13 @@ public class AutoMockTest extends TestCase {
 				"manager.needClose()", true,
 				InvocationCount.ATLEAST_ONCE);
 		expectedInvocations[12] = new Invocation(
+				"manager.needClose()", true,
+				InvocationCount.ONCE);
+		expectedInvocations[13] = new Invocation(
 				"manager.withdraw(accountId,amount)", true,
 				InvocationCount.ONCE);
 		
-		finder.setScopeByMethodDeclaration("double", "checkInvocationWithReturnValue");
+		finder.setScopeByMethodSignature("double", "checkInvocationWithReturnValue");
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(expectedInvocations));
 		// System.out.println(Arrays.toString(invocations));
@@ -174,7 +177,7 @@ public class AutoMockTest extends TestCase {
 		expectedInvocations[7] = new Invocation(
 				"manager.commit()", false,
 				InvocationCount.ONCE);
-		finder.setScopeByMethodDeclaration("double", "transfer");
+		finder.setScopeByMethodSignature("double", "transfer");
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
@@ -203,7 +206,7 @@ public class AutoMockTest extends TestCase {
 		expectedInvocations[6] = new Invocation(
 				"manager.needClose()", true,
 				InvocationCount.ATLEAST_ONCE);
-		finder.setScopeByMethodDeclaration("void", "checkInvocationWithLoop");
+		finder.setScopeByMethodSignature("void", "checkInvocationWithLoop");
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
@@ -226,7 +229,7 @@ public class AutoMockTest extends TestCase {
 		expectedInvocations[4] = new Invocation(
 				"manager.releaseCollection()", false,
 				InvocationCount.ONCE);
-		finder.setScopeByMethodDeclaration("void", "checkInvocationWithTryCatchFinally");
+		finder.setScopeByMethodSignature("void", "checkInvocationWithTryCatchFinally");
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
@@ -252,7 +255,7 @@ public class AutoMockTest extends TestCase {
 		expectedInvocations[5] = new Invocation(
 				"manager.releaseCollection()", false,
 				InvocationCount.ALLOWING);
-		finder.setScopeByMethodDeclaration("void", "checkInvocationWithIfElse");
+		finder.setScopeByMethodSignature("void", "checkInvocationWithIfElse");
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
@@ -311,9 +314,87 @@ public class AutoMockTest extends TestCase {
 		expectedInvocations[16] = new Invocation(
 				"manager.commit()", false,
 				InvocationCount.ATLEAST_ONCE);
-		finder.setScopeByMethodDeclaration("double", "checkInvocationWithAllFeatures");
+		finder.setScopeByMethodSignature("double", "checkInvocationWithAllFeatures");
 		invocations = finder.getInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(expectedInvocations));
+		// System.out.println(Arrays.toString(invocations));
+		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
+				invocations));
+		
+		// With conditional return
+		expectedInvocations = new Invocation[1];
+		expectedInvocations[0] = new Invocation(
+				"manager.withdraw(accountId,amount)", true,
+				InvocationCount.ALLOWING);
+		finder.setScopeByMethodSignature("double", "checkInvocationWithConditionalReturn1");
+		invocations = finder.getInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(invocations));
+		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
+				invocations));
+		expectedInvocations = new Invocation[1];
+		expectedInvocations[0] = new Invocation(
+				"manager.withdraw(accountId,amount)", false,
+				InvocationCount.ALLOWING);
+		finder.setScopeByMethodSignature("void", "checkInvocationWithConditionalReturn2");
+		invocations = finder.getInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(invocations));
+		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
+				invocations));
+		
+		// With recursive invocation
+		expectedInvocations = new Invocation[4];
+		expectedInvocations[0] = new Invocation(
+				"manager.withdraw(accountId,amount)", false,
+				InvocationCount.ATLEAST_ONCE);
+		expectedInvocations[1] = new Invocation(
+				"manager.deposit(accountId,amount)", true,
+				InvocationCount.ATLEAST_ONCE);
+		expectedInvocations[2] = new Invocation(
+				"manager.withdraw(accountId,amount)", false,
+				InvocationCount.ALLOWING);
+		expectedInvocations[3] = new Invocation(
+				"manager.deposit(accountId,amount)", false,
+				InvocationCount.ALLOWING);
+		finder.setScopeByMethodSignature("void", "checkInvocationWithRecursive1");
+		invocations = finder.getInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(invocations));
+		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
+				invocations));
+		
+		expectedInvocations = new Invocation[1];
+		expectedInvocations[0] = new Invocation(
+				"logger.log(n)", false,
+				InvocationCount.ATLEAST_ONCE);
+		finder.setScopeByMethodSignature("int", "fibonacci");
+		invocations = finder.getInvocations(fieldClassName2);
+		// System.out.println(Arrays.toString(invocations));
+		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
+				invocations));
+		expectedInvocations = new Invocation[7];
+		expectedInvocations[0] = new Invocation(
+				"logger.log(accountId)", false,
+				InvocationCount.ONCE);
+		expectedInvocations[1] = new Invocation(
+				"logger.log(amount)", false,
+				InvocationCount.ONCE);
+		expectedInvocations[2] = new Invocation(
+				"logger.log(n)", false,
+				InvocationCount.ATLEAST_ONCE);
+		expectedInvocations[3] = new Invocation(
+				"logger.log(accountId)", false,
+				InvocationCount.ATLEAST_ONCE);
+		expectedInvocations[4] = new Invocation(
+				"logger.log(amount)", false,
+				InvocationCount.ATLEAST_ONCE);
+		expectedInvocations[5] = new Invocation(
+				"logger.log(accountId)", false,
+				InvocationCount.ALLOWING);
+		expectedInvocations[6] = new Invocation(
+				"logger.log(amount)", false,
+				InvocationCount.ALLOWING);
+
+		finder.setScopeByMethodSignature("void", "checkInvocationWithRecursive2");
+		invocations = finder.getInvocations(fieldClassName2);
 		// System.out.println(Arrays.toString(invocations));
 		assertTrue("Should be equal", Arrays.equals(expectedInvocations,
 				invocations));
@@ -332,7 +413,7 @@ public class AutoMockTest extends TestCase {
 		expectedJMockInvocations[7] = "allowing (manager).releaseCollection()";
 		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
 				sourceFilePath);
-		finder.setScopeByMethodDeclaration("void", "checkInvocationWithIfElse");
+		finder.setScopeByMethodSignature("void", "checkInvocationWithIfElse");
 		String[] jMockInvocations = finder.getJMockInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(expectedJMockInvocations));
 		// System.out.println(Arrays.toString(jMockInvocations));
@@ -352,7 +433,7 @@ public class AutoMockTest extends TestCase {
 		expectedJMockInvocations[8] = "once (manager).commit()";
 		expectedJMockInvocations[9] = "once (manager).commit()";
 		InvocationSequenceFinder regexFinder = new RegexInvocationSequenceFinder(sourceFilePath);
-		regexFinder.setScopeByMethodDeclaration("double", "transfer");
+		regexFinder.setScopeByMethodSignature("double", "transfer");
 		jMockInvocations = regexFinder.getJMockInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(jMockInvocations));
 		assertTrue(Arrays.equals(jMockInvocations, expectedJMockInvocations));
