@@ -65,6 +65,9 @@ public class AccountService {
 			
 		}
 		
+		// ? :
+		int i = manager.needClose() ? 0 : -1;
+		
 		// return statement
 		return manager.withdraw(accountId, amount);
 
@@ -72,6 +75,52 @@ public class AccountService {
 	
 	public void fun(double input) {
 		
+	}
+	
+	public double checkInvocationWithConditionalReturn1(String accountId, double amount) {
+		if (amount > 50) {
+			return 0;
+		}
+		return manager.withdraw(accountId, amount);
+	}
+	
+	public void checkInvocationWithConditionalReturn2(String accountId, double amount) {
+		if (amount > 50) {
+			return;
+		}
+		manager.withdraw(accountId, amount);
+	}
+	
+	public void checkInvocationWithRecursive1(String accountId, double amount) {
+		manager.withdraw(accountId, amount);
+		double d = manager.deposit(accountId, amount);
+		logger.log(accountId);
+		logger.log(amount);
+		
+		if (d > 9) return;
+		
+		checkInvocationWithRecursive1(accountId, amount);
+		
+		manager.withdraw(accountId, amount);
+		manager.deposit(accountId, amount);
+		logger.log(accountId);
+		logger.log(amount);
+	}
+	
+	public void checkInvocationWithRecursive2(String accountId, double amount) {
+		logger.log(accountId);
+		logger.log(amount);
+		
+		int res = fibonacci(10);
+		
+		checkInvocationWithRecursive1(accountId, amount);
+	}
+	
+	public int fibonacci(int n) {
+		logger.log(n);
+		if (n == 0 || n == 1)
+			return n;
+		else return fibonacci(n - 1) + fibonacci(n - 2);
 	}
 	
 	public void checkInvocationWithLoop(String accountId, double amount) {
