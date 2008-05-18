@@ -27,7 +27,6 @@ public class ASTFieldNameFinder implements IFieldNameFinder {
 		this.unit = (CompilationUnit) parser.createAST(null);
 	}
 
-	@Override
 	public String getFieldName(String fieldClassName) {
 		String fieldSimpleClassName = ClassUtil.getSimpleClassName(fieldClassName);
 		FieldNameVisitor filedNameVisitor = new FieldNameVisitor(fieldSimpleClassName);
