@@ -3,11 +3,12 @@ package test.dependency;
 import java.util.ArrayList;
 
 public class B {
-	C[] c;
-	A a;
+	A[] a;
 	String[] s;
 	
-	public C[][] foo(String[] g) {
-		return new ArrayList<C[]>().toArray(new C[0][0]);
+	public void foo(String[] g) {
+		s = new String[0];
+		a = new A[0];
+		C[][] c = new ArrayList<C[]>().toArray(null);
 	}
 }
