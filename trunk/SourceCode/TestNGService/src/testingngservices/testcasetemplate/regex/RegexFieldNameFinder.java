@@ -22,8 +22,7 @@ public class RegexFieldNameFinder implements IFieldNameFinder {
 	public RegexFieldNameFinder(ArrayList<String> sourcefileContent) {
 		this.sourcefileContent = sourcefileContent;
 	}
-
-	@Override
+	
 	public String getFieldName(String fieldClassName) {
 		String simpleClassName = ClassUtil.getSimpleClassName(fieldClassName);
 		// e.g. 
