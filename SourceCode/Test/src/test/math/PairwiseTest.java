@@ -14,13 +14,14 @@ import pairwisetesting.util.Converter;
 
 
 public class PairwiseTest  {
+
 	@Test(dataProvider = "PairwiseTestingDataProvider")
 	public void testIsBetween(final int n, final int lower, final int upper) {
-		Assert.assertEquals(Range.isBetween(n, lower, upper), Converter.convertTo(Expectation.getExpectedResult("test.math.Range.isBetween_" + n + "_" + lower + "_" + upper), boolean.class));	}
+		Assert.assertEquals(Range.getInstance().isBetween(n, lower, upper), Converter.convertTo(Expectation.getExpectedResult("test.math.Range.isBetween_" + n + "_" + lower + "_" + upper), boolean.class));	}
 
 	@DataProvider(name = "PairwiseTestingDataProvider")
 	public Object[][] rangeData() throws Exception {
-                String testCases = "<?xml version='1.0'?><testcases><factor>n</factor><factor>lower</factor><factor>upper</factor><run><level>5</level><level>5000</level><level>10000</level></run><run><level>5</level><level>1</level><level>5</level></run><run><level>500</level><level>5000</level><level>5</level></run><run><level>50</level><level>1</level><level>10000</level></run><run><level>50</level><level>5000</level><level>5</level></run><run><level>500</level><level>1</level><level>10000</level></run></testcases>";
+                String testCases = "<?xml version='1.0'?><testcases><factor>n</factor><factor>lower</factor><factor>upper</factor><run><level>3</level><level>1</level><level>4</level></run><run><level>3</level><level>3</level><level>4</level></run><run><level>4</level><level>3</level><level>4</level></run></testcases>";
                 
                 // Parse XML Data to 2D String Array
                 Document doc = new Builder().build(testCases, null);

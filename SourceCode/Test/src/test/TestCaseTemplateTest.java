@@ -27,10 +27,10 @@ public class TestCaseTemplateTest extends TestCase {
 		assertTrue(Arrays.equals(sequences, expectedSequences));
 		
 		String[] expectedJMockSequences = new String[4];
-		expectedJMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[1] = "atLeast(1).of (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[3] = "atLeast(1).of (manager).commit()";
+		expectedJMockSequences[3] = "one (manager).commit()";
 		String[] jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
 		// System.out.println(Arrays.toString(jMockSequences));
 		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
@@ -50,16 +50,16 @@ public class TestCaseTemplateTest extends TestCase {
 		assertTrue(Arrays.equals(sequences, expectedSequences));
 		
 		expectedJMockSequences = new String[10];
-		expectedJMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[1] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[2] = "atLeast(1).of (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+		expectedJMockSequences[1] = "one (manager).beginTransaction()";
+		expectedJMockSequences[2] = "one (manager).withdraw(accountId, amount)";
 		expectedJMockSequences[3] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[4] = "atLeast(1).of (manager).commit()";
-		expectedJMockSequences[5] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[6] = "atLeast(1).of (manager).deposit(accountId, amount)";
+		expectedJMockSequences[4] = "one (manager).commit()";
+		expectedJMockSequences[5] = "one (manager).beginTransaction()";
+		expectedJMockSequences[6] = "one (manager).deposit(accountId, amount)";
 		expectedJMockSequences[7] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[8] = "atLeast(1).of (manager).commit()";
-		expectedJMockSequences[9] = "atLeast(1).of (manager).commit()";
+		expectedJMockSequences[8] = "one (manager).commit()";
+		expectedJMockSequences[9] = "one (manager).commit()";
 		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
 		// System.out.println(Arrays.toString(jMockSequences));
 		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
@@ -92,10 +92,10 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.addImport("test.bank.IAccountManager");
 		tp.addClassToMockInstanceName("test.bank.IAccountManager", "manager");
 		String[] jMockSequences = new String[4];
-		jMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
-		jMockSequences[1] = "atLeast(1).of (manager).withdraw(accountId, amount)";
+		jMockSequences[0] = "one (manager).beginTransaction()";
+		jMockSequences[1] = "one (manager).withdraw(accountId, amount)";
 		jMockSequences[2] = "will(returnValue(<NeedFilled>)";
-		jMockSequences[3] = "atLeast(1).of (manager).commit()";
+		jMockSequences[3] = "one (manager).commit()";
 		tp.addJMockInvokeSequence("test.bank.IAccountManager", jMockSequences);
 		// tp.addClassToMockInstanceName("test.bank.AbstractAccountRepository", "repository");
 		
@@ -206,9 +206,9 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.addImport("test.bookstore.Logger");
 		tp.addClassToMockInstanceName("test.bookstore.Logger", "logger");
 		jMockSequences = new String[3];
-		jMockSequences[0] = "atLeast(1).of (logger).log(level)";
-		jMockSequences[1] = "atLeast(1).of (logger).log(accountType)";
-		jMockSequences[2] = "atLeast(1).of (logger).log(coupon)";
+		jMockSequences[0] = "one (logger).log(level)";
+		jMockSequences[1] = "one (logger).log(accountType)";
+		jMockSequences[2] = "one (logger).log(coupon)";
 		tp.addJMockInvokeSequence("test.bookstore.Logger", jMockSequences);
 		
 		tp.setCheckStateMethod("");
@@ -258,10 +258,10 @@ public class TestCaseTemplateTest extends TestCase {
 		// System.out.println(te.generateTestNGTestCase());
 		
 		String[] expectedJMockSequences = new String[4];
-		expectedJMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[1] = "atLeast(1).of (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[3] = "atLeast(1).of (manager).commit()";
+		expectedJMockSequences[3] = "one (manager).commit()";
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[1]));
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[2]));
@@ -273,12 +273,12 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.addJMockInvokeSequence("test.bank.Logger", jMockSequences);
 
 		expectedJMockSequences = new String[6];
-		expectedJMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[1] = "atLeast(1).of (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[3] = "atLeast(1).of (manager).commit()";
-		expectedJMockSequences[4] = "atLeast(1).of (logger).log(accountId)";
-		expectedJMockSequences[5] = "atLeast(1).of (logger).log(amount)";
+		expectedJMockSequences[3] = "one (manager).commit()";
+		expectedJMockSequences[4] = "one (logger).log(accountId)";
+		expectedJMockSequences[5] = "one (logger).log(amount)";
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(te.generateTestNGTestCase());
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
@@ -323,20 +323,20 @@ public class TestCaseTemplateTest extends TestCase {
 		// System.out.println(te.generateTestNGTestCase());
 		
 		expectedJMockSequences = new String[14];
-		expectedJMockSequences[0] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[1] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[2] = "atLeast(1).of (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+		expectedJMockSequences[1] = "one (manager).beginTransaction()";
+		expectedJMockSequences[2] = "one (manager).withdraw(accountId, amount)";
 		expectedJMockSequences[3] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[4] = "atLeast(1).of (manager).commit()";
-		expectedJMockSequences[5] = "atLeast(1).of (manager).beginTransaction()";
-		expectedJMockSequences[6] = "atLeast(1).of (manager).deposit(accountId, amount)";
+		expectedJMockSequences[4] = "one (manager).commit()";
+		expectedJMockSequences[5] = "one (manager).beginTransaction()";
+		expectedJMockSequences[6] = "one (manager).deposit(accountId, amount)";
 		expectedJMockSequences[7] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[8] = "atLeast(1).of (manager).commit()";
-		expectedJMockSequences[9] = "atLeast(1).of (manager).commit()";
-		expectedJMockSequences[10] = "atLeast(1).of (logger).log(accountId)";
-		expectedJMockSequences[11] = "atLeast(1).of (logger).log(amount)";
-		expectedJMockSequences[12] = "atLeast(1).of (logger).log(accountId)";
-		expectedJMockSequences[13] = "atLeast(1).of (logger).log(amount)";
+		expectedJMockSequences[8] = "one (manager).commit()";
+		expectedJMockSequences[9] = "one (manager).commit()";
+		expectedJMockSequences[10] = "one (logger).log(accountId)";
+		expectedJMockSequences[11] = "one (logger).log(amount)";
+		expectedJMockSequences[12] = "one (logger).log(accountId)";
+		expectedJMockSequences[13] = "one (logger).log(amount)";
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[1]));
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[2]));
