@@ -13,13 +13,22 @@ import test.expect.Expectation;
 import pairwisetesting.util.Converter;
 
 $if(needMock)$
+import org.testng.annotations.BeforeMethod;
 import org.jmock.Expectations;
 import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.lib.legacy.ClassImposteriser;
 $endif$
 
 $imports: {import $it$;}; separator="\n"$
 
 public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
+	$if(needMock)$
+	@BeforeMethod
+	public void setUp() {
+		setImposteriser(ClassImposteriser.INSTANCE);
+	}
+	$endif$
+
 	@Test(dataProvider = "$dataProviderName; null="PairwiseTestingDataProvider"$")
 	public void test$methodUnderTest; format="capitalize"$($params:parameter(); separator=", "$) {
 		$if(isStaticMethod)$
@@ -32,9 +41,15 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
 		$if(needMock)$$injectMockObjects()$$endif$
 		$if(checkStateMethod)$
 		$classUnderTest; format="camelize"$.$invokeMethodUnderTest()$;
+		$if(needMock)$
+		verify();
+		$endif$
 		Assert.assertEquals($classUnderTest; format="camelize"$.$checkStateMethod$(), $expected()$);
 		$else$
 		$returnType$ testResult = $classUnderTest; format="camelize"$.$invokeMethodUnderTest()$;
+		$if(needMock)$
+		verify();
+		$endif$
 		Assert.assertEquals(testResult, $expected()$);
 		$endif$
 		$endif$
