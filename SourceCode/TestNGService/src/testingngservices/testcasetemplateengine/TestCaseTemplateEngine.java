@@ -40,7 +40,7 @@ public class TestCaseTemplateEngine {
 			for (Map.Entry<String, String> entry : tp.getClassToMockInstanceNameEntrySet()) {
 				t.setAttribute("classToMockNames", ClassUtil.getSimpleClassName(entry.getKey()));
 				t.setAttribute("classToMockInstanceNames", entry.getValue());
-				t.setAttribute("jmockInvokeSequences", tp.getJMockInvokeSequence(entry.getKey()));
+				t.setAttribute("jmockInvokeSequences", tp.getJMockInvocationSequence(entry.getKey()));
 			}
 		}
 
