@@ -155,7 +155,7 @@ class FieldMethodInvocationVisitor extends ASTVisitor {
 		}
 		
 		// Return the Looser
-		if (myIvocationCount.ordinal() > parentInvocationCount.ordinal()) {
+		if (myIvocationCount.looserThan(parentInvocationCount)) {
 			return myIvocationCount;
 		} else {
 			return parentInvocationCount;
