@@ -26,28 +26,36 @@ public class PairwiseTest extends MockObjectTestCase {
 	}
 
 	@Test(dataProvider = "PairwiseTestingDataProvider")
-	public void testWithdraw(final String accountId, final double amount) {
-		final IAccountManager manager = mock(IAccountManager.class, "MockIAccountManager_" + accountId + "_" + amount);
-		final Logger logger = mock(Logger.class, "MockLogger_" + accountId + "_" + amount);
+	public void testTransfer(final String accountIdA, final String accountIdB, final double amount) {
+		final IAccountManager manager = mock(IAccountManager.class, "MockIAccountManager_" + accountIdA + "_" + accountIdB + "_" + amount);
+		final Logger logger = mock(Logger.class, "MockLogger_" + accountIdA + "_" + accountIdB + "_" + amount);
 		checking(new Expectations() {{
 			one (manager).beginTransaction();
-			one (manager).withdraw(accountId, amount);
-			will(returnValue(10000-amount));
+			one (manager).beginTransaction();
+			one (manager).withdraw(accountIdA,amount);
+			will(returnValue(10000 - amount));
 			one (manager).commit();
-			one (logger).log(accountId);
+			one (manager).beginTransaction();
+			one (manager).deposit(accountIdB,amount);
+			will(returnValue(10000 + amount));
+			one (manager).commit();
+			one (manager).commit();
+			one (logger).log(accountIdA);
+			one (logger).log(amount);
+			one (logger).log(accountIdB);
 			one (logger).log(amount);
 		}});
 		AccountService accountService = new AccountService();
 		accountService.setIAccountManager(manager);
 		accountService.setLogger(logger);
-		double testResult = accountService.withdraw(accountId, amount);
-		this.verify();
-		Assert.assertEquals(testResult, Converter.convertTo(Expectation.getExpectedResult("test.bank.AccountService.withdraw_" + accountId + "_" + amount), double.class), 0.0010);
+		double testResult = accountService.transfer(accountIdA, accountIdB, amount);
+		verify();
+		Assert.assertEquals(testResult, Converter.convertTo(Expectation.getExpectedResult("test.bank.AccountService.transfer_" + accountIdA + "_" + accountIdB + "_" + amount), double.class), 0.0010);
 	}
 
 	@DataProvider(name = "PairwiseTestingDataProvider")
 	public Object[][] rangeData() throws Exception {
-                String testCases = "<?xml version='1.0'?><testcases><factor>accountId</factor><factor>amount</factor><run><level>A001</level><level>1000</level></run><run><level>A002</level><level>2000</level></run><run><level>A001</level><level>2000</level></run><run><level>A002</level><level>1000</level></run></testcases>";
+                String testCases = "<?xml version='1.0'?><testcases><factor>accountId</factor><factor>amount</factor><run><level>A001</level><level>A003</level><level>1000</level></run><run><level>A001</level><level>A004</level><level>2000</level></run><run><level>A002</level><level>A003</level><level>2000</level></run><run><level>A002</level><level>A004</level><level>1000</level></run></testcases>";
                 
                 // Parse XML Data to 2D String Array
                 Document doc = new Builder().build(testCases, null);
@@ -69,7 +77,8 @@ public class PairwiseTest extends MockObjectTestCase {
                 for (int i = 0; i < testData.length; i++) {
                         String[] row = testData[i];
                         testDataObjects[i][0] = Converter.convertTo(row[0], String.class);
-                        testDataObjects[i][1] = Converter.convertTo(row[1], double.class);
+                        testDataObjects[i][1] = Converter.convertTo(row[1], String.class);
+                        testDataObjects[i][2] = Converter.convertTo(row[2], double.class);
                 }
                 return testDataObjects;
 	}
