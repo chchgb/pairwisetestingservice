@@ -22,7 +22,7 @@ public class AccountManager implements IAccountManager {
 		
 	}
 
-	public void releaseCollection() {
+	public void releaseConnection() {
 		
 	}
 
