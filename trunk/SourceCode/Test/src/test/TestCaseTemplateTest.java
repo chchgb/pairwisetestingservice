@@ -1,69 +1,67 @@
 package test;
 
-import java.util.Arrays;
-
 import junit.framework.TestCase;
-import testingngservices.testcasetemplate.Invoke;
-import testingngservices.testcasetemplate.InvokeSequence;
 import testingngservices.testcasetemplate.TestCaseTemplateParameter;
+import testingngservices.testcasetemplate.ast.ASTInvocationSequenceFinder;
+import testingngservices.testcasetemplate.core.InvocationSequenceFinder;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngine;
 
 
 public class TestCaseTemplateTest extends TestCase {
-	public void testInvokeSequence() {
-		InvokeSequence is = new InvokeSequence("src/test/bank/AccountService.java");
-		
-		assertEquals("manager", is.getFieldName("test.bank.IAccountManager"));
-		assertEquals("manager", is.getFieldName("IAccountManager"));
-		
-		//is.setScopeByMethod("double", "withdraw", new Parameter("String", "accountId"), new Parameter("double", "amount"));
-		is.setScopeByMethod("double", "withdraw");	
-		Invoke[] sequences = is.findByFieldType("test.bank.IAccountManager");
-		Invoke[] expectedSequences = new Invoke[3];
-		expectedSequences[0] = new Invoke("manager.beginTransaction()", "void");
-		expectedSequences[1] = new Invoke("manager.withdraw(accountId, amount)", "double");
-		expectedSequences[2] = new Invoke("manager.commit()", "void");
-		// System.out.println(Arrays.toString(sequences));
-		assertTrue(Arrays.equals(sequences, expectedSequences));
-		
-		String[] expectedJMockSequences = new String[4];
-		expectedJMockSequences[0] = "one (manager).beginTransaction()";
-		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
-		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[3] = "one (manager).commit()";
-		String[] jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
-		// System.out.println(Arrays.toString(jMockSequences));
-		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
-		
-		is.setScopeByMethod("double", "transfer");	
-		sequences = is.findByFieldType("test.bank.IAccountManager");
-		expectedSequences = new Invoke[8];
-		expectedSequences[0] = new Invoke("manager.beginTransaction()", "void");
-		expectedSequences[1] = new Invoke("manager.beginTransaction()", "void");
-		expectedSequences[2] = new Invoke("manager.withdraw(accountId, amount)", "double");
-		expectedSequences[3] = new Invoke("manager.commit()", "void");
-		expectedSequences[4] = new Invoke("manager.beginTransaction()", "void");
-		expectedSequences[5] = new Invoke("manager.deposit(accountId, amount)", "double");
-		expectedSequences[6] = new Invoke("manager.commit()", "void");
-		expectedSequences[7] = new Invoke("manager.commit()", "void");
-		// System.out.println(Arrays.toString(sequences));
-		assertTrue(Arrays.equals(sequences, expectedSequences));
-		
-		expectedJMockSequences = new String[10];
-		expectedJMockSequences[0] = "one (manager).beginTransaction()";
-		expectedJMockSequences[1] = "one (manager).beginTransaction()";
-		expectedJMockSequences[2] = "one (manager).withdraw(accountId, amount)";
-		expectedJMockSequences[3] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[4] = "one (manager).commit()";
-		expectedJMockSequences[5] = "one (manager).beginTransaction()";
-		expectedJMockSequences[6] = "one (manager).deposit(accountId, amount)";
-		expectedJMockSequences[7] = "will(returnValue(<NeedFilled>))";
-		expectedJMockSequences[8] = "one (manager).commit()";
-		expectedJMockSequences[9] = "one (manager).commit()";
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
-		// System.out.println(Arrays.toString(jMockSequences));
-		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
-	}
+//	public void testInvokeSequence() {
+//		InvokeSequence is = new InvokeSequence("src/test/bank/AccountService.java");
+//		
+//		assertEquals("manager", is.getFieldName("test.bank.IAccountManager"));
+//		assertEquals("manager", is.getFieldName("IAccountManager"));
+//		
+//		//is.setScopeByMethod("double", "withdraw", new Parameter("String", "accountId"), new Parameter("double", "amount"));
+//		is.setScopeByMethod("double", "withdraw");	
+//		Invoke[] sequences = is.findByFieldType("test.bank.IAccountManager");
+//		Invoke[] expectedSequences = new Invoke[3];
+//		expectedSequences[0] = new Invoke("manager.beginTransaction()", "void");
+//		expectedSequences[1] = new Invoke("manager.withdraw(accountId, amount)", "double");
+//		expectedSequences[2] = new Invoke("manager.commit()", "void");
+//		// System.out.println(Arrays.toString(sequences));
+//		assertTrue(Arrays.equals(sequences, expectedSequences));
+//		
+//		String[] expectedJMockSequences = new String[4];
+//		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+//		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
+//		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
+//		expectedJMockSequences[3] = "one (manager).commit()";
+//		String[] jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
+//		// System.out.println(Arrays.toString(jMockSequences));
+//		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
+//		
+//		is.setScopeByMethod("double", "transfer");	
+//		sequences = is.findByFieldType("test.bank.IAccountManager");
+//		expectedSequences = new Invoke[8];
+//		expectedSequences[0] = new Invoke("manager.beginTransaction()", "void");
+//		expectedSequences[1] = new Invoke("manager.beginTransaction()", "void");
+//		expectedSequences[2] = new Invoke("manager.withdraw(accountId, amount)", "double");
+//		expectedSequences[3] = new Invoke("manager.commit()", "void");
+//		expectedSequences[4] = new Invoke("manager.beginTransaction()", "void");
+//		expectedSequences[5] = new Invoke("manager.deposit(accountId, amount)", "double");
+//		expectedSequences[6] = new Invoke("manager.commit()", "void");
+//		expectedSequences[7] = new Invoke("manager.commit()", "void");
+//		// System.out.println(Arrays.toString(sequences));
+//		assertTrue(Arrays.equals(sequences, expectedSequences));
+//		
+//		expectedJMockSequences = new String[10];
+//		expectedJMockSequences[0] = "one (manager).beginTransaction()";
+//		expectedJMockSequences[1] = "one (manager).beginTransaction()";
+//		expectedJMockSequences[2] = "one (manager).withdraw(accountId, amount)";
+//		expectedJMockSequences[3] = "will(returnValue(<NeedFilled>))";
+//		expectedJMockSequences[4] = "one (manager).commit()";
+//		expectedJMockSequences[5] = "one (manager).beginTransaction()";
+//		expectedJMockSequences[6] = "one (manager).deposit(accountId, amount)";
+//		expectedJMockSequences[7] = "will(returnValue(<NeedFilled>))";
+//		expectedJMockSequences[8] = "one (manager).commit()";
+//		expectedJMockSequences[9] = "one (manager).commit()";
+//		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
+//		// System.out.println(Arrays.toString(jMockSequences));
+//		assertTrue(Arrays.equals(jMockSequences, expectedJMockSequences));
+//	}
 	
 	public void testTestCaseTemplate() throws Exception {
 		TestCaseTemplateParameter tp = new TestCaseTemplateParameter();
@@ -91,12 +89,12 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.addImport("java.net.*");
 		tp.addImport("test.bank.IAccountManager");
 		tp.addClassToMockInstanceName("test.bank.IAccountManager", "manager");
-		String[] jMockSequences = new String[4];
-		jMockSequences[0] = "one (manager).beginTransaction()";
-		jMockSequences[1] = "one (manager).withdraw(accountId, amount)";
-		jMockSequences[2] = "will(returnValue(<NeedFilled>)";
-		jMockSequences[3] = "one (manager).commit()";
-		tp.addJMockInvokeSequence("test.bank.IAccountManager", jMockSequences);
+		String[] jMockInvocations = new String[4];
+		jMockInvocations[0] = "one (manager).beginTransaction()";
+		jMockInvocations[1] = "one (manager).withdraw(accountId,amount)";
+		jMockInvocations[2] = "will(returnValue(<NeedFilled>)";
+		jMockInvocations[3] = "one (manager).commit()";
+		tp.addJMockInvocationSequence("test.bank.IAccountManager", jMockInvocations);
 		// tp.addClassToMockInstanceName("test.bank.AbstractAccountRepository", "repository");
 		
 		assertTrue(tp.isSingleton());
@@ -205,26 +203,26 @@ public class TestCaseTemplateTest extends TestCase {
 		
 		tp.addImport("test.bookstore.Logger");
 		tp.addClassToMockInstanceName("test.bookstore.Logger", "logger");
-		jMockSequences = new String[3];
-		jMockSequences[0] = "one (logger).log(level)";
-		jMockSequences[1] = "one (logger).log(accountType)";
-		jMockSequences[2] = "one (logger).log(coupon)";
-		tp.addJMockInvokeSequence("test.bookstore.Logger", jMockSequences);
+		jMockInvocations = new String[3];
+		jMockInvocations[0] = "one (logger).log(level)";
+		jMockInvocations[1] = "one (logger).log(accountType)";
+		jMockInvocations[2] = "one (logger).log(coupon)";
+		tp.addJMockInvocationSequence("test.bookstore.Logger", jMockInvocations);
 		
 		tp.setCheckStateMethod("");
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(tp.toXML());
 		// System.out.println(te.generateTestNGTestCase());
-		assertTrue(te.generateTestNGTestCase().contains(jMockSequences[0]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockSequences[1]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockSequences[2]));
+		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[0]));
+		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[1]));
+		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[2]));
 		
 		tp.setCheckStateMethod("getDiscountedPrice");
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(te.generateTestNGTestCase());
-		assertTrue(te.generateTestNGTestCase().contains(jMockSequences[0]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockSequences[1]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockSequences[2]));
+		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[0]));
+		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[1]));
+		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[2]));
 		assertTrue(te.generateTestNGTestCase().contains("bookStore.getDiscountedPrice()"));
 		
 		tp = new TestCaseTemplateParameter();
@@ -239,10 +237,11 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.addImport("test.bank.IAccountManager");
 		tp.addClassToMockInstanceName("test.bank.IAccountManager", "manager");
 		
-		InvokeSequence is = new InvokeSequence("src/test/bank/AccountService.java");
-		is.setScopeByMethod("double", "withdraw");
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
-		tp.addJMockInvokeSequence("test.bank.IAccountManager", jMockSequences);
+		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
+				"src/test/bank/AccountService.java");
+		finder.setScopeByMethodSignature("double", "withdraw");
+		jMockInvocations = finder.getJMockInvocations("test.bank.IAccountManager");
+		tp.addJMockInvocationSequence("test.bank.IAccountManager", jMockInvocations);
 		
 		pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
             + "<testcases>"
@@ -259,7 +258,7 @@ public class TestCaseTemplateTest extends TestCase {
 		
 		String[] expectedJMockSequences = new String[4];
 		expectedJMockSequences[0] = "one (manager).beginTransaction()";
-		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[1] = "one (manager).withdraw(accountId,amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
 		expectedJMockSequences[3] = "one (manager).commit()";
 		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
@@ -269,12 +268,12 @@ public class TestCaseTemplateTest extends TestCase {
 		
 		tp.addImport("test.bank.Logger");
 		tp.addClassToMockInstanceName("test.bank.Logger", "logger");
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.Logger");
-		tp.addJMockInvokeSequence("test.bank.Logger", jMockSequences);
+		jMockInvocations = finder.getJMockInvocations("test.bank.Logger");
+		tp.addJMockInvocationSequence("test.bank.Logger", jMockInvocations);
 
 		expectedJMockSequences = new String[6];
 		expectedJMockSequences[0] = "one (manager).beginTransaction()";
-		expectedJMockSequences[1] = "one (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[1] = "one (manager).withdraw(accountId,amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
 		expectedJMockSequences[3] = "one (manager).commit()";
 		expectedJMockSequences[4] = "one (logger).log(accountId)";
@@ -292,7 +291,7 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.setPackageName("test.bank");
 		tp.setClassUnderTest("AccountService");
 		tp.setMethodUnderTest("transfer");
-		is.setScopeByMethod("double", "transfer");
+		finder.setScopeByMethodSignature("double", "transfer");
 		tp.addMethodParameter("String", "accountIdA");
 		tp.addMethodParameter("String", "accountIdB");
 		tp.addMethodParameter("double", "amount");
@@ -301,13 +300,13 @@ public class TestCaseTemplateTest extends TestCase {
 		
 		tp.addImport("test.bank.IAccountManager");
 		tp.addClassToMockInstanceName("test.bank.IAccountManager", "manager");
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.IAccountManager");
-		tp.addJMockInvokeSequence("test.bank.IAccountManager", jMockSequences);
+		jMockInvocations = finder.getJMockInvocations("test.bank.IAccountManager");
+		tp.addJMockInvocationSequence("test.bank.IAccountManager", jMockInvocations);
 		
 		tp.addImport("test.bank.Logger");
 		tp.addClassToMockInstanceName("test.bank.Logger", "logger");
-		jMockSequences = is.generateJMockInvokeSequenceByFieldType("test.bank.Logger");
-		tp.addJMockInvokeSequence("test.bank.Logger", jMockSequences);
+		jMockInvocations = finder.getJMockInvocations("test.bank.Logger");
+		tp.addJMockInvocationSequence("test.bank.Logger", jMockInvocations);
 		
 		pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
             + "<testcases>"
@@ -325,11 +324,11 @@ public class TestCaseTemplateTest extends TestCase {
 		expectedJMockSequences = new String[14];
 		expectedJMockSequences[0] = "one (manager).beginTransaction()";
 		expectedJMockSequences[1] = "one (manager).beginTransaction()";
-		expectedJMockSequences[2] = "one (manager).withdraw(accountId, amount)";
+		expectedJMockSequences[2] = "one (manager).withdraw(accountId,amount)";
 		expectedJMockSequences[3] = "will(returnValue(<NeedFilled>))";
 		expectedJMockSequences[4] = "one (manager).commit()";
 		expectedJMockSequences[5] = "one (manager).beginTransaction()";
-		expectedJMockSequences[6] = "one (manager).deposit(accountId, amount)";
+		expectedJMockSequences[6] = "one (manager).deposit(accountId,amount)";
 		expectedJMockSequences[7] = "will(returnValue(<NeedFilled>))";
 		expectedJMockSequences[8] = "one (manager).commit()";
 		expectedJMockSequences[9] = "one (manager).commit()";
