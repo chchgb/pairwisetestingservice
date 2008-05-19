@@ -31,9 +31,57 @@ public abstract class InvocationSequenceFinder {
 
 	public String[] getJMockInvocations(String fieldClassName) {
 		Invocation[] invocations = getInvocations(fieldClassName);
-		ArrayList<String> jMockInvocations = new ArrayList<String>();
-		String invocationCount = null;
+		invocations = cleanRedundancyForJMock(invocations);
+		return convertToJMockExpections(invocations);
+	}
+
+	private Invocation[] cleanRedundancyForJMock(Invocation[] rawInvocations) {
+		for (int outterIndex = 0; outterIndex < rawInvocations.length; outterIndex++) {
+			// Find the next invocation content to process
+			if (rawInvocations[outterIndex] == null) {
+				continue;
+			}
+			String invocationContent = rawInvocations[outterIndex].getContent();
+			
+			Invocation mixedLastInvocation = null;
+			for (int innerIndex = outterIndex; innerIndex < rawInvocations.length; innerIndex++) {
+				
+				// Same invocation content is required
+				if (rawInvocations[innerIndex] == null
+						|| !invocationContent.equals(rawInvocations[innerIndex].getContent()))
+					continue;
+	
+				if (mixedLastInvocation == null) {
+					// Find the first invocation that its InvocationCount is not ONCE
+					if (rawInvocations[innerIndex].getCount() != InvocationCount.ONCE) {
+						mixedLastInvocation = rawInvocations[innerIndex];
+					}
+				} else {
+					// Mix the invocation count
+					InvocationCount mixedInvocationCount
+						= mixedLastInvocation.getCount().plus(rawInvocations[innerIndex].getCount());
+					mixedLastInvocation.setCount(mixedInvocationCount);
+					// Remove the invocation has just been mixed
+					rawInvocations[innerIndex] = null;
+				}
+			}
+		}
+		
+		// Filter the invocations have just been mixed
+		ArrayList<Invocation> cleanedInvocations = new ArrayList<Invocation>();
+		for (Invocation invocation : rawInvocations) {
+			if (invocation != null) {
+				cleanedInvocations.add(invocation);
+			}
+		}
+		return cleanedInvocations.toArray(new Invocation[0]);
+	}
+	
+	private String[] convertToJMockExpections(Invocation[] invocations) {
+		// Convert to JMock Expections
+		ArrayList<String> jMockInvocationContents = new ArrayList<String>();
 		for (Invocation invocation : invocations) {
+			String invocationCount = null;
 			switch (invocation.getCount()) {
 			case ONCE:
 				invocationCount = "one";
@@ -48,13 +96,13 @@ public abstract class InvocationSequenceFinder {
 				invocationCount = "ignoring";
 				break;
 			}
-			jMockInvocations.add(invocation.getContent().replaceFirst(
+			jMockInvocationContents.add(invocation.getContent().replaceFirst(
 					"(.*)[.](.*)", invocationCount + " ($1).$2"));
 			if (invocation.hasReturnValue()) {
-				jMockInvocations.add("will(returnValue(<NeedFilled>))");
+				jMockInvocationContents.add("will(returnValue(<NeedFilled>))");
 			}
 		}
-		return jMockInvocations.toArray(new String[0]);
+		return jMockInvocationContents.toArray(new String[0]);
 	}
 	
 }
