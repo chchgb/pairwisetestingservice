@@ -227,7 +227,7 @@ public class AutoMockTest extends TestCase {
 				"manager.rollback()", false,
 				InvocationCount.IGNORING);
 		expectedInvocations[4] = new Invocation(
-				"manager.releaseCollection()", false,
+				"manager.releaseConnection()", false,
 				InvocationCount.ONCE);
 		finder.setScopeByMethodSignature("void", "checkInvocationWithTryCatchFinally");
 		invocations = finder.getInvocations(fieldClassName1);
@@ -253,7 +253,7 @@ public class AutoMockTest extends TestCase {
 				"manager.needClose()", true,
 				InvocationCount.ONCE);
 		expectedInvocations[5] = new Invocation(
-				"manager.releaseCollection()", false,
+				"manager.releaseConnection()", false,
 				InvocationCount.ALLOWING);
 		finder.setScopeByMethodSignature("void", "checkInvocationWithIfElse");
 		invocations = finder.getInvocations(fieldClassName1);
@@ -294,7 +294,7 @@ public class AutoMockTest extends TestCase {
 				"manager.needClose()", true,
 				InvocationCount.ONCE);
 		expectedInvocations[10] = new Invocation(
-				"manager.releaseCollection()", false,
+				"manager.releaseConnection()", false,
 				InvocationCount.ALLOWING);
 		expectedInvocations[11] = new Invocation(
 				"manager.beginTransaction()", false,
@@ -400,28 +400,26 @@ public class AutoMockTest extends TestCase {
 				invocations));
 	}
 	
+	public void testInvocationCount() {
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.ATLEAST_ONCE.plus(InvocationCount.ATLEAST_ONCE));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.ATLEAST_ONCE.plus(InvocationCount.ALLOWING));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.ATLEAST_ONCE.plus(InvocationCount.ONCE));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.ATLEAST_ONCE.plus(InvocationCount.IGNORING));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.ALLOWING.plus(InvocationCount.ONCE));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.ALLOWING.plus(InvocationCount.ATLEAST_ONCE));
+		assertEquals(InvocationCount.ALLOWING, InvocationCount.ALLOWING.plus(InvocationCount.ALLOWING));
+		assertEquals(InvocationCount.ALLOWING, InvocationCount.ALLOWING.plus(InvocationCount.IGNORING));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.IGNORING.plus(InvocationCount.ONCE));
+		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.IGNORING.plus(InvocationCount.ATLEAST_ONCE));
+		assertEquals(InvocationCount.ALLOWING, InvocationCount.IGNORING.plus(InvocationCount.ALLOWING));
+		assertEquals(InvocationCount.IGNORING, InvocationCount.IGNORING.plus(InvocationCount.IGNORING));
+	
+	}
+	
 	public void testJMockInvocations() {
-		// ASTInvocationSequenceFinder
-		String[] expectedJMockInvocations = new String[8];
-		expectedJMockInvocations[0] = "one (manager).beginTransaction()";
-		expectedJMockInvocations[1] = "allowing (manager).withdraw(accountId,amount)";
-		expectedJMockInvocations[2] = "will(returnValue(<NeedFilled>))";
-		expectedJMockInvocations[3] = "allowing (manager).commit()";
-		expectedJMockInvocations[4] = "ignoring (manager).rollback()";
-		expectedJMockInvocations[5] = "one (manager).needClose()";
-		expectedJMockInvocations[6] = "will(returnValue(<NeedFilled>))";
-		expectedJMockInvocations[7] = "allowing (manager).releaseCollection()";
-		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
-				sourceFilePath);
-		finder.setScopeByMethodSignature("void", "checkInvocationWithIfElse");
-		String[] jMockInvocations = finder.getJMockInvocations(fieldClassName1);
-		// System.out.println(Arrays.toString(expectedJMockInvocations));
-		// System.out.println(Arrays.toString(jMockInvocations));
-		assertTrue("Should be equal", Arrays.equals(expectedJMockInvocations,
-				jMockInvocations));
 		
 		// RegexInvocationSequenceFinder
-		expectedJMockInvocations = new String[10];
+		String[] expectedJMockInvocations = new String[10];
 		expectedJMockInvocations[0] = "one (manager).beginTransaction()";
 		expectedJMockInvocations[1] = "one (manager).beginTransaction()";
 		expectedJMockInvocations[2] = "one (manager).withdraw(accountId, amount)";
@@ -434,9 +432,77 @@ public class AutoMockTest extends TestCase {
 		expectedJMockInvocations[9] = "one (manager).commit()";
 		InvocationSequenceFinder regexFinder = new RegexInvocationSequenceFinder(sourceFilePath);
 		regexFinder.setScopeByMethodSignature("double", "transfer");
-		jMockInvocations = regexFinder.getJMockInvocations(fieldClassName1);
+		String[] jMockInvocations = regexFinder.getJMockInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(jMockInvocations));
 		assertTrue(Arrays.equals(jMockInvocations, expectedJMockInvocations));
+		
+		// ASTInvocationSequenceFinder
+		expectedJMockInvocations = new String[8];
+		expectedJMockInvocations[0] = "one (manager).beginTransaction()";
+		expectedJMockInvocations[1] = "allowing (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[2] = "will(returnValue(<NeedFilled>))";
+		expectedJMockInvocations[3] = "allowing (manager).commit()";
+		expectedJMockInvocations[4] = "ignoring (manager).rollback()";
+		expectedJMockInvocations[5] = "one (manager).needClose()";
+		expectedJMockInvocations[6] = "will(returnValue(<NeedFilled>))";
+		expectedJMockInvocations[7] = "allowing (manager).releaseConnection()";
+		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
+				sourceFilePath);
+		finder.setScopeByMethodSignature("void", "checkInvocationWithIfElse");
+		jMockInvocations = finder.getJMockInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(expectedJMockInvocations));
+		// System.out.println(Arrays.toString(jMockInvocations));
+		assertTrue("Should be equal", Arrays.equals(expectedJMockInvocations,
+				jMockInvocations));
+		
+		// Check JMock invoations order
+		expectedJMockInvocations = new String[4];
+		expectedJMockInvocations[0] = "one (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[1] = "one (manager).deposit(accountId,amount)";
+		expectedJMockInvocations[2] = "atLeast(1).of (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[3] = "atLeast(1).of (manager).deposit(accountId,amount)";
+		finder.setScopeByMethodSignature("void", "checkJMockInvocation1");
+		jMockInvocations = finder.getJMockInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(finder.getInvocations(fieldClassName1)));
+		// System.out.println(Arrays.toString(jMockInvocations));
+		assertTrue("Should be equal", Arrays.equals(expectedJMockInvocations,
+				jMockInvocations));
+		
+		expectedJMockInvocations = new String[4];
+		expectedJMockInvocations[0] = "one (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[1] = "one (manager).deposit(accountId,amount)";
+		expectedJMockInvocations[2] = "allowing (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[3] = "atLeast(1).of (manager).deposit(accountId,amount)";
+		finder.setScopeByMethodSignature("void", "checkJMockInvocation2");
+		jMockInvocations = finder.getJMockInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(jMockInvocations));
+		assertTrue("Should be equal", Arrays.equals(expectedJMockInvocations,
+				jMockInvocations));
+		
+		expectedJMockInvocations = new String[2];
+		expectedJMockInvocations[0] = "allowing (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[1] = "allowing (manager).deposit(accountId,amount)";
+		finder.setScopeByMethodSignature("void", "checkJMockInvocation3");
+		jMockInvocations = finder.getJMockInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(jMockInvocations));
+		assertTrue("Should be equal", Arrays.equals(expectedJMockInvocations,
+				jMockInvocations));
+		
+		expectedJMockInvocations = new String[8];
+		expectedJMockInvocations[0] = "one (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[1] = "one (manager).deposit(accountId,amount)";
+		expectedJMockInvocations[2] = "atLeast(1).of (manager).withdraw(accountId,amount)";
+		expectedJMockInvocations[3] = "allowing (manager).deposit(accountId,amount)";
+		expectedJMockInvocations[4] = "allowing (manager).commit()";
+		expectedJMockInvocations[5] = "ignoring (manager).rollback()";
+		expectedJMockInvocations[6] = "one (manager).releaseConnection()";
+		expectedJMockInvocations[7] = "one (manager).releaseConnection()";
+		finder.setScopeByMethodSignature("void", "checkJMockInvocation4");
+		jMockInvocations = finder.getJMockInvocations(fieldClassName1);
+		// System.out.println(Arrays.toString(finder.getInvocations(fieldClassName1)));
+		// System.out.println(Arrays.toString(jMockInvocations));
+		assertTrue("Should be equal", Arrays.equals(expectedJMockInvocations,
+				jMockInvocations));
 	}
 	
 	public void testMethodSignatureFinder() {

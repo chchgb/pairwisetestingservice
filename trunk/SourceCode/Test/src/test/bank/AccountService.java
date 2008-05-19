@@ -77,6 +77,98 @@ public class AccountService {
 		
 	}
 	
+	public void checkJMockInvocation1(String accountId, double amount) {
+		manager.withdraw(accountId, amount);
+		manager.deposit(accountId, amount);
+		
+		int i = 0;
+		do {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			i++;
+		} while (i > 10);		
+		
+		manager.withdraw(accountId, amount);
+		manager.deposit(accountId, amount);
+		
+		i = 0;
+		do {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			i++;
+		} while (i > 10);
+
+	}
+	
+	public void checkJMockInvocation2(String accountId, double amount) {
+		manager.withdraw(accountId, amount);
+		manager.deposit(accountId, amount);
+		
+		int i = 0;
+		while (i > 10) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			i++;
+		}
+		
+		manager.deposit(accountId, amount);
+		
+		i = 0;
+		while (i > 10) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			i++;
+		}
+	}
+	
+	public void checkJMockInvocation3(String accountId, double amount) {	
+		int i = 0;
+		
+		while (i > 10) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			i++;
+		}
+		
+		for (int j = 0; j < 10; j++) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+		}
+		
+		if (amount > 50) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+		}
+	}
+	
+	public void checkJMockInvocation4(String accountId, double amount) {
+		manager.withdraw(accountId, amount);
+		manager.deposit(accountId, amount);
+		try {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			manager.commit();
+		} catch (Exception e) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			manager.rollback();
+		} finally {
+			manager.releaseConnection();
+		}
+		try {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			manager.commit();
+		} catch (Exception e) {
+			manager.withdraw(accountId, amount);
+			manager.deposit(accountId, amount);
+			manager.rollback();
+		} finally {
+			manager.releaseConnection();
+		}
+		manager.withdraw(accountId, amount);
+	}
+	
 	public double checkInvocationWithConditionalReturn1(String accountId, double amount) {
 		if (amount > 50) {
 			return 0;
@@ -170,7 +262,7 @@ public class AccountService {
 		} catch (Exception e) {
 			manager.rollback();
 		} finally {
-			manager.releaseCollection();
+			manager.releaseConnection();
 		}
 	}
 	
@@ -183,7 +275,7 @@ public class AccountService {
 			manager.rollback();
 		} finally {
 			if (manager.needClose()) {
-				manager.releaseCollection();
+				manager.releaseConnection();
 			} 
 		}
 	}
@@ -209,7 +301,7 @@ public class AccountService {
 			manager.rollback();
 		} finally {
 			if (manager.needClose()) {
-				manager.releaseCollection();
+				manager.releaseConnection();
 			} 
 		}
 		

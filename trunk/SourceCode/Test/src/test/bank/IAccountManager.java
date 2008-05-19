@@ -7,6 +7,6 @@ public interface IAccountManager {
 	double deposit(String accountId, double amount) throws RuntimeException;
 	void commit();
 	void rollback();
-	void releaseCollection();
+	void releaseConnection();
 	boolean needClose();
 }
