@@ -28,7 +28,7 @@ public class TestCaseTemplateParameter {
 	private boolean hasDelta = false;
 	private ArrayList<String> imports = new ArrayList<String>();
 	private LinkedHashMap<String, String> classToMockInstanceNameMap = new LinkedHashMap<String, String>();
-	private LinkedHashMap<String, List<String>> jMockInvokeSequenceMap = new LinkedHashMap<String, List<String>>();
+	private LinkedHashMap<String, List<String>> jMockInvocationSequenceMap = new LinkedHashMap<String, List<String>>();
 	
 	public TestCaseTemplateParameter() {
 	}
@@ -56,7 +56,7 @@ public class TestCaseTemplateParameter {
 				Element invokeElement = invokeElements.get(j);
 				invokeList.add(invokeElement.getValue());
 			}
-			this.addJMockInvokeSequence(classNameElement.getValue(), invokeList.toArray(new String[0]));
+			this.addJMockInvocationSequence(classNameElement.getValue(), invokeList.toArray(new String[0]));
 		}
 		
 		this.setPackageName(root.getFirstChildElement("packageName").getValue());
@@ -120,7 +120,7 @@ public class TestCaseTemplateParameter {
 			classToMockElement.appendChild(instanceNameElement);
 			
 			// Invokes
-			for (String invoke : jMockInvokeSequenceMap.get(entry.getKey())) {
+			for (String invoke : jMockInvocationSequenceMap.get(entry.getKey())) {
 				Element invokeElement = new Element("invoke");
 				invokeElement.appendChild(invoke);
 				classToMockElement.appendChild(invokeElement);
@@ -318,12 +318,12 @@ public class TestCaseTemplateParameter {
 		return this.classToMockInstanceNameMap.keySet().size() != 0;
 	}
 	
-	public void addJMockInvokeSequence(String className, String[] invokes) {
-		this.jMockInvokeSequenceMap.put(className, Arrays.asList(invokes));
+	public void addJMockInvocationSequence(String className, String[] invokes) {
+		this.jMockInvocationSequenceMap.put(className, Arrays.asList(invokes));
 	}
 	
-	public List<String> getJMockInvokeSequence(String className) {
-		return this.jMockInvokeSequenceMap.get(className);
+	public List<String> getJMockInvocationSequence(String className) {
+		return this.jMockInvocationSequenceMap.get(className);
 	}
 
 	@Override
@@ -357,7 +357,7 @@ public class TestCaseTemplateParameter {
 		result = prime * result
 				+ ((classToMockInstanceNameMap == null) ? 0 : classToMockInstanceNameMap.hashCode());
 		result = prime * result
-				+ ((jMockInvokeSequenceMap == null) ? 0 : jMockInvokeSequenceMap.hashCode());
+				+ ((jMockInvocationSequenceMap == null) ? 0 : jMockInvocationSequenceMap.hashCode());
 		return result;
 	}
 
@@ -427,10 +427,10 @@ public class TestCaseTemplateParameter {
 				return false;
 		} else if (!classToMockInstanceNameMap.equals(other.classToMockInstanceNameMap))
 			return false;
-		if (this.jMockInvokeSequenceMap == null) {
-			if (other.jMockInvokeSequenceMap != null)
+		if (this.jMockInvocationSequenceMap == null) {
+			if (other.jMockInvocationSequenceMap != null)
 				return false;
-		} else if (!jMockInvokeSequenceMap.equals(other.jMockInvokeSequenceMap))
+		} else if (!jMockInvocationSequenceMap.equals(other.jMockInvocationSequenceMap))
 			return false;
 		return true;
 	}
