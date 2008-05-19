@@ -213,17 +213,19 @@ public class TestCaseTemplateTest extends TestCase {
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(tp.toXML());
 		// System.out.println(te.generateTestNGTestCase());
-		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[0]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[1]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[2]));
+		String testNGTestCase = te.generateTestNGTestCase();
+		assertTrue(testNGTestCase.contains(jMockInvocations[0]));
+		assertTrue(testNGTestCase.contains(jMockInvocations[1]));
+		assertTrue(testNGTestCase.contains(jMockInvocations[2]));
 		
 		tp.setCheckStateMethod("getDiscountedPrice");
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(te.generateTestNGTestCase());
-		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[0]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[1]));
-		assertTrue(te.generateTestNGTestCase().contains(jMockInvocations[2]));
-		assertTrue(te.generateTestNGTestCase().contains("bookStore.getDiscountedPrice()"));
+		testNGTestCase = te.generateTestNGTestCase();
+		assertTrue(testNGTestCase.contains(jMockInvocations[0]));
+		assertTrue(testNGTestCase.contains(jMockInvocations[1]));
+		assertTrue(testNGTestCase.contains(jMockInvocations[2]));
+		assertTrue(testNGTestCase.contains("bookStore.getDiscountedPrice()"));
 		
 		tp = new TestCaseTemplateParameter();
 		tp.setPackageName("test.bank");
@@ -261,10 +263,11 @@ public class TestCaseTemplateTest extends TestCase {
 		expectedJMockSequences[1] = "one (manager).withdraw(accountId,amount)";
 		expectedJMockSequences[2] = "will(returnValue(<NeedFilled>))";
 		expectedJMockSequences[3] = "one (manager).commit()";
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[1]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[2]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[3]));
+		testNGTestCase = te.generateTestNGTestCase();
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[0]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[1]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[2]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[3]));
 		
 		tp.addImport("test.bank.Logger");
 		tp.addClassToMockInstanceName("test.bank.Logger", "logger");
@@ -280,12 +283,13 @@ public class TestCaseTemplateTest extends TestCase {
 		expectedJMockSequences[5] = "one (logger).log(amount)";
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(te.generateTestNGTestCase());
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[1]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[2]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[3]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[4]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[5]));
+		testNGTestCase = te.generateTestNGTestCase();
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[0]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[1]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[2]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[3]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[4]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[5]));
 		
 		tp = new TestCaseTemplateParameter();
 		tp.setPackageName("test.bank");
@@ -336,19 +340,20 @@ public class TestCaseTemplateTest extends TestCase {
 		expectedJMockSequences[11] = "one (logger).log(amount)";
 		expectedJMockSequences[12] = "one (logger).log(accountId)";
 		expectedJMockSequences[13] = "one (logger).log(amount)";
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[0]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[1]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[2]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[3]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[4]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[5]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[6]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[7]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[8]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[9]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[10]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[11]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[12]));
-		assertTrue(te.generateTestNGTestCase().contains(expectedJMockSequences[13]));
+		testNGTestCase = te.generateTestNGTestCase();
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[0]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[1]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[2]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[3]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[4]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[5]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[6]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[7]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[8]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[9]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[10]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[11]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[12]));
+		assertTrue(testNGTestCase.contains(expectedJMockSequences[13]));
 	}
 }
