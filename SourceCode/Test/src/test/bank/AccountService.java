@@ -5,6 +5,14 @@ public class AccountService {
 	private IAccountManager manager;
 	private Logger logger;
 	private double result;
+	
+	public AccountService() {
+		
+	}
+	
+	public AccountService(IAccountManager manager) {
+		this.manager = manager;
+	}
 
 	public double withdraw(String accountId, double amount) {
 		logger.log(accountId);
