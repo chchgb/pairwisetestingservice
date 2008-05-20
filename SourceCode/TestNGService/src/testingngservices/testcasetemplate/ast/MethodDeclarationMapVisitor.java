@@ -11,7 +11,11 @@ class MethodDeclarationMapVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
-		methodDeclarationMap.put(node.getName().toString(), node);
+		// System.out.println(node.getName() + " " + node.getReturnType2());
+		// Make sure it is not Constructor
+		if (node.getReturnType2() != null) {
+			methodDeclarationMap.put(node.getName().toString(), node);
+		}
 		return false;
 	}
 
