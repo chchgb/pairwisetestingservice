@@ -41,7 +41,9 @@ class MethodSignatureVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
-		if (node.getReturnType2().toString().equals(returnTypeName)
+		// System.out.println(node + " " + node.getReturnType2());
+		if (node.getReturnType2() != null // Make sure it is not Constructor
+				&& node.getReturnType2().toString().equals(returnTypeName)
 				&& node.getName().toString().equals(methodName)) {
 			ms.setReturnTypeName(returnTypeName);
 			ms.setMethodName(methodName);
