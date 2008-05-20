@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import pairwisetesting.util.TextFile;
+import test.bookstore.AccountType;
 import testingngservices.testcasetemplate.MethodSignatureFinder;
 import testingngservices.testcasetemplate.ast.ASTFieldNameFinder;
 import testingngservices.testcasetemplate.ast.ASTInvocationSequenceFinder;
@@ -23,39 +24,43 @@ import testingngservices.testcasetemplate.regex.RegexInvocationSequenceFinder;
 
 public class AutoMockTest extends TestCase {
 
-	private String sourceFilePath;
+	private String sourceFilePath1;
 	private String fieldClassName1;
 	private String fieldSimpleClassName1;
 	private String fieldClassName2;
 	private String fieldSimpleClassName2;
+	private String sourceFilePath2;
+	private String sourceFilePath3;
 
 	protected void setUp() throws Exception {
-		sourceFilePath = "src/test/bank/AccountService.java";
+		sourceFilePath1 = "src/test/bank/AccountService.java";
 		fieldClassName1 = "test.bank.IAccountManager";
 		fieldSimpleClassName1 = "IAccountManager";
 		fieldClassName2 = "test.bank.Logger";
 		fieldSimpleClassName2 = "Logger";
+		sourceFilePath2 = "src/test/math/Range.java";
+		sourceFilePath3 = "src/test/bookstore/BookStore.java";
 	}
 
 	public void testExtractFieldName() {
 
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
-		parser.setSource(TextFile.read(sourceFilePath).toCharArray());
+		parser.setSource(TextFile.read(sourceFilePath1).toCharArray());
 		CompilationUnit unit = (CompilationUnit) parser.createAST(null);
 
 		IFieldNameFinder finder = new ASTFieldNameFinder(unit);
 		assertEquals("manager", finder.getFieldName(fieldClassName1));
 		assertEquals("manager", finder.getFieldName(fieldSimpleClassName1));
 
-		finder = new ASTFieldNameFinder(sourceFilePath);
+		finder = new ASTFieldNameFinder(sourceFilePath1);
 		assertEquals("manager", finder.getFieldName(fieldClassName1));
 		assertEquals("manager", finder.getFieldName(fieldSimpleClassName1));
 
-		finder = new RegexFieldNameFinder(sourceFilePath);
+		finder = new RegexFieldNameFinder(sourceFilePath1);
 		assertEquals("manager", finder.getFieldName(fieldClassName1));
 		assertEquals("manager", finder.getFieldName(fieldSimpleClassName1));
 
-		finder = new RegexFieldNameFinder(new TextFile(sourceFilePath));
+		finder = new RegexFieldNameFinder(new TextFile(sourceFilePath1));
 		assertEquals("manager", finder.getFieldName(fieldClassName1));
 		assertEquals("manager", finder.getFieldName(fieldSimpleClassName1));
 
@@ -63,7 +68,7 @@ public class AutoMockTest extends TestCase {
 	
 	public void testRegexInvocationSequenceFinder() {
 		InvocationSequenceFinder finder = new RegexInvocationSequenceFinder(
-				sourceFilePath);
+				sourceFilePath1);
 		assertEquals("logger", finder.getFieldName(fieldClassName2));
 		assertEquals("logger", finder.getFieldName(fieldSimpleClassName2));
 		
@@ -100,7 +105,7 @@ public class AutoMockTest extends TestCase {
 
 	public void testASTInvocationSequenceFinder() {
 		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
-				sourceFilePath);
+				sourceFilePath1);
 		assertEquals("logger", finder.getFieldName(fieldClassName2));
 		assertEquals("logger", finder.getFieldName(fieldSimpleClassName2));
 		
@@ -430,7 +435,7 @@ public class AutoMockTest extends TestCase {
 		expectedJMockInvocations[7] = "will(returnValue(<NeedFilled>))";
 		expectedJMockInvocations[8] = "one (manager).commit()";
 		expectedJMockInvocations[9] = "one (manager).commit()";
-		InvocationSequenceFinder regexFinder = new RegexInvocationSequenceFinder(sourceFilePath);
+		InvocationSequenceFinder regexFinder = new RegexInvocationSequenceFinder(sourceFilePath1);
 		regexFinder.setScopeByMethodSignature("double", "transfer");
 		String[] jMockInvocations = regexFinder.getJMockInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(jMockInvocations));
@@ -447,7 +452,7 @@ public class AutoMockTest extends TestCase {
 		expectedJMockInvocations[6] = "will(returnValue(<NeedFilled>))";
 		expectedJMockInvocations[7] = "allowing (manager).releaseConnection()";
 		InvocationSequenceFinder finder = new ASTInvocationSequenceFinder(
-				sourceFilePath);
+				sourceFilePath1);
 		finder.setScopeByMethodSignature("void", "checkInvocationWithIfElse");
 		jMockInvocations = finder.getJMockInvocations(fieldClassName1);
 		// System.out.println(Arrays.toString(expectedJMockInvocations));
@@ -506,7 +511,7 @@ public class AutoMockTest extends TestCase {
 	}
 	
 	public void testMethodSignatureFinder() {
-		MethodSignatureFinder finder = new MethodSignatureFinder(sourceFilePath);
+		MethodSignatureFinder finder = new MethodSignatureFinder(sourceFilePath1);
 		MethodSignature ms = finder.getMethodSignature("double", "transfer");
 		assertEquals("double", ms.getReturnTypeName());
 		assertEquals("transfer", ms.getMethodName());
@@ -514,6 +519,28 @@ public class AutoMockTest extends TestCase {
 		expectedPrams[0] = new Parameter("String", "accountIdA");
 		expectedPrams[1] = new Parameter("String", "accountIdB");
 		expectedPrams[2] = new Parameter("double", "amount");
+		// System.out.println(ms);
+		assertTrue("They should be equal", Arrays.equals(expectedPrams, ms.getParameters()));
+		
+		finder = new MethodSignatureFinder(sourceFilePath2);
+		ms = finder.getMethodSignature("boolean", "isBetween");
+		assertEquals("boolean", ms.getReturnTypeName());
+		assertEquals("isBetween", ms.getMethodName());
+		expectedPrams = new Parameter[3];
+		expectedPrams[0] = new Parameter("int", "n");
+		expectedPrams[1] = new Parameter("int", "lower");
+		expectedPrams[2] = new Parameter("int", "upper");
+		// System.out.println(ms);
+		assertTrue("They should be equal", Arrays.equals(expectedPrams, ms.getParameters()));
+		
+		finder = new MethodSignatureFinder(sourceFilePath3);
+		ms = finder.getMethodSignature("double", "computeDiscountedPrice");
+		assertEquals("double", ms.getReturnTypeName());
+		assertEquals("computeDiscountedPrice", ms.getMethodName());
+		expectedPrams = new Parameter[3];
+		expectedPrams[0] = new Parameter("int", "level");
+		expectedPrams[1] = new Parameter("AccountType", "accountType");
+		expectedPrams[2] = new Parameter("String", "coupon");
 		// System.out.println(ms);
 		assertTrue("They should be equal", Arrays.equals(expectedPrams, ms.getParameters()));
 	}
