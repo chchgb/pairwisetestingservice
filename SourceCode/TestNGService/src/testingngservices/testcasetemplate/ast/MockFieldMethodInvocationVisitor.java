@@ -177,9 +177,11 @@ class FieldMethodInvocationVisitor extends ASTVisitor {
 				|| parentNodeType == ASTNode.RETURN_STATEMENT
 				|| parentNodeType == ASTNode.METHOD_INVOCATION
 				|| parentNodeType == ASTNode.DO_STATEMENT
+				|| parentNodeType == ASTNode.PREFIX_EXPRESSION
 				|| parentNodeType == ASTNode.CONDITIONAL_EXPRESSION
 				|| parentNodeType == ASTNode.CLASS_INSTANCE_CREATION
-				|| parentNodeType == ASTNode.ARRAY_INITIALIZER) {
+				|| parentNodeType == ASTNode.ARRAY_INITIALIZER
+				|| parentNodeType == ASTNode.CAST_EXPRESSION) {
 			return true;
 		} else {
 			return false;
