@@ -30,4 +30,8 @@ public class AccountManager implements IAccountManager {
 		return false;
 	}
 
+	public int getStatus() {
+		return 0;
+	}
+
 }

@@ -9,4 +9,5 @@ public interface IAccountManager {
 	void rollback();
 	void releaseConnection();
 	boolean needClose();
+	int getStatus();
 }
