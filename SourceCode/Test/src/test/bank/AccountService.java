@@ -76,6 +76,18 @@ public class AccountService {
 		// ? :
 		int i = manager.needClose() ? 0 : -1;
 		
+		// && 
+		boolean b = manager.needClose() && amount > 40;
+		
+		// |
+		int s = manager.getStatus() | 2;
+		
+		// !
+		boolean boo = !manager.needClose();
+		
+		// Case expression
+		int j = (int)manager.withdraw(accountId, amount) | 8;
+		
 		// return statement
 		return manager.withdraw(accountId, amount);
 
