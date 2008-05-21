@@ -173,6 +173,7 @@ class FieldMethodInvocationVisitor extends ASTVisitor {
 				|| parentNodeType == ASTNode.INFIX_EXPRESSION
 				|| parentNodeType == ASTNode.IF_STATEMENT
 				|| parentNodeType == ASTNode.FOR_STATEMENT
+				|| parentNodeType == ASTNode.ENHANCED_FOR_STATEMENT
 				|| parentNodeType == ASTNode.WHILE_STATEMENT
 				|| parentNodeType == ASTNode.RETURN_STATEMENT
 				|| parentNodeType == ASTNode.METHOD_INVOCATION
@@ -181,7 +182,8 @@ class FieldMethodInvocationVisitor extends ASTVisitor {
 				|| parentNodeType == ASTNode.CONDITIONAL_EXPRESSION
 				|| parentNodeType == ASTNode.CLASS_INSTANCE_CREATION
 				|| parentNodeType == ASTNode.ARRAY_INITIALIZER
-				|| parentNodeType == ASTNode.CAST_EXPRESSION) {
+				|| parentNodeType == ASTNode.CAST_EXPRESSION
+				|| parentNodeType == ASTNode.INSTANCEOF_EXPRESSION) {
 			return true;
 		} else {
 			return false;
@@ -206,7 +208,8 @@ class FieldMethodInvocationVisitor extends ASTVisitor {
 	}
 
 	private boolean withinForStatement(MethodInvocation node) {
-		return withControlStatement(node, ASTNode.FOR_STATEMENT);
+		return withControlStatement(node, ASTNode.FOR_STATEMENT)
+				|| withControlStatement(node, ASTNode.ENHANCED_FOR_STATEMENT);
 	} 
 	
 	private boolean withinWhileStatement(MethodInvocation node) {
