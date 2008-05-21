@@ -30,8 +30,12 @@ public class AccountManager implements IAccountManager {
 		return false;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return 0;
+	}
+
+	public String[] getAccounts() {
+		return null;
 	}
 
 }
