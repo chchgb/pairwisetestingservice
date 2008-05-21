@@ -85,8 +85,16 @@ public class AccountService {
 		// !
 		boolean boo = !manager.needClose();
 		
+		// instanceof expression
+		boolean isInstance = manager.getStatus() instanceof Integer;
+		
 		// Case expression
 		int j = (int)manager.withdraw(accountId, amount) | 8;
+		
+		// for each statement
+		for (String account : manager.getAccounts()) {
+			
+		}
 		
 		// return statement
 		return manager.withdraw(accountId, amount);
