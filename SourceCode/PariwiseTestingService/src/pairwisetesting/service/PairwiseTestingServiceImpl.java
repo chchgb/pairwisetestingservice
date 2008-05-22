@@ -1,7 +1,7 @@
 package pairwisetesting.service;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import pairwisetesting.coredomain.Engine;
 import pairwisetesting.coredomain.EngineException;
