@@ -9,6 +9,7 @@ import pairwisetesting.util.Directory;
 import pairwisetesting.util.LibDependence;
 import pairwisetesting.util.ObjectSerializ;
 import pairwisetesting.util.TestingMetaParameter;
+import pairwisetesting.util.TextFile;
 import pairwisetesting.util.Directory.TreeInfo;
 import testingngservices.core.TestWorkflow;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngine;
@@ -23,8 +24,14 @@ public class TestNGServiceImpl implements ITestNGService {
 	public String testExecute(String testingMeta) {
 		String result = null;
 
+//		System.out.println("testingMeta: \n");
+//		
+//		TextFile.write("D:/text",testingMeta);
+		
 		TestingMetaParameter temp = (TestingMetaParameter) ObjectSerializ
 				.String2Object(testingMeta);
+		
+		
 		
 		log.info("TestNGService work Path : "+workPath);
 		temp.setEndPath(workPath);
