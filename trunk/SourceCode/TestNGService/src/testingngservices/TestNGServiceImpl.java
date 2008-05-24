@@ -11,6 +11,7 @@ import pairwisetesting.util.ObjectSerializ;
 import pairwisetesting.util.TestingMetaParameter;
 import pairwisetesting.util.TextFile;
 import pairwisetesting.util.Directory.TreeInfo;
+import testingngservices.core.CopyOfTestWorkflow;
 import testingngservices.core.TestWorkflow;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngine;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngineException;
@@ -36,8 +37,14 @@ public class TestNGServiceImpl implements ITestNGService {
 		log.info("TestNGService work Path : "+workPath);
 		temp.setEndPath(workPath);
 		
+//		CopyOfTestWorkflow workflow = new CopyOfTestWorkflow(temp,result);
+//		workflow.start();
+//		System.out.println(result);
+		
 		TestWorkflow workflow = new TestWorkflow(temp);
 		result = workflow.testWorkflow();
+		
+		log.info("return result");
 		return result;
 	}
 
