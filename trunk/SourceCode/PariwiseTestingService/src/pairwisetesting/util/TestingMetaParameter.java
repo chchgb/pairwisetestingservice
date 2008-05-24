@@ -54,21 +54,30 @@ public class TestingMetaParameter implements Serializable {
 
 	}
 
-	public void addFile(String fileName) {
+	public void addSourceFile(String fileName) {
 		if (!this.javaSource.containsKey(fileName)) {
 			String fileContent = TextFile.read(endPath + fileName);
 			javaSource.put(fileName, fileContent);
 		}
 	}
 
-	public void addFileList(ArrayList<String> fileList) {
+	public void addSourceFileFromList(ArrayList<String> fileList) {
 		// System.out.println("fileList :" + fileList.size());
+		//javaSource.clear();
 		Iterator<String> ite = fileList.iterator();
 
 		while (ite.hasNext()) {
-			addFile(ite.next());
+			addSourceFile(ite.next());
 		}
 
+	}
+	
+	public void addTestCase(String fileName){
+		if (javaSource.containsKey(fileName)) {
+			javaSource.remove(fileName);
+			String fileContent = TextFile.read(endPath + fileName);
+			javaSource.put(fileName, fileContent);
+		}
 	}
 
 	public String[] getFileArray() {
