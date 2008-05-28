@@ -1,21 +1,22 @@
-package pairwisetesting.engine.am.oaprovider;
+package pairwisetesting.engine.am.oaprovider.ols;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * The OA provider based on OLS and Rp finite field and its runs is p^u
- *
+ * This OA provider is based on OLS and its runs is t^u
  */
-public class Rp_OLS_pu_OAProvider extends OLS_OAProvider {
+public class OLS_tu_OAProvider extends OLS_OAProvider {
 
 	private int u = 2; // OA contains t^u runs (rows) and the default is 2
 
 	/**
 	 * @param t
-	 *            currently the number of levels and it should be a prime
+	 *            the number of levels
 	 * 
 	 */
-	public Rp_OLS_pu_OAProvider(int t) {
+	public OLS_tu_OAProvider(int t) {
 		super(t);
 	}
 
@@ -34,7 +35,7 @@ public class Rp_OLS_pu_OAProvider extends OLS_OAProvider {
 		ArrayList<int[]> rows = generate_tuXuRows();
 		fill_tuXuRowsInOA(rows, oa);
 
-		ArrayList<int[][]> OLS_list = generateRp_OLS(this.t, this.t - 1);
+		List<int[][]> OLS_list = getOLS_Provider().generate_OLS(this.t, this.t - 1);
 
 		// the start column for the OLS is the u-th one
 		int startColumnForOLS = u;
@@ -68,8 +69,7 @@ public class Rp_OLS_pu_OAProvider extends OLS_OAProvider {
 	private void generate_tuXuRowsBackTrack(int nextIndex, int[] row,
 			ArrayList<int[]> resultRows) {
 		if (nextIndex >= row.length) {
-			int[] newRow = new int[row.length];
-			System.arraycopy(row, 0, newRow, 0, newRow.length);
+			int[] newRow = Arrays.copyOf(row, row.length);
 			resultRows.add(newRow);
 		} else {
 			for (int value = 1; value <= this.t; value++) {

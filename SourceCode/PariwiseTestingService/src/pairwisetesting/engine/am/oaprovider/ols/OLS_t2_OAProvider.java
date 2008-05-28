@@ -1,21 +1,17 @@
-package pairwisetesting.engine.am.oaprovider;
+package pairwisetesting.engine.am.oaprovider.ols;
 
-import java.util.ArrayList;
-
-import pairwisetesting.engine.am.oaprovider.OLS_OAProvider;
+import java.util.List;
 
 /**
- * The OA provider based on OLS and Rp finite field and its runs is p^2
- *
+ * This OA provider is based on OLS and its runs is t^2
  */
-public class Rp_OLS_p2_OAProvider extends OLS_OAProvider {
+public class OLS_t2_OAProvider extends OLS_OAProvider {
 
 	/**
 	 * @param t
-	 *            currently the number of levels and it should be a prime
-	 * 
+	 *            the number of levels
 	 */
-	public Rp_OLS_p2_OAProvider(int t) {
+	public OLS_t2_OAProvider(int t) {
 		super(t);
 	}
 
@@ -32,7 +28,7 @@ public class Rp_OLS_p2_OAProvider extends OLS_OAProvider {
 		generateFirstColumn(oa);
 		generateSecondColumn(oa);
 
-		ArrayList<int[][]> OLS_list = generateRp_OLS(t, m - 2);
+		List<int[][]> OLS_list = getOLS_Provider().generate_OLS(t, m - 2);
 
 		// the start column for the OLS is the third one
 		int startColumnForOLS = 2;
@@ -58,4 +54,5 @@ public class Rp_OLS_p2_OAProvider extends OLS_OAProvider {
 			}
 		}
 	}
+
 }

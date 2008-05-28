@@ -1,4 +1,4 @@
-package pairwisetesting.engine.am.oaprovider;
+package pairwisetesting.engine.am.oaprovider.hadamard;
 
 import java.util.Arrays;
 
