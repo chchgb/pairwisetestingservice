@@ -14,12 +14,15 @@ import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.coredomain.MetaParameterException;
 import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.am.OAProvider;
-import pairwisetesting.engine.am.oaprovider.H_2s_OAProvider;
-import pairwisetesting.engine.am.oaprovider.MathUtil;
-import pairwisetesting.engine.am.oaprovider.Matrix;
 import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
-import pairwisetesting.engine.am.oaprovider.Rp_OLS_p2_OAProvider;
-import pairwisetesting.engine.am.oaprovider.Rp_OLS_pu_OAProvider;
+import pairwisetesting.engine.am.oaprovider.hadamard.H_2s_OAProvider;
+import pairwisetesting.engine.am.oaprovider.hadamard.Matrix;
+import pairwisetesting.engine.am.oaprovider.ols.OLS_Provider;
+import pairwisetesting.engine.am.oaprovider.ols.OLS_t2_OAProvider;
+import pairwisetesting.engine.am.oaprovider.ols.OLS_tu_OAProvider;
+import pairwisetesting.engine.am.oaprovider.ols.Poly_OLS_Provider;
+import pairwisetesting.engine.am.oaprovider.ols.Rp_OLS_Provider;
+import pairwisetesting.engine.am.oaprovider.util.MathUtil;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 import pairwisetesting.metaparameterparser.MetaParameterXMLSerializer;
@@ -308,10 +311,186 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				rawTestData));
 	}
+	
+	public void testRp_OLS_Provider() {
+		OLS_Provider provider = new Rp_OLS_Provider();
+		int[][] expected1 = {
+				{1, 2, 3, 4, 5}, 
+				{2, 3, 4, 5, 1}, 
+				{3, 4, 5, 1, 2}, 
+				{4, 5, 1, 2, 3}, 
+				{5, 1, 2, 3, 4}
+		};
+		int[][] expected2 = {
+				{1, 2, 3, 4, 5}, 
+				{3, 4, 5, 1, 2}, 
+				{5, 1, 2, 3, 4}, 
+				{2, 3, 4, 5, 1},
+				{4, 5, 1, 2, 3}
+		};
+		int[][] expected3 = {
+				{1, 2, 3, 4, 5}, 
+				{4, 5, 1, 2, 3}, 
+				{2, 3, 4, 5, 1}, 
+				{5, 1, 2, 3, 4}, 
+				{3, 4, 5, 1, 2}
+		};
+		int[][] expected4 = {
+				{1, 2, 3, 4, 5}, 
+				{5, 1, 2, 3, 4}, 
+				{4, 5, 1, 2, 3},
+				{3, 4, 5, 1, 2},
+				{2, 3, 4, 5, 1}
+		};
+		List<int[][]> OLS_list = provider.generate_OLS(5, 4);
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
+				OLS_list.get(0)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
+				OLS_list.get(1)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
+				OLS_list.get(2)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
+				OLS_list.get(3)));
+		
+		expected1 = new int[][] {
+				{1, 2, 3},
+				{2, 3, 1},
+				{3, 1, 2},
+		};
+		expected2 = new int[][] {
+				{1, 2, 3},
+				{3, 1, 2},
+				{2, 3, 1},
+		};
+		OLS_list = provider.generate_OLS(3, 2);
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
+				OLS_list.get(0)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
+				OLS_list.get(1)));
+	}
+	
+	public void testPoly_OLS_Provider() {
+		OLS_Provider provider = new Poly_OLS_Provider();
+		int[][] expected1 = {
+				{1, 2, 3, 4}, 
+				{2, 1, 4, 3}, 
+				{3, 4, 1, 2}, 
+				{4, 3, 2, 1},
+		};
+		int[][] expected2 = {
+				{1, 2, 3, 4}, 
+				{3, 4, 1, 2}, 
+				{4, 3, 2, 1},
+				{2, 1, 4, 3},
+		};
+		int[][] expected3 = {
+				{1, 2, 3, 4}, 
+				{4, 3, 2, 1},
+				{2, 1, 4, 3},
+				{3, 4, 1, 2}, 
+		};
+	
+		List<int[][]> OLS_list = provider.generate_OLS(4, 3);
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
+				OLS_list.get(0)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
+				OLS_list.get(1)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
+				OLS_list.get(2)));
+		
+		expected1 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+		};
+		expected2 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+		};
+		expected3 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+		};
+		int[][] expected4 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+		};
+		int[][] expected5 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+		};
+		
+		int[][] expected6 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+		};
+		
+		int[][] expected7 = new int[][] {
+				{1, 2, 3, 4, 5, 6, 7, 8},
+				{8, 4, 7, 2, 6, 5, 3, 1},
+				{2, 1, 5, 8, 3, 7, 6, 4},
+				{3, 5, 1, 6, 2, 4, 8, 7},
+				{4, 8, 6, 1, 7, 3, 5, 2},
+				{5, 3, 2, 7, 1, 8, 4, 6},
+				{6, 7, 4, 3, 8, 1, 2, 5},
+				{7, 6, 8, 5, 4, 2, 1, 3},
+		};
+		
+		OLS_list = provider.generate_OLS(8, 7);
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected1,
+				OLS_list.get(0)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
+				OLS_list.get(1)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
+				OLS_list.get(2)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
+				OLS_list.get(3)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected5,
+				OLS_list.get(4)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected6,
+				OLS_list.get(5)));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected7,
+				OLS_list.get(6)));
+	}
 
-	public void testRp_OLS_p2_OAProvider() {
+	public void testRp_OLS_t2_OAProvider() {
 
-		OAProvider provider = new Rp_OLS_p2_OAProvider(3);
+		OAProvider provider = new OLS_t2_OAProvider(3);
 
 		// L9(3^4)
 		int[][] rawTestData = provider.get(4);
@@ -330,7 +509,7 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				rawTestData));
 
-		provider = new Rp_OLS_p2_OAProvider(5);
+		provider = new OLS_t2_OAProvider(5);
 		// L25(5^6)
 		rawTestData = provider.get(6);
 		int[][] expected3 = { { 1, 1, 1, 1, 1, 1 }, { 1, 2, 2, 2, 2, 2 },
@@ -363,7 +542,7 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
 				rawTestData));
 
-		provider = new Rp_OLS_p2_OAProvider(2);
+		provider = new OLS_t2_OAProvider(2);
 		// L4(2^3)
 		rawTestData = provider.get(3);
 		int[][] expected5 = { { 1, 1, 1 }, { 1, 2, 2 }, { 2, 1, 2 },
@@ -381,8 +560,8 @@ public class TestPairwiseTesting extends TestCase {
 
 	}
 
-	public void testRp_OLS_pu_OAProvider() {
-		OAProvider provider = new Rp_OLS_pu_OAProvider(3);
+	public void testRp_OLS_tu_OAProvider() {
+		OAProvider provider = new OLS_tu_OAProvider(3);
 
 		// L9(3^4)
 		int[][] rawTestData = provider.get(4);
@@ -409,7 +588,7 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				rawTestData));
 
-		provider = new Rp_OLS_pu_OAProvider(5);
+		provider = new OLS_tu_OAProvider(5);
 		// L25(5^6)
 		rawTestData = provider.get(6);
 		int[][] expected3 = { { 1, 1, 1, 1, 1, 1 }, { 1, 2, 2, 2, 2, 2 },
@@ -429,7 +608,7 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected3,
 				rawTestData));
 
-		provider = new Rp_OLS_pu_OAProvider(2);
+		provider = new OLS_tu_OAProvider(2);
 		// L8(2^4)
 		rawTestData = provider.get(4);
 		int[][] expected4 = { { 1, 1, 1, 1 }, { 1, 1, 2, 2 }, { 1, 2, 1, 2 },
@@ -439,17 +618,235 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
 				rawTestData));
 	}
+	
+	public void testPoly_OLS_t2_OAProvider() {
+		OAProvider provider = new OLS_t2_OAProvider(4);
+		
+		// L16(4^5)
+		int[][] rawTestData = provider.get(5);
+		int[][] expected = { 
+				{ 1, 1, 1, 1, 1}, 
+				{ 1, 2, 2, 2, 2}, 
+				{ 1, 3, 3, 3 ,3},
+				{ 1, 4, 4, 4 ,4},
+				{ 2, 1, 2, 3, 4}, 
+				{ 2, 2, 1, 4, 3}, 
+				{ 2, 3, 4, 1, 2}, 
+				{ 2, 4, 3, 2, 1},
+				{ 3, 1, 3, 4, 2}, 
+				{ 3, 2, 4, 3, 1},
+				{ 3, 3, 1, 2, 4},
+				{ 3, 4, 2, 1, 3},
+				{ 4, 1, 4, 2, 3},
+				{ 4, 2, 3, 1, 4},
+				{ 4, 3, 2, 4, 1},
+				{ 4, 4, 1, 3, 2} };
+		// System.out.println(Arrays.deepToString(rawTestData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				rawTestData));
+		
+		// L16(4^3)
+		rawTestData = provider.get(3);
+		expected = new int[][] { 
+				{ 1, 1, 1}, 
+				{ 1, 2, 2}, 
+				{ 1, 3, 3},
+				{ 1, 4, 4},
+				{ 2, 1, 2}, 
+				{ 2, 2, 1}, 
+				{ 2, 3, 4}, 
+				{ 2, 4, 3},
+				{ 3, 1, 3}, 
+				{ 3, 2, 4},
+				{ 3, 3, 1},
+				{ 3, 4, 2},
+				{ 4, 1, 4},
+				{ 4, 2, 3},
+				{ 4, 3, 2},
+				{ 4, 4, 1} };
+		// System.out.println(Arrays.deepToString(rawTestData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				rawTestData));
+		
+		// L64(8^5)
+		 provider = new OLS_t2_OAProvider(8);
+		rawTestData = provider.get(5);
+		expected = new int[][] { 
+				{1, 1, 1, 1, 1}, 
+				{1, 2, 2, 2, 2}, 
+				{1, 3, 3, 3, 3}, 
+				{1, 4, 4, 4, 4}, 
+				{1, 5, 5, 5, 5}, 
+				{1, 6, 6, 6, 6}, 
+				{1, 7, 7, 7, 7}, 
+				{1, 8, 8, 8, 8}, 
+				{2, 1, 2, 3, 4}, 
+				{2, 2, 1, 5, 8}, 
+				{2, 3, 5, 1, 6}, 
+				{2, 4, 8, 6, 1}, 
+				{2, 5, 3, 2, 7}, 
+				{2, 6, 7, 4, 3}, 
+				{2, 7, 6, 8, 5}, 
+				{2, 8, 4, 7, 2}, 
+				{3, 1, 3, 4, 5}, 
+				{3, 2, 5, 8, 3}, 
+				{3, 3, 1, 6, 2}, 
+				{3, 4, 6, 1, 7}, 
+				{3, 5, 2, 7, 1}, 
+				{3, 6, 4, 3, 8}, 
+				{3, 7, 8, 5, 4}, 
+				{3, 8, 7, 2, 6}, 
+				{4, 1, 4, 5, 6}, 
+				{4, 2, 8, 3, 7}, 
+				{4, 3, 6, 2, 4}, 
+				{4, 4, 1, 7, 3}, 
+				{4, 5, 7, 1, 8}, 
+				{4, 6, 3, 8, 1}, 
+				{4, 7, 5, 4, 2}, 
+				{4, 8, 2, 6, 5}, 
+				{5, 1, 5, 6, 7}, 
+				{5, 2, 3, 7, 6}, 
+				{5, 3, 2, 4, 8}, 
+				{5, 4, 7, 3, 5}, 
+				{5, 5, 1, 8, 4}, 
+				{5, 6, 8, 1, 2}, 
+				{5, 7, 4, 2, 1}, 
+				{5, 8, 6, 5, 3}, 
+				{6, 1, 6, 7, 8}, 
+				{6, 2, 7, 6, 4}, 
+				{6, 3, 4, 8, 7}, 
+				{6, 4, 3, 5, 2}, 
+				{6, 5, 8, 4, 6}, 
+				{6, 6, 1, 2, 5}, 
+				{6, 7, 2, 1, 3}, 
+				{6, 8, 5, 3, 1}, 
+				{7, 1, 7, 8, 2}, 
+				{7, 2, 6, 4, 1}, 
+				{7, 3, 8, 7, 5}, 
+				{7, 4, 5, 2, 8}, 
+				{7, 5, 4, 6, 3}, 
+				{7, 6, 2, 5, 7}, 
+				{7, 7, 1, 3, 6}, 
+				{7, 8, 3, 1, 4}, 
+				{8, 1, 8, 2, 3}, 
+				{8, 2, 4, 1, 5}, 
+				{8, 3, 7, 5, 1}, 
+				{8, 4, 2, 8, 6}, 
+				{8, 5, 6, 3, 2}, 
+				{8, 6, 5, 7, 4}, 
+				{8, 7, 3, 6, 8}, 
+				{8, 8, 1, 4, 7}
+				};
+		// System.out.println(Arrays.deepToString(rawTestData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				rawTestData));
+		
+	}
+	
+	public void testPoly_OLS_tu_OAProvider() {
+		OAProvider provider = new OLS_tu_OAProvider(4);
+		
+		// L64(4^6)
+		int[][] rawTestData = provider.get(6);
+		int[][] expected = { 
+				{ 1, 1, 1, 1, 1, 1}, 
+				{ 1, 1, 2, 2, 2, 2}, 
+				{ 1, 1, 3, 3, 3 ,3},
+				{ 1, 1, 4, 4, 4 ,4},
+				{ 1, 2, 1, 2, 3, 4}, 
+				{ 1, 2, 2, 1, 4, 3}, 
+				{ 1, 2, 3, 4, 1, 2}, 
+				{ 1, 2, 4, 3, 2, 1},
+				{ 1, 3, 1, 3, 4, 2}, 
+				{ 1, 3, 2, 4, 3, 1},
+				{ 1, 3, 3, 1, 2, 4},
+				{ 1, 3, 4, 2, 1, 3},
+				{ 1, 4, 1, 4, 2, 3},
+				{ 1, 4, 2, 3, 1, 4},
+				{ 1, 4, 3, 2, 4, 1},
+				{ 1, 4, 4, 1, 3, 2}, 
+				{ 2, 1, 1, 1, 1, 1}, 
+				{ 2, 1, 2, 2, 2, 2}, 
+				{ 2, 1, 3, 3, 3 ,3},
+				{ 2, 1, 4, 4, 4 ,4},
+				{ 2, 2, 1, 2, 3, 4}, 
+				{ 2, 2, 2, 1, 4, 3}, 
+				{ 2, 2, 3, 4, 1, 2}, 
+				{ 2, 2, 4, 3, 2, 1},
+				{ 2, 3, 1, 3, 4, 2}, 
+				{ 2, 3, 2, 4, 3, 1},
+				{ 2, 3, 3, 1, 2, 4},
+				{ 2, 3, 4, 2, 1, 3},
+				{ 2, 4, 1, 4, 2, 3},
+				{ 2, 4, 2, 3, 1, 4},
+				{ 2, 4, 3, 2, 4, 1},
+				{ 2, 4, 4, 1, 3, 2}, 
+				{ 3, 1, 1, 1, 1, 1}, 
+				{ 3, 1, 2, 2, 2, 2}, 
+				{ 3, 1, 3, 3, 3 ,3},
+				{ 3, 1, 4, 4, 4 ,4},
+				{ 3, 2, 1, 2, 3, 4}, 
+				{ 3, 2, 2, 1, 4, 3}, 
+				{ 3, 2, 3, 4, 1, 2}, 
+				{ 3, 2, 4, 3, 2, 1},
+				{ 3, 3, 1, 3, 4, 2}, 
+				{ 3, 3, 2, 4, 3, 1},
+				{ 3, 3, 3, 1, 2, 4},
+				{ 3, 3, 4, 2, 1, 3},
+				{ 3, 4, 1, 4, 2, 3},
+				{ 3, 4, 2, 3, 1, 4},
+				{ 3, 4, 3, 2, 4, 1},
+				{ 3, 4, 4, 1, 3, 2}, 
+				{ 4, 1, 1, 1, 1, 1}, 
+				{ 4, 1, 2, 2, 2, 2}, 
+				{ 4, 1, 3, 3, 3 ,3},
+				{ 4, 1, 4, 4, 4 ,4},
+				{ 4, 2, 1, 2, 3, 4}, 
+				{ 4, 2, 2, 1, 4, 3}, 
+				{ 4, 2, 3, 4, 1, 2}, 
+				{ 4, 2, 4, 3, 2, 1},
+				{ 4, 3, 1, 3, 4, 2}, 
+				{ 4, 3, 2, 4, 3, 1},
+				{ 4, 3, 3, 1, 2, 4},
+				{ 4, 3, 4, 2, 1, 3},
+				{ 4, 4, 1, 4, 2, 3},
+				{ 4, 4, 2, 3, 1, 4},
+				{ 4, 4, 3, 2, 4, 1},
+				{ 4, 4, 4, 1, 3, 2}, 
+		};
+		// System.out.println(Arrays.deepToString(rawTestData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
+				rawTestData));
+	}
 
 	public void testOAProviderFactory() {
 		OAProviderFactory factory = new OAProviderFactory();
 		assertTrue("It should create H_2s_OAProvider object", factory.create(2,
 				3) instanceof H_2s_OAProvider);
-		assertTrue("It should create Rp_OLS_p2_OAProvider object", factory
-				.create(3, 4) instanceof Rp_OLS_p2_OAProvider);
-		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory
-				.create(2, 4) instanceof Rp_OLS_pu_OAProvider);
-		assertTrue("It should create Rp_OLS_pu_OAProvider object", factory
-				.create(3, 5) instanceof Rp_OLS_pu_OAProvider);
+		assertTrue("It should create OLS_tu_OAProvider object", factory
+				.create(2, 4) instanceof OLS_tu_OAProvider);
+		
+		assertTrue("It should create OLS_t2_OAProvider object", factory
+				.create(3, 3) instanceof OLS_t2_OAProvider);
+		assertTrue("It should create OLS_t2_OAProvider object", factory
+				.create(3, 4) instanceof OLS_t2_OAProvider);
+		assertTrue("It should create OLS_tu_OAProvider object", factory
+				.create(3, 5) instanceof OLS_tu_OAProvider);
+		
+		assertTrue("It should create OLS_t2_OAProvider object", factory
+				.create(4, 4) instanceof OLS_t2_OAProvider);
+		assertTrue("It should create OLS_t2_OAProvider object", factory
+				.create(4, 5) instanceof OLS_t2_OAProvider);
+		assertTrue("It should create OLS_tu_OAProvider object", factory
+				.create(4, 6) instanceof OLS_tu_OAProvider);
+		
+		assertTrue("It should create OLS_t2_OAProvider object", factory
+				.create(8, 8) instanceof OLS_t2_OAProvider);
+		assertTrue("It should create OLS_t2_OAProvider object", factory
+				.create(8, 9) instanceof OLS_t2_OAProvider);
+		assertTrue("It should create OLS_tu_OAProvider object", factory
+				.create(8, 10) instanceof OLS_tu_OAProvider);
+		
 	}
 
 	public void testAMEngine() throws EngineException {
@@ -510,7 +907,7 @@ public class TestPairwiseTesting extends TestCase {
 				testData));
 
 		//
-		// AMEngine with Rp_OLS_p2_OAProvider
+		// AMEngine with Rp_OLS_t2_OAProvider
 		//
 		mp = new MockMetaParameterProvider().get();
 		testData = engine.generateTestData(mp);
@@ -555,7 +952,7 @@ public class TestPairwiseTesting extends TestCase {
 				testData));
 
 		//
-		// AMEngine with Rp_OLS_pu_OAProvider
+		// AMEngine with Rp_OLS_tu_OAProvider
 		//
 		f1 = new Factor("OS");
 		f1.addLevel("Windows XP");
@@ -581,7 +978,138 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(testData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected4,
 				testData));
-
+		
+		//
+		// AMEngine with Poly_OLS_t2_OAProvider
+		//
+		f1 = new Factor("OS");
+		f1.addLevel("Windows XP");
+		f1.addLevel("Solaris 10");
+		f1.addLevel("Vista");
+		f1.addLevel("Red Hat Linux 9");
+		f2 = new Factor("Browser", new String[] { "IE", "Firefox", "Opera", "MyIE" });
+		f3 = new Factor("Memory", new String[] { "1G", "2G" , "256M", "512M"});
+		f4 = new Factor("DB", new String[] { "MySQL", "Oracle", "DB2", "SQL Server"});
+		f5 = new Factor("PC", new String[] { "DELL", "HP", "IBM", "Apple"});
+		mp = new MetaParameter(2);
+		mp.addFactor(f1);
+		mp.addFactor(f2);
+		mp.addFactor(f3);
+		mp.addFactor(f4);
+		mp.addFactor(f5);
+		testData = engine.generateTestData(mp);
+		String[][] expected5 = {
+				{ "Windows XP", "IE", "1G", "MySQL", "DELL"}, 
+				{ "Windows XP", "Firefox", "2G", "Oracle", "HP"}, 
+				{ "Windows XP", "Opera", "256M", "DB2" ,"IBM"},
+				{ "Windows XP", "MyIE", "512M", "SQL Server" ,"Apple"},
+				{ "Solaris 10", "IE", "2G", "DB2", "Apple"}, 
+				{ "Solaris 10", "Firefox", "1G", "SQL Server", "IBM"}, 
+				{ "Solaris 10", "Opera", "512M", "MySQL", "HP"}, 
+				{ "Solaris 10", "MyIE", "256M", "Oracle", "DELL"},
+				{ "Vista", "IE", "256M", "SQL Server", "HP"}, 
+				{ "Vista", "Firefox", "512M", "DB2", "DELL"},
+				{ "Vista", "Opera", "1G", "Oracle", "Apple"},
+				{ "Vista", "MyIE", "2G", "MySQL", "IBM"},
+				{ "Red Hat Linux 9", "IE", "512M", "Oracle", "IBM"},
+				{ "Red Hat Linux 9", "Firefox", "256M", "MySQL", "Apple"},
+				{ "Red Hat Linux 9", "Opera", "2G", "SQL Server", "DELL"},
+				{ "Red Hat Linux 9", "MyIE", "1G", "DB2", "HP"},
+		};
+		// System.out.println(Arrays.deepToString(testData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected5,
+				testData));
+		
+		//
+		// AMEngine with Poly_OLS_tu_OAProvider
+		//
+		f1 = new Factor("Server", new String[] { "WebLogic", "WebSphere", "JBoss", "GlassFish"});
+		f2 = new Factor("OS");
+		f2.addLevel("Windows XP");
+		f2.addLevel("Solaris 10");
+		f2.addLevel("Vista");
+		f2.addLevel("Red Hat Linux 9");
+		f3 = new Factor("Browser", new String[] { "IE", "Firefox", "Opera", "MyIE" });
+		f4 = new Factor("Memory", new String[] { "1G", "2G" , "256M", "512M"});
+		f5 = new Factor("DB", new String[] { "MySQL", "Oracle", "DB2", "SQL Server"});
+		f6 = new Factor("PC", new String[] { "DELL", "HP", "IBM", "Apple"});
+		mp = new MetaParameter(2);
+		mp.addFactor(f1);
+		mp.addFactor(f2);
+		mp.addFactor(f3);
+		mp.addFactor(f4);
+		mp.addFactor(f5);
+		mp.addFactor(f6);
+		testData = engine.generateTestData(mp);
+		String[][] expected6 = {
+				{ "WebLogic", "Windows XP", "IE", "1G", "MySQL", "DELL"}, 
+				{ "WebLogic", "Windows XP", "Firefox", "2G", "Oracle", "HP"}, 
+				{ "WebLogic", "Windows XP", "Opera", "256M", "DB2" ,"IBM"},
+				{ "WebLogic", "Windows XP", "MyIE", "512M", "SQL Server" ,"Apple"},
+				{ "WebLogic", "Solaris 10", "IE", "2G", "DB2", "Apple"}, 
+				{ "WebLogic", "Solaris 10", "Firefox", "1G", "SQL Server", "IBM"}, 
+				{ "WebLogic", "Solaris 10", "Opera", "512M", "MySQL", "HP"}, 
+				{ "WebLogic", "Solaris 10", "MyIE", "256M", "Oracle", "DELL"},
+				{ "WebLogic", "Vista", "IE", "256M", "SQL Server", "HP"}, 
+				{ "WebLogic", "Vista", "Firefox", "512M", "DB2", "DELL"},
+				{ "WebLogic", "Vista", "Opera", "1G", "Oracle", "Apple"},
+				{ "WebLogic", "Vista", "MyIE", "2G", "MySQL", "IBM"},
+				{ "WebLogic", "Red Hat Linux 9", "IE", "512M", "Oracle", "IBM"},
+				{ "WebLogic", "Red Hat Linux 9", "Firefox", "256M", "MySQL", "Apple"},
+				{ "WebLogic", "Red Hat Linux 9", "Opera", "2G", "SQL Server", "DELL"},
+				{ "WebLogic", "Red Hat Linux 9", "MyIE", "1G", "DB2", "HP"},
+				{ "WebSphere", "Windows XP", "IE", "1G", "MySQL", "DELL"}, 
+				{ "WebSphere", "Windows XP", "Firefox", "2G", "Oracle", "HP"}, 
+				{ "WebSphere", "Windows XP", "Opera", "256M", "DB2" ,"IBM"},
+				{ "WebSphere", "Windows XP", "MyIE", "512M", "SQL Server" ,"Apple"},
+				{ "WebSphere", "Solaris 10", "IE", "2G", "DB2", "Apple"}, 
+				{ "WebSphere", "Solaris 10", "Firefox", "1G", "SQL Server", "IBM"}, 
+				{ "WebSphere", "Solaris 10", "Opera", "512M", "MySQL", "HP"}, 
+				{ "WebSphere", "Solaris 10", "MyIE", "256M", "Oracle", "DELL"},
+				{ "WebSphere", "Vista", "IE", "256M", "SQL Server", "HP"}, 
+				{ "WebSphere", "Vista", "Firefox", "512M", "DB2", "DELL"},
+				{ "WebSphere", "Vista", "Opera", "1G", "Oracle", "Apple"},
+				{ "WebSphere", "Vista", "MyIE", "2G", "MySQL", "IBM"},
+				{ "WebSphere", "Red Hat Linux 9", "IE", "512M", "Oracle", "IBM"},
+				{ "WebSphere", "Red Hat Linux 9", "Firefox", "256M", "MySQL", "Apple"},
+				{ "WebSphere", "Red Hat Linux 9", "Opera", "2G", "SQL Server", "DELL"},
+				{ "WebSphere", "Red Hat Linux 9", "MyIE", "1G", "DB2", "HP"},
+				{ "JBoss", "Windows XP", "IE", "1G", "MySQL", "DELL"}, 
+				{ "JBoss", "Windows XP", "Firefox", "2G", "Oracle", "HP"}, 
+				{ "JBoss", "Windows XP", "Opera", "256M", "DB2" ,"IBM"},
+				{ "JBoss", "Windows XP", "MyIE", "512M", "SQL Server" ,"Apple"},
+				{ "JBoss", "Solaris 10", "IE", "2G", "DB2", "Apple"}, 
+				{ "JBoss", "Solaris 10", "Firefox", "1G", "SQL Server", "IBM"}, 
+				{ "JBoss", "Solaris 10", "Opera", "512M", "MySQL", "HP"}, 
+				{ "JBoss", "Solaris 10", "MyIE", "256M", "Oracle", "DELL"},
+				{ "JBoss", "Vista", "IE", "256M", "SQL Server", "HP"}, 
+				{ "JBoss", "Vista", "Firefox", "512M", "DB2", "DELL"},
+				{ "JBoss", "Vista", "Opera", "1G", "Oracle", "Apple"},
+				{ "JBoss", "Vista", "MyIE", "2G", "MySQL", "IBM"},
+				{ "JBoss", "Red Hat Linux 9", "IE", "512M", "Oracle", "IBM"},
+				{ "JBoss", "Red Hat Linux 9", "Firefox", "256M", "MySQL", "Apple"},
+				{ "JBoss", "Red Hat Linux 9", "Opera", "2G", "SQL Server", "DELL"},
+				{ "JBoss", "Red Hat Linux 9", "MyIE", "1G", "DB2", "HP"},
+				{ "GlassFish", "Windows XP", "IE", "1G", "MySQL", "DELL"}, 
+				{ "GlassFish", "Windows XP", "Firefox", "2G", "Oracle", "HP"}, 
+				{ "GlassFish", "Windows XP", "Opera", "256M", "DB2" ,"IBM"},
+				{ "GlassFish", "Windows XP", "MyIE", "512M", "SQL Server" ,"Apple"},
+				{ "GlassFish", "Solaris 10", "IE", "2G", "DB2", "Apple"}, 
+				{ "GlassFish", "Solaris 10", "Firefox", "1G", "SQL Server", "IBM"}, 
+				{ "GlassFish", "Solaris 10", "Opera", "512M", "MySQL", "HP"}, 
+				{ "GlassFish", "Solaris 10", "MyIE", "256M", "Oracle", "DELL"},
+				{ "GlassFish", "Vista", "IE", "256M", "SQL Server", "HP"}, 
+				{ "GlassFish", "Vista", "Firefox", "512M", "DB2", "DELL"},
+				{ "GlassFish", "Vista", "Opera", "1G", "Oracle", "Apple"},
+				{ "GlassFish", "Vista", "MyIE", "2G", "MySQL", "IBM"},
+				{ "GlassFish", "Red Hat Linux 9", "IE", "512M", "Oracle", "IBM"},
+				{ "GlassFish", "Red Hat Linux 9", "Firefox", "256M", "MySQL", "Apple"},
+				{ "GlassFish", "Red Hat Linux 9", "Opera", "2G", "SQL Server", "DELL"},
+				{ "GlassFish", "Red Hat Linux 9", "MyIE", "1G", "DB2", "HP"},
+		};
+		// System.out.println(Arrays.deepToString(testData));
+		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected6,
+				testData));
 	}
 
 	public void testUtil() {
@@ -592,7 +1120,10 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("It should be 2^s - 1", MathUtil.is_2sMinusOne(255));
 
 		assertTrue("It should be a prime", MathUtil.isPrime(2));
+		assertTrue("It should be a prime", MathUtil.isPrime(3));
+		assertTrue("It should be a prime", MathUtil.isPrime(5));
 		assertTrue("It should be a prime", MathUtil.isPrime(7));
+		assertTrue("It should be a prime", MathUtil.isPrime(11));
 		assertTrue("It should be a prime", MathUtil.isPrime(17));
 		assertTrue("It should be a prime", MathUtil.isPrime(67));
 		assertFalse("It should not be a prime", MathUtil.isPrime(4));
@@ -601,6 +1132,22 @@ public class TestPairwiseTesting extends TestCase {
 		
 		String text = TextFile.read("testdata/data1.txt");
 		assertEquals("This is a string.\n", text);
+		
+		assertEquals(2, MathUtil.partOf(4)[0]);
+		assertEquals(2, MathUtil.partOf(4)[1]);
+		assertEquals(2, MathUtil.partOf(8)[0]);
+		assertEquals(3, MathUtil.partOf(8)[1]);
+		assertEquals(3, MathUtil.partOf(9)[0]);
+		assertEquals(2, MathUtil.partOf(9)[1]);
+		assertEquals(5, MathUtil.partOf(25)[0]);
+		assertEquals(2, MathUtil.partOf(25)[1]);
+		assertEquals(7, MathUtil.partOf(49)[0]);
+		assertEquals(2, MathUtil.partOf(49)[1]);
+		
+		assertEquals(3, MathUtil.partOf(3)[0]);
+		assertEquals(1, MathUtil.partOf(3)[1]);
+		assertEquals(5, MathUtil.partOf(5)[0]);
+		assertEquals(1, MathUtil.partOf(5)[1]);
 	}
 
 	public void testMetaParameterProvider() throws MetaParameterException {
