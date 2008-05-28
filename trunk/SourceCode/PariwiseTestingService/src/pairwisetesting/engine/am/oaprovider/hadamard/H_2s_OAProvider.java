@@ -1,4 +1,4 @@
-package pairwisetesting.engine.am.oaprovider;
+package pairwisetesting.engine.am.oaprovider.hadamard;
 
 import pairwisetesting.engine.am.OAProvider;
 

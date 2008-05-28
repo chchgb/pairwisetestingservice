@@ -1,4 +1,4 @@
-package pairwisetesting.engine.am.oaprovider;
+package pairwisetesting.engine.am.oaprovider.util;
 
 public class MathUtil {
 	
@@ -34,6 +34,37 @@ public class MathUtil {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * if n = p^m, return [p, m], otherwise return null
+	 */
+	public static int[] partOf(int n) {
+		if (isPrime(n)) {
+			return new int[]{n, 1};
+		}
+		
+		final int threshold = 10000;
+		
+		int p = 1;
+		while (true) {
+			if (isPrime(p)) {
+				int i = 1;
+				while (true) {
+					int res = (int)Math.pow(p, i);
+					if (res == n) {
+						return new int[]{p, i};
+					} else if (res > n){
+						break;
+					}
+					i++;
+				}
+			}
+			p++;
+			if (p > threshold) {
+				return null;
+			}
 		}
 	}
 }

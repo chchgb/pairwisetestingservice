@@ -2,16 +2,22 @@ package pairwisetesting.engine.am.oaprovider;
 
 import pairwisetesting.engine.am.IOAProviderFactory;
 import pairwisetesting.engine.am.OAProvider;
+import pairwisetesting.engine.am.oaprovider.hadamard.H_2s_OAProvider;
+import pairwisetesting.engine.am.oaprovider.ols.OLS_t2_OAProvider;
+import pairwisetesting.engine.am.oaprovider.ols.OLS_tu_OAProvider;
+import pairwisetesting.engine.am.oaprovider.util.MathUtil;
 
 public class OAProviderFactory implements IOAProviderFactory {
 
 	public OAProvider create(int t, int m) {
 		if (t == 2 && MathUtil.is_2sMinusOne(m)) {
 			return new H_2s_OAProvider();
-		} else if (MathUtil.isPrime(t) && (m <= t + 1)) {
-			return new Rp_OLS_p2_OAProvider(t);
-		} else if (MathUtil.isPrime(t) && (m > t + 1)) {
-			return new Rp_OLS_pu_OAProvider(t);
+		} else if (MathUtil.partOf(t) != null) {
+			if (m <= t + 1) {
+				return new OLS_t2_OAProvider(t);
+			} else {
+				return new OLS_tu_OAProvider(t);
+			}
 		} else {
 			return null;
 		}
