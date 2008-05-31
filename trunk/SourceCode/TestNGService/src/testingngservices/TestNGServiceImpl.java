@@ -11,7 +11,6 @@ import pairwisetesting.util.ObjectSerializ;
 import pairwisetesting.util.TestingMetaParameter;
 import pairwisetesting.util.TextFile;
 import pairwisetesting.util.Directory.TreeInfo;
-import testingngservices.core.CopyOfTestWorkflow;
 import testingngservices.core.TestWorkflow;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngine;
 import testingngservices.testcasetemplateengine.TestCaseTemplateEngineException;
