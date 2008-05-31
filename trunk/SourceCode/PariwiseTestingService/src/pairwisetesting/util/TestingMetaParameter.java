@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-
 public class TestingMetaParameter implements Serializable {
 	/**
 	 * 
@@ -63,7 +62,7 @@ public class TestingMetaParameter implements Serializable {
 
 	public void addSourceFileFromList(ArrayList<String> fileList) {
 		// System.out.println("fileList :" + fileList.size());
-		//javaSource.clear();
+		// javaSource.clear();
 		Iterator<String> ite = fileList.iterator();
 
 		while (ite.hasNext()) {
@@ -71,13 +70,16 @@ public class TestingMetaParameter implements Serializable {
 		}
 
 	}
-	
-	public void addTestCase(String fileName){
+
+	public void addTestCase(String fileName) {
 		if (javaSource.containsKey(fileName)) {
 			javaSource.remove(fileName);
-			String fileContent = TextFile.read(endPath + fileName);
-			javaSource.put(fileName, fileContent);
 		}
+		
+		System.out.println("read TestCase file");
+		String fileContent = TextFile.read(endPath + fileName);
+		javaSource.put(fileName, fileContent);
+
 	}
 
 	public String[] getFileArray() {
