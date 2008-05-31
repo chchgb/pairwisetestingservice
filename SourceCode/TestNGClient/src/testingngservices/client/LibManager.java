@@ -13,6 +13,7 @@ public class LibManager {
 	private Set<String> notFoundLib;
 	private Set<String> foundedSet;
 	private Set<String> dependencyLib;
+	private ArrayList<String> mockList;
 
 	public LibManager() {
 		this.partLibNameOfNotFound = new HashSet<String>();
@@ -117,4 +118,11 @@ public class LibManager {
 		return new ArrayList<String>(this.fullPathOfFoundedLib);
 	}
 
+	public void setMockList(ArrayList<String> mock){
+		this.mockList = mock;
+	}
+	
+	public ArrayList<String> getMockList(){
+		return this.mockList;
+	}
 }

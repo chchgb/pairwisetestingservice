@@ -77,6 +77,8 @@ public class TestNGCore {
 	public String getTestCase(TestCaseTemplateParameter tp,String pairwiseXML) {
 
 		//getPairwiseResult();
+		
+		//System.out.println("getTestCase\n" +tp.toXML());
 
 		this.testCaseString = service.getTestCase(tp.toXML(), pairwiseXML);
 		
@@ -85,6 +87,10 @@ public class TestNGCore {
 				+ "/" + "PairwiseTest.java";
 		TextFile.write(endPath + testCasePath, this.testCaseString);
 		return testCaseString;
+	}
+	
+	public String getTestCasePath(){
+		return endPath + testCasePath;
 	}
 
 	public String testMethod(ArrayList<String> fileList,ArrayList<String> libList) {
@@ -97,11 +103,11 @@ public class TestNGCore {
 		//log.info("File List: "+ fileList);
 		
 		//System.out.println("File List: " + fileList);
-		this.testingMeta.addFileList(fileList);
+		this.testingMeta.addSourceFileFromList(fileList);
 		
 		testingMeta.setTestCase(testCasePath);
 
-		testingMeta.addFile(testCasePath);
+		testingMeta.addTestCase(testCasePath);
 
 		String input = ObjectSerializ.Object2String(testingMeta);
 		result = service.testExecute(input);
@@ -123,10 +129,6 @@ public class TestNGCore {
 			
 			libPath = lib.substring(0,lib.lastIndexOf("/")+1);
 			libName = lib.substring(lib.lastIndexOf("/")+1,lib.length());
-			
-			
-			System.out.println("libPath " +libPath);
-			System.out.println("libName : " + libName);
 			
 			if(!libSet.contains(libName)){
 				libNeededUpload.addJavaLib(libName, libPath);

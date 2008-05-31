@@ -17,6 +17,7 @@ public class TestNGClient {
 
 	private ArrayList<String> srcList;
 	private ArrayList<String> libList;
+
 	public LibManager libManager;
 	private TestCaseTemplateParameter tp;
 	private String pairwiseXML;
@@ -36,6 +37,10 @@ public class TestNGClient {
 		className = tp.getPackageName() + "." + tp.getClassUnderTest();
 		sourceCode = "src/" + className.replace(".", "/") + ".java";
 
+	}
+	
+	public void setTestCaseTemplateParameter(TestCaseTemplateParameter tp){
+		this.tp = tp;
 	}
 
 	public void setClassPath(String path) {
@@ -71,6 +76,9 @@ public class TestNGClient {
 		
 		libManager.addNotFoundLibFromArrayList(this.libList);
 		libManager.setDependencyLib(res.impList);
+		libManager.setMockList(res.mockList);
+		
+		System.out.println(res.mockList);
 		return this.libManager;
 		
 	}
@@ -98,6 +106,10 @@ public class TestNGClient {
 
 	}
 	
+	public String getTestCasePath(){
+		return testNGCore.getTestCasePath();
+	}
+	
 	public ArrayList<String> getServiceLibList(){
 		return new ArrayList<String>(testNGCore.getLibList());
 	}
@@ -121,5 +133,7 @@ public class TestNGClient {
 		return testResult;
 
 	}
+	
+
 
 }
