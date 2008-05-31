@@ -1,5 +1,6 @@
 package pairwisetesting.engine.am.oaprovider;
 
+import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.engine.am.IOAProviderFactory;
 import pairwisetesting.engine.am.OAProvider;
 import pairwisetesting.engine.am.oaprovider.hadamard.H_2s_OAProvider;
@@ -9,7 +10,7 @@ import pairwisetesting.engine.am.oaprovider.util.MathUtil;
 
 public class OAProviderFactory implements IOAProviderFactory {
 
-	public OAProvider create(int t, int m) {
+	public OAProvider create(int t, int m) throws EngineException {
 		if (t == 2 && MathUtil.is_2sMinusOne(m)) {
 			return new H_2s_OAProvider();
 		} else if (MathUtil.partOf(t) != null) {
@@ -19,7 +20,7 @@ public class OAProviderFactory implements IOAProviderFactory {
 				return new OLS_tu_OAProvider(t);
 			}
 		} else {
-			return null;
+			throw new EngineException("No OA provider available");
 		}
 	}
 }
