@@ -819,7 +819,7 @@ public class TestPairwiseTesting extends TestCase {
 				rawTestData));
 	}
 
-	public void testOAProviderFactory() {
+	public void testOAProviderFactory() throws EngineException {
 		OAProviderFactory factory = new OAProviderFactory();
 		assertTrue("It should create H_2s_OAProvider object", factory.create(2,
 				3) instanceof H_2s_OAProvider);
@@ -846,7 +846,6 @@ public class TestPairwiseTesting extends TestCase {
 				.create(8, 9) instanceof OLS_t2_OAProvider);
 		assertTrue("It should create OLS_tu_OAProvider object", factory
 				.create(8, 10) instanceof OLS_tu_OAProvider);
-		
 	}
 
 	public void testAMEngine() throws EngineException {
