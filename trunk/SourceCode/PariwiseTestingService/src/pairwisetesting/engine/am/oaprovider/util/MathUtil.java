@@ -45,8 +45,6 @@ public class MathUtil {
 			return new int[]{n, 1};
 		}
 		
-		final int threshold = 10000;
-		
 		int p = 1;
 		while (true) {
 			if (isPrime(p)) {
@@ -62,7 +60,7 @@ public class MathUtil {
 				}
 			}
 			p++;
-			if (p > threshold) {
+			if (p > n) {
 				return null;
 			}
 		}

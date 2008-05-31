@@ -1,12 +1,15 @@
 package pairwisetesting.engine.am;
 
+import pairwisetesting.coredomain.EngineException;
+
 public interface IOAProviderFactory {
 	/**
 	 * @param t
 	 *            the number of levels
 	 * @param m
 	 *            the number of factors
-	 * @return the proper OAProvider based on t and m, return null if no OAProvider
+	 * 
+	 * @return the proper OAProvider based on t and m
 	 */
-	OAProvider create(int t, int m);
+	OAProvider create(int t, int m) throws EngineException;
 }
