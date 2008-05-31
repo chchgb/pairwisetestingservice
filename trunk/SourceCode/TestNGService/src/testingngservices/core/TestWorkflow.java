@@ -29,7 +29,7 @@ public class TestWorkflow {
 
 	public String testWorkflow() {
 		String result = null;
-		testingMeta.addFile("src/pairwisetesting/util/Converter.java");
+		testingMeta.addSourceFile("src/pairwisetesting/util/Converter.java");
 		// testingMeta.addFile("src/test/expect/Expectation.java");
 		
 		ArrayList<String> libList = new ArrayList<String>();
@@ -85,7 +85,14 @@ public class TestWorkflow {
 		// Load the classes related with test
 
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		
+		System.out.println("cl : " + cl.getClass().getFields());
+		System.out.println("cl : " + cl.getClass().getName());
+		
+		
+		
 		URL[] urls;
+		
 //		
 //		
 //		ArrayList<File> fileList = new ArrayList<File>();
@@ -106,17 +113,31 @@ public class TestWorkflow {
 //			}
 //		}
 		
+		//File lib = new File(workPath +"lib/");
 		
+		TestNG tng = null;
 		try {
 
 			urls = new URL[] { outputDir.toURI().toURL() };
 
 			URLClassLoader ucl = new URLClassLoader(urls, cl);
+			
+			System.out.println("UCL length : " + ucl.getURLs().length);
+			System.out.println("UCL : " + Arrays.toString(ucl.getURLs()));
 
 			// Run Test with TestNG
 			// testingMeta.gettestCaseClassName()
 			Class<?> clazz = ucl.loadClass(testingMeta.gettestCaseClassName());
-			TestNG tng = new TestNG();
+			ucl.loadClass("test.bookstore.Logger");
+//			ucl.loadClass(testingMeta.gettestCaseClassName());
+//			ucl.loadClass(testingMeta.gettestCaseClassName());
+//			ucl.loadClass(testingMeta.gettestCaseClassName());
+//			ucl.loadClass(testingMeta.gettestCaseClassName());
+			
+			log.info("ClassName : \n" +clazz);
+			
+			tng = new TestNG();
+			
 			tng.setTestClasses(new Class[] { clazz });
 			// tng.set
 			TestListenerAdapter listener = new TestListenerAdapter();
@@ -125,10 +146,14 @@ public class TestWorkflow {
 
 			log.info("Excute test case");
 			tng.run();
+			//tng.run();
 			// result = "PASSED: " + listener.getPassedTests().size()
 			// + "\nFAILED: " + listener.getFailedTests().size();
 			result = TextFile.read(workPath + "testNG-Log/"
 					+ "emailable-report.html");
+			
+			log.info("TestNG Finish!");
+			//ucl.clearAssertionStatus();
 
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -136,7 +161,13 @@ public class TestWorkflow {
 		}catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			tng = null;
+			
 		}
+		
+		//cl.clearAssertionStatus();
+		
 
 		return result;
 
