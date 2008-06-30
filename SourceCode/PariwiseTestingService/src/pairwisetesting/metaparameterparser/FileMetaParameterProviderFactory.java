@@ -1,5 +1,9 @@
 package pairwisetesting.metaparameterparser;
 
+/**
+ * Create the right FileMetaParameterProvider based on suffix
+ *
+ */
 public class FileMetaParameterProviderFactory {
 
 	public FileMetaParameterProvider create(String filePath) {

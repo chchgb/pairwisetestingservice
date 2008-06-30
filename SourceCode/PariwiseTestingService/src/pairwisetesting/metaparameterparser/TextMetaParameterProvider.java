@@ -6,6 +6,10 @@ import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.coredomain.MetaParameterException;
 import pairwisetesting.util.TextFile;
 
+/**
+ * Extract Factors/Levels from Text file
+ *
+ */
 public class TextMetaParameterProvider extends FileMetaParameterProvider {
 
 	public TextMetaParameterProvider(String filePath) {

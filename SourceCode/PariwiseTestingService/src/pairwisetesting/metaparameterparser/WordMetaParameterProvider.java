@@ -7,6 +7,10 @@ import java.io.InputStreamReader;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.coredomain.MetaParameterException;
 
+/**
+ * Extract Factors/Levels from Word
+ *
+ */
 public class WordMetaParameterProvider extends FileMetaParameterProvider {
 
 	public WordMetaParameterProvider(String filePath) {
