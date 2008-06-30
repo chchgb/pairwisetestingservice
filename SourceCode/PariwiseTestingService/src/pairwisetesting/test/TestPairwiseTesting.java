@@ -26,6 +26,10 @@ import pairwisetesting.engine.am.oaprovider.ols.Rp_OLS_Provider;
 import pairwisetesting.engine.am.oaprovider.util.MathUtil;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
+import pairwisetesting.level.BooleanLevelGenerator;
+import pairwisetesting.level.EnumLevelGenerator;
+import pairwisetesting.level.ILevelGenerator;
+import pairwisetesting.level.EP_BVA_IntegerLevelGenerator;
 import pairwisetesting.metaparameterparser.ExcelMetaParameterProvider;
 import pairwisetesting.metaparameterparser.FileMetaParameterProvider;
 import pairwisetesting.metaparameterparser.FileMetaParameterProviderFactory;
@@ -43,6 +47,10 @@ import pairwisetesting.util.TextFile;
 
 public class TestPairwiseTesting extends TestCase {
 	private Factor f1, f2, f3, f4, f5;
+	
+	enum AccountType { 
+		Student, Internal, Normal;
+	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -1475,6 +1483,24 @@ public class TestPairwiseTesting extends TestCase {
 		
 		provider = factory.create(20, 19);
 		assertEquals(529, provider.get(19).length);
+	}
+	
+	public void testLevelGenerator() {
+		ILevelGenerator lg = new EP_BVA_IntegerLevelGenerator(0, 10);
+		String[] expected = new String[] {"-10", "-1", "0", "1", "5", "9", "10", "11", "20"};
+		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+		lg = new EP_BVA_IntegerLevelGenerator(-10, 15);
+		expected = new String[] {"-35", "-11", "-10", "-9", "2", "14", "15", "16", "40"};
+		assertTrue("EP_BVA_IntegerLevelGenerator should be OK", 
+				Arrays.equals(expected, lg.generateLevels()));
+		
+		expected = new String[] {"Student", "Internal", "Normal"};
+		lg = new EnumLevelGenerator(AccountType.class);
+		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+		
+		expected = new String[] {"true", "false"};
+		lg = new BooleanLevelGenerator();
+		assertTrue(Arrays.equals(expected, lg.generateLevels()));
 	}
 	
 	protected void tearDown() throws Exception {
