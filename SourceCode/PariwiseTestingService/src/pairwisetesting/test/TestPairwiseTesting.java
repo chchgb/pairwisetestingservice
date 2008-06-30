@@ -15,6 +15,7 @@ import pairwisetesting.coredomain.MetaParameterException;
 import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.am.OAProvider;
 import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
+import pairwisetesting.engine.am.oaprovider.SelfRuleOAProviderFactory;
 import pairwisetesting.engine.am.oaprovider.hadamard.H_2s_OAProvider;
 import pairwisetesting.engine.am.oaprovider.hadamard.Matrix;
 import pairwisetesting.engine.am.oaprovider.ols.OLS_Provider;
@@ -1136,21 +1137,28 @@ public class TestPairwiseTesting extends TestCase {
 		String text = TextFile.read("testdata/data1.txt");
 		assertEquals("This is a string.\n", text);
 		
-		assertEquals(2, MathUtil.partOf(4)[0]);
-		assertEquals(2, MathUtil.partOf(4)[1]);
-		assertEquals(2, MathUtil.partOf(8)[0]);
-		assertEquals(3, MathUtil.partOf(8)[1]);
-		assertEquals(3, MathUtil.partOf(9)[0]);
-		assertEquals(2, MathUtil.partOf(9)[1]);
-		assertEquals(5, MathUtil.partOf(25)[0]);
-		assertEquals(2, MathUtil.partOf(25)[1]);
-		assertEquals(7, MathUtil.partOf(49)[0]);
-		assertEquals(2, MathUtil.partOf(49)[1]);
+		assertEquals(2, MathUtil.partOfPrimePower(4)[0]);
+		assertEquals(2, MathUtil.partOfPrimePower(4)[1]);
+		assertEquals(2, MathUtil.partOfPrimePower(8)[0]);
+		assertEquals(3, MathUtil.partOfPrimePower(8)[1]);
+		assertEquals(3, MathUtil.partOfPrimePower(9)[0]);
+		assertEquals(2, MathUtil.partOfPrimePower(9)[1]);
+		assertEquals(5, MathUtil.partOfPrimePower(25)[0]);
+		assertEquals(2, MathUtil.partOfPrimePower(25)[1]);
+		assertEquals(7, MathUtil.partOfPrimePower(49)[0]);
+		assertEquals(2, MathUtil.partOfPrimePower(49)[1]);
 		
-		assertEquals(3, MathUtil.partOf(3)[0]);
-		assertEquals(1, MathUtil.partOf(3)[1]);
-		assertEquals(5, MathUtil.partOf(5)[0]);
-		assertEquals(1, MathUtil.partOf(5)[1]);
+		assertEquals(3, MathUtil.partOfPrimePower(3)[0]);
+		assertEquals(1, MathUtil.partOfPrimePower(3)[1]);
+		assertEquals(5, MathUtil.partOfPrimePower(5)[0]);
+		assertEquals(1, MathUtil.partOfPrimePower(5)[1]);
+		
+		assertEquals(4, MathUtil.nextPrimePower(3));
+		assertEquals(5, MathUtil.nextPrimePower(4));
+		assertEquals(7, MathUtil.nextPrimePower(5));
+		assertEquals(9, MathUtil.nextPrimePower(8));
+		assertEquals(11, MathUtil.nextPrimePower(9));
+		assertEquals(13, MathUtil.nextPrimePower(11));
 	}
 
 	public void testMetaParameterProvider() throws MetaParameterException {
@@ -1435,6 +1443,38 @@ public class TestPairwiseTesting extends TestCase {
 				"testdata/MetaParameter_columns.doc").getClass());
 		assertEquals(TextMetaParameterProvider.class, factory.create(
 				"testdata/MetaParameter.txt").getClass());
+	}
+	
+	public void testSelfRuleOAProviderFactory() {
+		SelfRuleOAProviderFactory factory = new SelfRuleOAProviderFactory();
+		
+		OAProvider provider = factory.create(2, 4);
+		assertEquals(9, provider.get(4).length);
+		provider = factory.create(2, 5);
+		assertEquals(16, provider.get(5).length);
+		
+		provider = factory.create(3, 5);
+		assertEquals(16, provider.get(5).length);
+		provider = factory.create(3, 6);
+		assertEquals(25, provider.get(6).length);
+		
+		provider = factory.create(4, 6);
+		assertEquals(25, provider.get(6).length);
+		provider = factory.create(4, 7);
+		assertEquals(49, provider.get(7).length);
+		
+		provider = factory.create(6, 7);
+		assertEquals(49, provider.get(7).length);
+		provider = factory.create(6, 9);
+		assertEquals(64, provider.get(9).length);
+		
+		provider = factory.create(10, 7);
+		assertEquals(121, provider.get(7).length);
+		provider = factory.create(10, 19);
+		assertEquals(361, provider.get(19).length);
+		
+		provider = factory.create(20, 19);
+		assertEquals(529, provider.get(19).length);
 	}
 	
 	protected void tearDown() throws Exception {

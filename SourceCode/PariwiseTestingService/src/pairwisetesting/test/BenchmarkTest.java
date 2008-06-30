@@ -6,6 +6,7 @@ import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.am.AMEngine;
+import pairwisetesting.engine.am.oaprovider.SelfRuleOAProviderFactory;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
 
@@ -38,17 +39,16 @@ public class BenchmarkTest extends TestCase {
 	
 	public void testBenchmark() throws EngineException {
 		Engine[] engines = new Engine[] {
-				new AMEngine(),
+				new AMEngine(new SelfRuleOAProviderFactory()),
 				new JennyEngine(), 
 				new PICTEngine(),
 		};
-		MetaParameter mp = getMetaParameter(16, 17);
+		MetaParameter mp = getMetaParameter(14, 19);
 		for (Engine engine : engines) {
 			System.out.println("--------"
 					+ engine.getClass().getSimpleName()
 					+ "--------");
 			benchmarkEngine(engine, mp);	
 		}
-		
 	}
 }

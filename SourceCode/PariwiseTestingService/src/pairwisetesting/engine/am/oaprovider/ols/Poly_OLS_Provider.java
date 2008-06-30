@@ -20,7 +20,7 @@ public class Poly_OLS_Provider implements OLS_Provider {
 	 * Generate OLS based on polynomial finite field
 	 * 
 	 * @param pm
-	 *            the order of the OLS and it should be power of prime
+	 *            the order of the OLS and it should be prime power
 	 * @param n
 	 *            the number of OLS and it should be at most pm-1
 	 */
@@ -29,7 +29,7 @@ public class Poly_OLS_Provider implements OLS_Provider {
 		ArrayList<int[][]> OLS_list = new ArrayList<int[][]>(n);
 		
 		 // p & m
-		int[] parts = MathUtil.partOf(pm);
+		int[] parts = MathUtil.partOfPrimePower(pm);
 		int[][] firstPoly_LS = generatePoly_LS(parts[0], parts[1]);
 		OLS_list.add(firstPoly_LS);
 		
