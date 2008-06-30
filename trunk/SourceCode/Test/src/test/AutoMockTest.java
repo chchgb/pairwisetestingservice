@@ -1,6 +1,7 @@
 package test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -20,6 +21,7 @@ import testingngservices.testcasetemplate.core.MethodSignature;
 import testingngservices.testcasetemplate.core.Parameter;
 import testingngservices.testcasetemplate.regex.RegexFieldNameFinder;
 import testingngservices.testcasetemplate.regex.RegexInvocationSequenceFinder;
+import testingngservices.testcasetemplate.util.ClassUtil;
 
 public class AutoMockTest extends TestCase {
 
@@ -39,6 +41,28 @@ public class AutoMockTest extends TestCase {
 		fieldSimpleClassName2 = "Logger";
 		sourceFilePath2 = "src/test/math/Range.java";
 		sourceFilePath3 = "src/test/bookstore/BookStore.java";
+	}
+	
+	public void testClassUtil() {
+		assertEquals(TestCase.class, ClassUtil.getClass("junit.framework.TestCase"));
+		assertEquals(int.class, ClassUtil.getClass("int"));
+		assertEquals(boolean.class, ClassUtil.getClass("boolean"));
+		assertEquals(double.class, ClassUtil.getClass("double"));
+		assertTrue(ClassUtil.isAbstractClass(TestCase.class));
+		assertFalse(ClassUtil.isAbstractClass(Integer.class));
+		assertTrue(ClassUtil.isInterface(List.class));
+		assertFalse(ClassUtil.isInterface(TestCase.class));
+		assertEquals("boolean", ClassUtil.getReturnTypeName(
+				"test.math.Range", "isBetween", "int", "int",
+				"int"));
+		assertEquals("boolean", ClassUtil.getReturnTypeName(
+				"test.math.Range", "isBetween"));
+		assertEquals("void", ClassUtil.getReturnTypeName(
+				"junit.framework.TestCase", "tearDown"));
+		assertEquals("java.lang.String", ClassUtil.getReturnTypeName(
+				"junit.framework.TestCase", "toString"));
+		assertEquals("Range", ClassUtil.getSimpleClassName("test.math.Range"));
+		assertEquals("Range", ClassUtil.getSimpleClassName("Range"));
 	}
 
 	public void testExtractFieldName() {
