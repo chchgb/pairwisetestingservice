@@ -43,7 +43,7 @@ public class BenchmarkTest extends TestCase {
 				new JennyEngine(), 
 				new PICTEngine(),
 		};
-		MetaParameter mp = getMetaParameter(14, 19);
+		MetaParameter mp = getMetaParameter(11, 15);
 		for (Engine engine : engines) {
 			System.out.println("--------"
 					+ engine.getClass().getSimpleName()
