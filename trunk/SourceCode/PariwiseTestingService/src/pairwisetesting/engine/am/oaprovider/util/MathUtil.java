@@ -40,7 +40,7 @@ public class MathUtil {
 	/**
 	 * if n = p^m, return [p, m], otherwise return null
 	 */
-	public static int[] partOf(int n) {
+	public static int[] partOfPrimePower(int n) {
 		if (isPrime(n)) {
 			return new int[]{n, 1};
 		}
@@ -63,6 +63,21 @@ public class MathUtil {
 			if (p > n) {
 				return null;
 			}
+		}
+	}
+	
+	/**
+	 * @param start the start number to find the next prime power
+	 * @return the next Prime larger than the given number
+	 */
+	public static int nextPrimePower(int start) {
+		int next = start + 1;
+		while (true) {
+			if (partOfPrimePower(next) != null) {
+				return next;
+			} else {
+				next++;
+			}	
 		}
 	}
 }
