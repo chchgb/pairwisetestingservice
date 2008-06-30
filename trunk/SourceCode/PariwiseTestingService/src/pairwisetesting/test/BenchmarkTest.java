@@ -8,7 +8,6 @@ import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
-import pairwisetesting.engine.tvg.TVGEngine;
 
 
 public class BenchmarkTest extends TestCase {
