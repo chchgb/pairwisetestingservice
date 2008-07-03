@@ -37,6 +37,10 @@ public class ComplexParameter extends Parameter {
 			child.addFullNamePrefix(prefix);
 		}
 	}
+	
+	public Parameter[] getChildren() {
+		return this.children.toArray(new Parameter[0]);
+	}
 
 	@Override
 	public int hashCode() {
@@ -62,10 +66,6 @@ public class ComplexParameter extends Parameter {
 		} else if (!children.equals(other.children))
 			return false;
 		return true;
-	}
-
-	public Parameter[] getChildren() {
-		return this.children.toArray(new Parameter[0]);
 	}
 
 }

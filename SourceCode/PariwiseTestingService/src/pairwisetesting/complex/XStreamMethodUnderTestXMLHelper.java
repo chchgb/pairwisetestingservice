@@ -1,6 +1,5 @@
 package pairwisetesting.complex;
 
-
 import java.util.ArrayList;
 
 import com.thoughtworks.xstream.XStream;
@@ -8,7 +7,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class XStreamMethodUnderTestXMLHelper implements
 		IMethodUnderTestXMLHelper {
-	
+
 	private XStream xstream = new XStream(new DomDriver());
 
 	public MethodUnderTest fromXML(String xml) {
@@ -33,16 +32,16 @@ public class XStreamMethodUnderTestXMLHelper implements
 }
 
 class ParameterAssignmentVisitor implements IParameterVisitor {
-	
+
 	private String[] values;
 	private int next;
 	private ArrayList<String> xmlParameters = new ArrayList<String>();
 	private StringBuilder xmlParameter = new StringBuilder();
-	
+
 	ParameterAssignmentVisitor(String[] values) {
 		this.values = values;
 	}
-	
+
 	public void visit(SimpleParameter p) {
 		beginTag(p);
 		xmlParameter.append(values[next++]);
@@ -51,7 +50,7 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	public void endVisit(SimpleParameter p) {
 		endTag(p);
 	}
-	
+
 	public void visit(ComplexParameter p) {
 		beginTag(p);
 	}
@@ -59,11 +58,11 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	public void endVisit(ComplexParameter p) {
 		endTag(p);
 	}
-	
+
 	public String[] getXMLParameters() {
 		return this.xmlParameters.toArray(new String[0]);
 	}
-	
+
 	private void beginTag(SimpleParameter p) {
 		if (p.getDepth() == 0) {
 			xmlParameter = new StringBuilder();
@@ -72,7 +71,7 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 			xmlParameter.append("<" + p.getName() + ">");
 		}
 	}
-	
+
 	private void beginTag(ComplexParameter p) {
 		if (p.getDepth() == 0) {
 			xmlParameter = new StringBuilder();
@@ -81,7 +80,7 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 			xmlParameter.append("<" + p.getName() + ">");
 		}
 	}
-	
+
 	private void endTag(Parameter p) {
 		if (p.getDepth() == 0) {
 			xmlParameter.append("</" + p.getType() + ">");
@@ -90,5 +89,5 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 			xmlParameter.append("</" + p.getName() + ">");
 		}
 	}
-	
+
 }
