@@ -1,6 +1,8 @@
 package pairwisetesting.complex;
 
 
+import java.util.ArrayList;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -17,8 +19,16 @@ public class XStreamMethodUnderTestXMLHelper implements
 		return xstream.toXML(m);
 	}
 
-	public void assign(MethodUnderTest m, String[] values) {
-		m.accept(new ParameterAssignmentVisitor(values));
+	public Object[] assign(MethodUnderTest m, String[] values) {
+		ParameterAssignmentVisitor pv = new ParameterAssignmentVisitor(values);
+		m.accept(pv);
+		ArrayList<Object> objects = new ArrayList<Object>();
+		for (String xmlParameter : pv.getXMLParameters()) {
+			objects.add(xstream.fromXML(xmlParameter));
+		}
+		// System.out.println(xstream.toXML(objects.get(0)));
+		// System.out.println(xstream.toXML(objects.get(1)));
+		return objects.toArray();
 	}
 }
 
@@ -26,6 +36,8 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	
 	private String[] values;
 	private int next;
+	private ArrayList<String> xmlParameters = new ArrayList<String>();
+	private StringBuilder xmlParameter = new StringBuilder();
 	
 	ParameterAssignmentVisitor(String[] values) {
 		this.values = values;
@@ -33,7 +45,7 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	
 	public void visit(SimpleParameter p) {
 		beginTag(p);
-		System.out.print(values[next++]);
+		xmlParameter.append(values[next++]);
 	}
 
 	public void endVisit(SimpleParameter p) {
@@ -48,28 +60,34 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 		endTag(p);
 	}
 	
+	public String[] getXMLParameters() {
+		return this.xmlParameters.toArray(new String[0]);
+	}
+	
 	private void beginTag(SimpleParameter p) {
 		if (p.getDepth() == 0) {
-			System.out.print("<" + p.getType() + ">");
+			xmlParameter = new StringBuilder();
+			xmlParameter.append("<" + p.getType() + ">");
 		} else {
-			System.out.print("<" + p.getName() + ">");
+			xmlParameter.append("<" + p.getName() + ">");
 		}
 	}
 	
 	private void beginTag(ComplexParameter p) {
 		if (p.getDepth() == 0) {
-			System.out.println("<" + p.getType() + ">");
+			xmlParameter = new StringBuilder();
+			xmlParameter.append("<" + p.getType() + ">");
 		} else {
-			System.out.println("<" + p.getName() + ">");
+			xmlParameter.append("<" + p.getName() + ">");
 		}
-		
 	}
 	
 	private void endTag(Parameter p) {
 		if (p.getDepth() == 0) {
-			System.out.println("</" + p.getType() + ">");
+			xmlParameter.append("</" + p.getType() + ">");
+			xmlParameters.add(xmlParameter.toString());
 		} else {
-			System.out.println("</" + p.getName() + ">");
+			xmlParameter.append("</" + p.getName() + ">");
 		}
 	}
 	
