@@ -1,4 +1,8 @@
-package pairwisetesting.complex;
+package pairwisetesting.complex.parametervisitor;
+
+import pairwisetesting.complex.ComplexParameter;
+import pairwisetesting.complex.DefaultParameterVisitor;
+import pairwisetesting.complex.SimpleParameter;
 
 public class PrintParameterVisitor extends DefaultParameterVisitor {
 
