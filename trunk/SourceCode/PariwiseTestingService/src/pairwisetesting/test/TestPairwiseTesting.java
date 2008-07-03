@@ -41,6 +41,7 @@ import pairwisetesting.test.mock.MockMetaParameterProvider;
 import pairwisetesting.test.mock.MockOAEngine;
 import pairwisetesting.test.mock.MockOAProviderFactory;
 import pairwisetesting.test.mock.MockTestCasesGenerator;
+import pairwisetesting.testcasesgenerator.ExcelTestCasesGenerator;
 import pairwisetesting.testcasesgenerator.TXTTestCasesGenerator;
 import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
 import pairwisetesting.util.TextFile;
@@ -1501,6 +1502,14 @@ public class TestPairwiseTesting extends TestCase {
 		expected = new String[] {"true", "false"};
 		lg = new BooleanLevelGenerator();
 		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+	}
+	
+	public void testExcelTestCasesGenerator() throws EngineException {
+		ITestCasesGenerator generator = new ExcelTestCasesGenerator("testcases.xls");
+		MetaParameter mp = new MockMetaParameterProvider().get();
+		String[][] testData = new MockOAEngine().generateTestData(mp);
+		String testCases = generator.generate(mp, testData);
+		assertNotNull(testCases);
 	}
 	
 	protected void tearDown() throws Exception {
