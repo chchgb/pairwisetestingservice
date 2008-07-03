@@ -10,9 +10,10 @@ import pairwisetesting.complex.SimpleParameter;
 import pairwisetesting.complex.XStreamMethodUnderTestXMLHelper;
 import pairwisetesting.complex.parametervisitor.CountParameterVisitor;
 import pairwisetesting.complex.parametervisitor.PrintParameterVisitor;
+import pairwisetesting.test.edu.Student;
 
 public class ComplexParameterTest extends TestCase {
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 	}
@@ -22,15 +23,15 @@ public class ComplexParameterTest extends TestCase {
 	}
 
 	public void testParameter() {
-		
+
 		Parameter p = new SimpleParameter("String", "id");
 		assertEquals("String", p.getType());
 		assertEquals("id", p.getName());
-		
+
 		ComplexParameter st1 = new ComplexParameter("Student", "student");
 		st1.add(p);
 		assertEquals("student_id", p.getFullName());
-		
+
 		ComplexParameter tc = new ComplexParameter("Teacher", "teacher");
 		Parameter tid = new SimpleParameter("String", "id");
 		tc.add(tid);
@@ -43,43 +44,45 @@ public class ComplexParameterTest extends TestCase {
 		assertEquals(1, tc.getChildren().length);
 		assertEquals("student_male", male.getFullName());
 		assertEquals("student_teacher_id", tid.getFullName());
-		
+
 		CountParameterVisitor pv = new CountParameterVisitor();
 		st1.accept(pv);
 		assertEquals(5, pv.getNodeCount());
 		assertEquals(3, pv.getLeafCount());
-		
+
 		IParameterVisitor ppv = new PrintParameterVisitor();
 		st1.accept(ppv);
 	}
-	
+
 	public void testMethodUnderTest() {
 		SimpleParameter p1 = new SimpleParameter("int", "number");
 		ComplexParameter p2 = new ComplexParameter("Student", "student");
 		p2.add(new SimpleParameter("String", "id"));
 		ComplexParameter p3 = new ComplexParameter("Teacher", "teacher");
 		p3.add(new SimpleParameter("String", "id"));
-		
+
 		MethodUnderTest m = new MethodUnderTest("void", "foo");
 		m.add(p1);
 		m.add(p2);
 		m.add(p3);
-		
+
 		assertEquals("void", m.getReturnType());
 		assertEquals("foo", m.getName());
 		assertEquals(3, m.getParameters().length);
 	}
-	
+
 	public void testMethodUnderTestXMLHelper() {
 		SimpleParameter p1 = new SimpleParameter("int", "number");
-		ComplexParameter p2 = new ComplexParameter("Student", "student");
+		ComplexParameter p2 = new ComplexParameter(
+				"pairwisetesting.test.edu.Student", "student");
 		SimpleParameter sid = new SimpleParameter("String", "id");
 		p2.add(sid);
-		ComplexParameter p3 = new ComplexParameter("Teacher", "teacher");
+		ComplexParameter p3 = new ComplexParameter(
+				"pairwisetesting.test.edu.Teacher", "teacher");
 		SimpleParameter tid = new SimpleParameter("String", "id");
 		p3.add(tid);
 		p2.add(p3);
-		
+
 		MethodUnderTest m = new MethodUnderTest("void", "foo");
 		m.add(p1);
 		m.add(p2);
@@ -87,7 +90,10 @@ public class ComplexParameterTest extends TestCase {
 		String xml = helper.toXML(m);
 		// System.out.println(xml);
 		assertEquals(m, helper.fromXML(xml));
-		
-		helper.assign(m, new String[] {"100", "s001", "t001"});
+
+		Object[] objects = helper.assign(m, new String[] { "100", "s001", "t001" });
+		assertEquals(100, Integer.parseInt(objects[0].toString()));
+		assertEquals("s001", ((Student)objects[1]).getId());
+		assertEquals("t001", ((Student)objects[1]).getTeacher().getId());
 	}
 }

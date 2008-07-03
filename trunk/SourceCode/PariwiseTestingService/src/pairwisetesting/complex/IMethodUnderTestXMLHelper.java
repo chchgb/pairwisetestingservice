@@ -6,6 +6,6 @@ public interface IMethodUnderTestXMLHelper {
 
 	MethodUnderTest fromXML(String xml);
 
-	void assign(MethodUnderTest m, String[] values);
+	 Object[] assign(MethodUnderTest m, String[] values);
 
 }
