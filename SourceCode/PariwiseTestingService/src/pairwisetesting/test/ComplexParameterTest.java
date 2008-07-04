@@ -1,6 +1,9 @@
 package pairwisetesting.test;
 
+import java.util.Arrays;
+
 import junit.framework.TestCase;
+import pairwisetesting.complex.ChildParametersExtractor;
 import pairwisetesting.complex.ComplexParameter;
 import pairwisetesting.complex.IMethodUnderTestXMLHelper;
 import pairwisetesting.complex.IParameterVisitor;
@@ -95,5 +98,22 @@ public class ComplexParameterTest extends TestCase {
 		assertEquals(100, Integer.parseInt(objects[0].toString()));
 		assertEquals("s001", ((Student)objects[1]).getId());
 		assertEquals("t001", ((Student)objects[1]).getTeacher().getId());
+	}
+	
+	public void testChildParametersExtractor(){
+		String className = "pairwisetesting.test.edu.Student";
+		ChildParametersExtractor e = new ChildParametersExtractor();
+		Parameter[] ps = e.getParameters(className);
+		
+		Parameter[] expected = new Parameter[2];
+		SimpleParameter sid = new SimpleParameter("java.lang.String", "id");
+		expected[0] = sid;
+		ComplexParameter teacher = new ComplexParameter(
+				"pairwisetesting.test.edu.Teacher", "teacher");
+		SimpleParameter tid = new SimpleParameter("java.lang.String", "id");
+		teacher.add(tid);
+		expected[1] = teacher;
+
+		assertTrue("It should be equal", Arrays.equals(expected, ps));
 	}
 }

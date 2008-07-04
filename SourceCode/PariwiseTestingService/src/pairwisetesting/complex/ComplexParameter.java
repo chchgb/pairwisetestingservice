@@ -1,6 +1,7 @@
 package pairwisetesting.complex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ComplexParameter extends Parameter {
 
@@ -8,6 +9,8 @@ public class ComplexParameter extends Parameter {
 
 	public ComplexParameter(String type, String name) {
 		super(type, name);
+//		Parameter[] parameters = new ChildParametersExtractor().getParameters(type);
+//		children.addAll(Arrays.asList(parameters));
 	}
 
 	public void add(Parameter child) {
