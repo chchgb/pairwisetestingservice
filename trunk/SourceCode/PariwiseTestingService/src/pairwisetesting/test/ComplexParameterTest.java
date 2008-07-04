@@ -91,7 +91,7 @@ public class ComplexParameterTest extends TestCase {
 		m.add(p2);
 		IMethodUnderTestXMLHelper helper = new XStreamMethodUnderTestXMLHelper();
 		String xml = helper.toXML(m);
-		System.out.println(xml);
+		// System.out.println(xml);
 		assertEquals(m, helper.fromXML(xml));
 
 		Object[] objects = helper.assign(m, new String[] { "100", "s001", "t001" });
