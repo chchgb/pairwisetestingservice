@@ -6,9 +6,9 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 
+import pairwisetesting.util.ClassUtil;
 import pairwisetesting.util.TextFile;
 import testingngservices.testcasetemplate.core.IFieldNameFinder;
-import testingngservices.testcasetemplate.util.ClassUtil;
 
 /**
  * Finding field name based on AST
