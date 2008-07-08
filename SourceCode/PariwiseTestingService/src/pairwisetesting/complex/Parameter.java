@@ -41,7 +41,7 @@ public abstract class Parameter {
 	}
 	
 	public void addFullNamePrefix(String prefix) {
-		this.fullNamePrefix = prefix + "_" + this.fullNamePrefix;
+		this.fullNamePrefix = prefix + "." + this.fullNamePrefix;
 	}
 	
 	public String toString() {

@@ -3,6 +3,8 @@ package pairwisetesting.complex;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import pairwisetesting.util.ClassUtil;
+
 public class ChildParametersExtractor {
 
 	public Parameter[] getParameters(String className) {
@@ -11,10 +13,11 @@ public class ChildParametersExtractor {
 		try {
 			Field[] fields = Class.forName(className).getDeclaredFields();
 			for (Field f : fields) {
-				if (isSimpleType(f.getType())) {
+				if (ClassUtil.isSimpleType(f.getType())) {
 					Parameter p = new SimpleParameter(f.getType().getName(), f.getName());
 					list.add(p);
 				} else {
+					// Need extract its child parameters
 					ComplexParameter cp = new ComplexParameter(f.getType().getName(), f.getName());
 					Parameter[] parameters = getParameters(f.getType().getName());
 					for (Parameter child : parameters)
@@ -26,9 +29,5 @@ public class ChildParametersExtractor {
 			e.printStackTrace();
 		}
 		return list.toArray(new Parameter[0]);
-	}
-	
-	private boolean isSimpleType(Class<?> clazz){
-		return clazz.isPrimitive() || clazz == String.class;
 	}
 }

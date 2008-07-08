@@ -18,7 +18,8 @@ public class XStreamMethodUnderTestXMLHelper implements
 		return xstream.toXML(m);
 	}
 
-	public Object[] assign(MethodUnderTest m, String[] values) {
+	public Object[] assign(String methodUnderTestXmlData, String[] values) {
+		MethodUnderTest m = fromXML(methodUnderTestXmlData);
 		ParameterAssignmentVisitor pv = new ParameterAssignmentVisitor(values);
 		m.accept(pv);
 		ArrayList<Object> objects = new ArrayList<Object>();

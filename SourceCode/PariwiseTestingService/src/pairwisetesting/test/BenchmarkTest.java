@@ -13,13 +13,16 @@ import pairwisetesting.engine.pict.PICTEngine;
 
 public class BenchmarkTest extends TestCase {
 	public void benchmarkEngine(Engine engine, MetaParameter mp) throws EngineException {
-		double before = System.currentTimeMillis();
+		long before = System.nanoTime();
 		String[][] testData = engine.generateTestData(mp);
-		double after = System.currentTimeMillis();
-		System.out.println("Time spent: " + (after - before));
-		System.out.println("Level: " + mp.getMaxNumOfLevels());
-		System.out.println("Factor: " + mp.getNumOfFactors());
-		System.out.println("Run: " + testData.length);
+		long after = System.nanoTime();
+		System.out.print((after - before) / 1000000);
+//		System.out.print("\t");
+		System.out.print(testData.length);
+		System.out.print("\t");
+//		System.out.println("Level: " + mp.getMaxNumOfLevels());
+//		System.out.println("Factor: " + mp.getNumOfFactors());
+//		System.out.println("Run: " + testData.length);
 //		for (String[] row : testData) {
 //			System.out.println(Arrays.toString(row));
 //		}
@@ -43,12 +46,19 @@ public class BenchmarkTest extends TestCase {
 				new JennyEngine(), 
 				new PICTEngine(),
 		};
-		MetaParameter mp = getMetaParameter(11, 15);
+		
 		for (Engine engine : engines) {
-			System.out.println("--------"
-					+ engine.getClass().getSimpleName()
-					+ "--------");
-			benchmarkEngine(engine, mp);	
+			System.out.print(engine.getClass().getSimpleName() + "\t");	
 		}
+		System.out.println("");
+		
+		for (int i = 3; i < 12; i++) {
+			MetaParameter mp = getMetaParameter(i, 11);
+			for (Engine engine : engines) {
+				benchmarkEngine(engine, mp);	
+			}
+			System.out.println("");			
+		}
+
 	}
 }
