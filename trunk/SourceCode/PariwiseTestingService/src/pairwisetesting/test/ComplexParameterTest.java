@@ -33,7 +33,7 @@ public class ComplexParameterTest extends TestCase {
 
 		ComplexParameter st1 = new ComplexParameter("Student", "student");
 		st1.add(p);
-		assertEquals("student_id", p.getFullName());
+		assertEquals("student.id", p.getFullName());
 
 		ComplexParameter tc = new ComplexParameter("Teacher", "teacher");
 		Parameter tid = new SimpleParameter("String", "id");
@@ -45,8 +45,8 @@ public class ComplexParameterTest extends TestCase {
 		assertEquals("student", st1.getName());
 		assertEquals(3, st1.getChildren().length);
 		assertEquals(1, tc.getChildren().length);
-		assertEquals("student_male", male.getFullName());
-		assertEquals("student_teacher_id", tid.getFullName());
+		assertEquals("student.male", male.getFullName());
+		assertEquals("student.teacher.id", tid.getFullName());
 
 		CountParameterVisitor pv = new CountParameterVisitor();
 		st1.accept(pv);
@@ -94,7 +94,7 @@ public class ComplexParameterTest extends TestCase {
 		// System.out.println(xml);
 		assertEquals(m, helper.fromXML(xml));
 
-		Object[] objects = helper.assign(m, new String[] { "100", "s001", "t001" });
+		Object[] objects = helper.assign(xml, new String[] { "100", "s001", "t001" });
 		assertEquals(100, Integer.parseInt(objects[0].toString()));
 		assertEquals("s001", ((Student)objects[1]).getId());
 		assertEquals("t001", ((Student)objects[1]).getTeacher().getId());
