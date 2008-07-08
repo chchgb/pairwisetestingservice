@@ -6,16 +6,20 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 
+import pairwisetesting.util.ClassUtil;
 import testingngservices.testcasetemplate.TestCaseTemplateParameter;
-import testingngservices.testcasetemplate.util.ClassUtil;
 
 
 public class TestCaseTemplateEngine {
 
 	private String testCaseTemplateParameterXmlData = "";
 	private String pairwiseTestCasesXmlData = "";
-	private String templateDir = "";
+	private String methodUnderTestXmlData = "";
+	private String templateDir = "templates";
 	private final String testCaseTemplateName = "PairwiseTest";
+	
+	public TestCaseTemplateEngine() {
+			}
 	
 	public String generateTestNGTestCase() throws TestCaseTemplateEngineException {
 		TestCaseTemplateParameter tp = null;
@@ -71,6 +75,7 @@ public class TestCaseTemplateEngine {
 		}
 		
 		t.setAttribute("testCases", pairwiseTestCasesXmlData);
+		t.setAttribute("methodUnderTestXmlData", methodUnderTestXmlData);
 		
 		return t.toString();
 	}
@@ -81,6 +86,10 @@ public class TestCaseTemplateEngine {
 
 	public void setPairwiseTestCasesXmlData(String xmlData) {
 		this.pairwiseTestCasesXmlData = xmlData.replaceAll("\"", "'").replace("\n", "");
+	}
+	
+	public void setMethodUnderTestXmlData(String xmlData) {
+		this.methodUnderTestXmlData = xmlData.replaceAll("\n\\s*", "");
 	}
 
 	public void setTemplateDir(String templateDir) {
