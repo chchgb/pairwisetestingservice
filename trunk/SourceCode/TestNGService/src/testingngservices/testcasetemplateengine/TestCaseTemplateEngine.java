@@ -19,7 +19,7 @@ public class TestCaseTemplateEngine {
 	private final String testCaseTemplateName = "PairwiseTest";
 	
 	public TestCaseTemplateEngine() {
-			}
+	}
 	
 	public String generateTestNGTestCase() throws TestCaseTemplateEngineException {
 		TestCaseTemplateParameter tp = null;
