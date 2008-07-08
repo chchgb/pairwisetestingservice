@@ -467,7 +467,7 @@ public class TestCaseTemplateTest extends TestCase {
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(new XStreamMethodUnderTestXMLHelper().toXML(mut));
 		te.setMethodUnderTestXmlData(new XStreamMethodUnderTestXMLHelper().toXML(mut));
-		System.out.println(te.generateTestNGTestCase());
+		// System.out.println(te.generateTestNGTestCase());
 		assertTrue("It should contain this", te.generateTestNGTestCase().contains(
 				"testTransfer(" +
 					"final testingngservices.test.bank.Account accountA, " +
