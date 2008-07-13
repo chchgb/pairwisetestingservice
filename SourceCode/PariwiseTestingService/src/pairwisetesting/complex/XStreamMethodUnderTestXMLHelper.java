@@ -26,8 +26,8 @@ public class XStreamMethodUnderTestXMLHelper implements
 		for (String xmlParameter : pv.getXMLParameters()) {
 			objects.add(xstream.fromXML(xmlParameter));
 		}
-		System.out.println(xstream.toXML(objects.get(0)));
-		System.out.println(xstream.toXML(objects.get(1)));
+		//System.out.println(xstream.toXML(objects.get(0)));
+		//System.out.println(xstream.toXML(objects.get(1)));
 		return objects.toArray();
 	}
 }

@@ -7,7 +7,7 @@ public class ComplexParameter extends Parameter {
 	private ArrayList<Parameter> children = new ArrayList<Parameter>();
 
 	public ComplexParameter(String type, String name) {
-		super(type, name);
+		super(type, name,true);
 //		Parameter[] parameters = new ChildParametersExtractor().getParameters(type);
 //		children.addAll(Arrays.asList(parameters));
 	}
