@@ -6,10 +6,16 @@ public abstract class Parameter {
 	private String name = "";
 	private String fullNamePrefix = "";
 	private int depth;
+	private boolean isComplexParameter;
 
-	public Parameter(String type, String name) {
+	public Parameter(String type, String name, boolean isComplexParameter) {
 		this.type = type;
 		this.name = name;
+		this.isComplexParameter = isComplexParameter;
+	}
+	
+	public boolean isComplexparameter(){
+		return this.isComplexParameter;
 	}
 
 	public String getType() {
