@@ -53,7 +53,7 @@ public abstract class Parameter {
 	public String toString() {
 		return String.format("[%s %s]", type, getFullName());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -61,6 +61,7 @@ public abstract class Parameter {
 		result = prime * result + depth;
 		result = prime * result
 				+ ((fullNamePrefix == null) ? 0 : fullNamePrefix.hashCode());
+		result = prime * result + (isComplexParameter ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -81,6 +82,8 @@ public abstract class Parameter {
 			if (other.fullNamePrefix != null)
 				return false;
 		} else if (!fullNamePrefix.equals(other.fullNamePrefix))
+			return false;
+		if (isComplexParameter != other.isComplexParameter)
 			return false;
 		if (name == null) {
 			if (other.name != null)
