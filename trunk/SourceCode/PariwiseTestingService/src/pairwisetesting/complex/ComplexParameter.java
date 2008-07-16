@@ -7,9 +7,10 @@ public class ComplexParameter extends Parameter {
 	private ArrayList<Parameter> children = new ArrayList<Parameter>();
 
 	public ComplexParameter(String type, String name) {
-		super(type, name,true);
-//		Parameter[] parameters = new ChildParametersExtractor().getParameters(type);
-//		children.addAll(Arrays.asList(parameters));
+		super(type, name, true);
+		// Parameter[] parameters = new
+		// ChildParametersExtractor().getParameters(type);
+		// children.addAll(Arrays.asList(parameters));
 	}
 
 	public void add(Parameter child) {
@@ -25,21 +26,21 @@ public class ComplexParameter extends Parameter {
 		}
 		pv.endVisit(this);
 	}
-	
+
 	public void setDepth(int newDepth) {
 		super.setDepth(newDepth);
 		for (Parameter child : children) {
 			child.setDepth(this.getDepth() + 1);
 		}
 	}
-	
+
 	public void addFullNamePrefix(String prefix) {
 		super.addFullNamePrefix(prefix);
 		for (Parameter child : children) {
 			child.addFullNamePrefix(prefix);
 		}
 	}
-	
+
 	public Parameter[] getChildren() {
 		return this.children.toArray(new Parameter[0]);
 	}
