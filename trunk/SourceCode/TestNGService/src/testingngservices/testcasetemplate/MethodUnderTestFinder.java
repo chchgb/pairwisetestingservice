@@ -20,7 +20,7 @@ public class MethodUnderTestFinder {
 		this.className = className;
 	}
 
-	public MethodUnderTest getMethodUnderTest(String returnTypeName, String methodName) {
+	public MethodUnderTest getMethodUnderTest(String returnTypeName, String methodName) throws MethodUnderTestException {
 		MethodUnderTest methodUnderTest = new MethodUnderTest(returnTypeName, methodName);
 		MethodSignature methodSignature
 					= methodSignatureFinder.getMethodSignature(returnTypeName, methodName);
@@ -46,7 +46,7 @@ public class MethodUnderTestFinder {
 				}
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			throw new MethodUnderTestException(e);
 		}
 		return methodUnderTest;
 	}

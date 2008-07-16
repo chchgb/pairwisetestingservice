@@ -7,6 +7,7 @@ import pairwisetesting.complex.ComplexParameter;
 import pairwisetesting.complex.MethodUnderTest;
 import pairwisetesting.complex.XStreamMethodUnderTestXMLHelper;
 import testingngservices.testcasetemplate.MethodSignatureFinder;
+import testingngservices.testcasetemplate.MethodUnderTestException;
 import testingngservices.testcasetemplate.MethodUnderTestFinder;
 import testingngservices.testcasetemplate.TestCaseTemplateParameter;
 import testingngservices.testcasetemplate.ast.ASTInvocationSequenceFinder;
@@ -379,7 +380,7 @@ public class TestCaseTemplateTest extends TestCase {
 		assertTrue("They should be equal", Arrays.equals(expectedPrams, ms.getParameters()));
 	}
 	
-	public void testMethodUnderTestFinder() {
+	public void testMethodUnderTestFinder() throws MethodUnderTestException {
 		String sourceFilePath = "src/testingngservices/test/bank/AccountService.java";
 		String className = "testingngservices.test.bank.AccountService";
 		MethodUnderTestFinder finder = new MethodUnderTestFinder(sourceFilePath, className);
@@ -467,7 +468,7 @@ public class TestCaseTemplateTest extends TestCase {
 		te.setTestCaseTemplateParameterXmlData(tp.toXML());
 		// System.out.println(new XStreamMethodUnderTestXMLHelper().toXML(mut));
 		te.setMethodUnderTestXmlData(new XStreamMethodUnderTestXMLHelper().toXML(mut));
-		// System.out.println(te.generateTestNGTestCase());
+		System.out.println(te.generateTestNGTestCase());
 		assertTrue("It should contain this", te.generateTestNGTestCase().contains(
 				"testTransfer(" +
 					"final testingngservices.test.bank.Account accountA, " +
