@@ -22,12 +22,15 @@ public class XStreamMethodUnderTestXMLHelper implements
 		MethodUnderTest m = fromXML(methodUnderTestXmlData);
 		ParameterAssignmentVisitor pv = new ParameterAssignmentVisitor(values);
 		m.accept(pv);
+		m.getReturnValueParameter().accept(pv);
 		ArrayList<Object> objects = new ArrayList<Object>();
+		// System.out.println(Arrays.toString(pv.getXMLParameters()));
 		for (String xmlParameter : pv.getXMLParameters()) {
 			objects.add(xstream.fromXML(xmlParameter));
 		}
-		//System.out.println(xstream.toXML(objects.get(0)));
-		//System.out.println(xstream.toXML(objects.get(1)));
+//		System.out.println(xstream.toXML(objects.get(0)));
+//		System.out.println(xstream.toXML(objects.get(1)));
+//		System.out.println(xstream.toXML(objects.get(2)));
 		return objects.toArray();
 	}
 }
@@ -38,6 +41,9 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	private int next;
 	private ArrayList<String> xmlParameters = new ArrayList<String>();
 	private StringBuilder xmlParameter = new StringBuilder();
+	
+	// Used to store the concrete type for endVisit usage
+	private String currentConcreteType;
 
 	ParameterAssignmentVisitor(String[] values) {
 		this.values = values;
@@ -76,7 +82,12 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	private void beginTag(ComplexParameter p) {
 		if (p.getDepth() == 0) {
 			xmlParameter = new StringBuilder();
-			xmlParameter.append("<" + p.getType() + ">");
+			if (p.isAbstract()) {
+				this.currentConcreteType = this.values[next++];
+				xmlParameter.append("<" + this.currentConcreteType + ">");
+			} else {
+				xmlParameter.append("<" + p.getType() + ">");
+			}
 		} else {
 			xmlParameter.append("<" + p.getName() + ">");
 		}
@@ -84,7 +95,11 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 
 	private void endTag(Parameter p) {
 		if (p.getDepth() == 0) {
-			xmlParameter.append("</" + p.getType() + ">");
+			if (p.isAbstract()) {
+				xmlParameter.append("</" + this.currentConcreteType + ">");
+			} else {
+				xmlParameter.append("</" + p.getType() + ">");
+			}
 			xmlParameters.add(xmlParameter.toString());
 		} else {
 			xmlParameter.append("</" + p.getName() + ">");

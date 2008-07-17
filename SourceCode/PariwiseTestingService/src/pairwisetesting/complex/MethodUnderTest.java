@@ -4,27 +4,18 @@ import java.util.ArrayList;
 
 public class MethodUnderTest {
 
-	private String returnType;
-	private String name;
 	private ArrayList<Parameter> paramlist = new ArrayList<Parameter>();
+	private Parameter returnValueParameter;
+	private String name = "";
+
+	public MethodUnderTest() {
+	}
 	
 	public MethodUnderTest(String returnType, String name) {
-		this.returnType = returnType;
+		this.returnValueParameter = new SimpleParameter(returnType, "ReturnValue");
 		this.name = name;
 	}
-
-	public void add(Parameter p) {
-		paramlist.add(p);
-	}
-
-	public String getReturnType() {
-		return returnType;
-	}
-
-	public void setReturnType(String returnType) {
-		this.returnType = returnType;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -33,8 +24,24 @@ public class MethodUnderTest {
 		this.name = name;
 	}
 
+	public void add(Parameter p) {
+		paramlist.add(p);
+	}
+
 	public Parameter[] getParameters() {
 		return paramlist.toArray(new Parameter[0]);
+	}
+	
+	public Parameter getReturnValueParameter() {
+		return returnValueParameter;
+	}
+
+	public void setReturnValueRarameter(Parameter returnValueParameter) {
+		this.returnValueParameter = returnValueParameter;
+	}
+	
+	public String getReturnType() {
+		return this.returnValueParameter.getType();
 	}
 	
 	public void accept(IParameterVisitor pv) {
@@ -42,7 +49,6 @@ public class MethodUnderTest {
 			p.accept(pv);
 		}
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -52,7 +58,7 @@ public class MethodUnderTest {
 		result = prime * result
 				+ ((paramlist == null) ? 0 : paramlist.hashCode());
 		result = prime * result
-				+ ((returnType == null) ? 0 : returnType.hashCode());
+				+ ((returnValueParameter == null) ? 0 : returnValueParameter.hashCode());
 		return result;
 	}
 
@@ -75,10 +81,10 @@ public class MethodUnderTest {
 				return false;
 		} else if (!paramlist.equals(other.paramlist))
 			return false;
-		if (returnType == null) {
-			if (other.returnType != null)
+		if (returnValueParameter == null) {
+			if (other.returnValueParameter != null)
 				return false;
-		} else if (!returnType.equals(other.returnType))
+		} else if (!returnValueParameter.equals(other.returnValueParameter))
 			return false;
 		return true;
 	}

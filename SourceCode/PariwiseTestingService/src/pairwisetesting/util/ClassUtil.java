@@ -37,7 +37,6 @@ public class ClassUtil {
 		return clazz.isInterface();
 	}
 	
-	
 
 	public static String getReturnTypeName(String className, String methodName,
 			String... parameterTypeNames) {
@@ -94,6 +93,13 @@ public class ClassUtil {
 		return (clazz.isPrimitive() 
 				|| clazz == String.class
 				|| clazz.isEnum());
+	}
+	
+	public static boolean isSimpleType(String className){
+		if (className.equals("void")) {
+			return true;
+		}
+		return isSimpleType(getClass(className));
 	}
 	
 	/**

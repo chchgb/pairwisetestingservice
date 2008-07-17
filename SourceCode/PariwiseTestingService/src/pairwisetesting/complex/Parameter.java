@@ -2,20 +2,14 @@ package pairwisetesting.complex;
 
 public abstract class Parameter {
 
-	private String type;
+	private String type = "";
 	private String name = "";
 	private String fullNamePrefix = "";
 	private int depth;
-	private boolean isComplexParameter;
 
-	public Parameter(String type, String name, boolean isComplexParameter) {
+	public Parameter(String type, String name) {
 		this.type = type;
 		this.name = name;
-		this.isComplexParameter = isComplexParameter;
-	}
-	
-	public boolean isComplexparameter(){
-		return this.isComplexParameter;
 	}
 
 	public String getType() {
@@ -41,15 +35,15 @@ public abstract class Parameter {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-	
+
 	public String getFullName() {
 		return this.fullNamePrefix + this.name;
 	}
-	
+
 	public void addFullNamePrefix(String prefix) {
 		this.fullNamePrefix = prefix + "." + this.fullNamePrefix;
 	}
-	
+
 	public String toString() {
 		return String.format("[%s %s]", type, getFullName());
 	}
@@ -61,7 +55,6 @@ public abstract class Parameter {
 		result = prime * result + depth;
 		result = prime * result
 				+ ((fullNamePrefix == null) ? 0 : fullNamePrefix.hashCode());
-		result = prime * result + (isComplexParameter ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -83,8 +76,6 @@ public abstract class Parameter {
 				return false;
 		} else if (!fullNamePrefix.equals(other.fullNamePrefix))
 			return false;
-		if (isComplexParameter != other.isComplexParameter)
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -98,6 +89,22 @@ public abstract class Parameter {
 		return true;
 	}
 
+	/**
+	 * Accept a ParameterVisitor to visit Parameter's children
+	 * 
+	 * @param pv
+	 *            the visitor to visit Parameter's children
+	 */
 	public abstract void accept(IParameterVisitor pv);
+
+	/**
+	 * @return <code>true</code> if it is a Complex Parameter
+	 */
+	public abstract boolean isComplex();
+
+	/**
+	 * @return <code>true</code> if it is Interface or Abstract Class type
+	 */
+	public abstract boolean isAbstract();
 
 }
