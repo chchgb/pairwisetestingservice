@@ -29,8 +29,8 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
     }
     $endif$
 
-	@Test(dataProvider = "$dataProviderName; null="PairwiseTestingDataProvider"$")
-	public void test$methodUnderTest; format="capitalize"$($params:parameter(); separator=", "$, final $returnType$ expected) {
+    @Test(dataProvider = "$dataProviderName; null="PairwiseTestingDataProvider"$")
+    public void test$methodUnderTest; format="capitalize"$($params:parameter(); separator=", "$, final $returnType$ expected) {
         $if(isStaticMethod)$
         Assert.assertEquals($classUnderTest$.$invokeMethodUnderTest()$, expected);
         $elseif(isSingleton)$
@@ -53,10 +53,10 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
         Assert.assertEquals(testResult, expected);
         $endif$
         $endif$
-	}
+    }
 
-	@DataProvider(name = "$dataProviderName; null="PairwiseTestingDataProvider"$")
-	public Object[][] rangeData() throws Exception {
+    @DataProvider(name = "$dataProviderName; null="PairwiseTestingDataProvider"$")
+    public Object[][] rangeData() throws Exception {
         XStreamMethodUnderTestXMLHelper xmlHelper = new XStreamMethodUnderTestXMLHelper();
         String testCases = "$testCases$";
         String methodUnderTestXmlData = "$methodUnderTestXmlData$";
@@ -69,25 +69,22 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
         for (int i = 0; i < runs.size(); i++) {
             Element run = runs.get(i);
             Elements levels = run.getChildElements("level");
-            testData[i] = new String[levels.size() + 1];
+            Elements expects = run.getChildElements("expected");
+            testData[i] = new String[levels.size() + expects.size()];
             for (int j = 0; j < levels.size(); j++) {
                 testData[i][j] = levels.get(j).getValue();
             }
-            Element expected = run.getFirstChildElement("expected");
-            testData[i][levels.size()] = expected.getValue();
+            for (int j = 0; j < expects.size(); j++) {
+                testData[i][levels.size() + j] = expects.get(j).getValue();
+            }
         }
 
         // Generate the 2D Object array needed for Data Provider
         // Need proper type conversion
         Object[][] testDataObjects = new Object[testData.length][];
         for (int i = 0; i < testData.length; i++) {
-            Object[] inputTestObjects = xmlHelper.assign(methodUnderTestXmlData, testData[i]);
-            testDataObjects[i] = new Object[inputTestObjects.length + 1];
-            for (int j = 0; j < inputTestObjects.length; j++) {
-                testDataObjects[i][j] = inputTestObjects[j];
-            }
-            testDataObjects[i][inputTestObjects.length] = Converter.convertTo(testData[i][testData[i].length - 1], $returnType$.class);
+            testDataObjects[i] = xmlHelper.assign(methodUnderTestXmlData, testData[i]);
         }
         return testDataObjects;
-	}
+    }
 }
