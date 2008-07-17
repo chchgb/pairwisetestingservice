@@ -61,6 +61,10 @@ public class AutoMockTest extends TestCase {
 		assertTrue(ClassUtil.isSimpleType(int.class));
 		assertTrue(ClassUtil.isSimpleType(String.class));
 		
+		assertTrue(ClassUtil.isSimpleType("int"));
+		assertTrue(ClassUtil.isSimpleType("java.lang.String"));
+		assertTrue(ClassUtil.isSimpleType("void"));
+		
 		assertEquals("withdraw", 
 				ClassUtil.getFirstMethod(ClassUtil.getClass("testingngservices.test.bank.AccountService"), 
 						"double", "withdraw").getName());

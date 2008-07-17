@@ -19,8 +19,10 @@ public class MethodSignatureFinder {
 	}
 
 	public MethodSignature getMethodSignature(String returnTypeName, String methodName) {
+		String simpleReturnTypeName = returnTypeName.replaceFirst(".*[.]", "");
+		// System.out.println(simpleReturnTypeName);
 		MethodSignatureVisitor visitor
-			= new MethodSignatureVisitor(returnTypeName, methodName);
+			= new MethodSignatureVisitor(simpleReturnTypeName, methodName);
 		unit.accept(visitor);
 		return visitor.getMethodSignature();
 	}

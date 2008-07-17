@@ -14,7 +14,6 @@ public class TestCaseTemplateEngine {
 
 	private String testCaseTemplateParameterXmlData = "";
 	private String pairwiseTestCasesXmlData = "";
-	private String methodUnderTestXmlData = "";
 	private String templateDir = "templates";
 	private final String testCaseTemplateName = "PairwiseTest";
 	
@@ -24,7 +23,7 @@ public class TestCaseTemplateEngine {
 	public String generateTestNGTestCase() throws TestCaseTemplateEngineException {
 		TestCaseTemplateParameter tp = null;
 		try {
-			tp = new TestCaseTemplateParameter(testCaseTemplateParameterXmlData);
+			tp = TestCaseTemplateParameter.fromXML(testCaseTemplateParameterXmlData);
 		} catch (Exception e) {
 			throw new TestCaseTemplateEngineException(e);
 		}
@@ -55,7 +54,7 @@ public class TestCaseTemplateEngine {
 			t.setAttribute("constructorArgs", tp.getConstructorArguments());
 		}
 		
-		t.setAttribute("methodUnderTest", tp.getMethodUnderTest());
+		t.setAttribute("methodUnderTest", tp.getMethodUnderTest().getName());
 		t.setAttribute("params", tp.getMethodParameters());
 		t.setAttribute("isStaticMethod", tp.isStaticMethod());
 		
@@ -75,7 +74,7 @@ public class TestCaseTemplateEngine {
 		}
 		
 		t.setAttribute("testCases", pairwiseTestCasesXmlData);
-		t.setAttribute("methodUnderTestXmlData", methodUnderTestXmlData);
+		t.setAttribute("methodUnderTestXmlData", tp.getMethodUnderTestXmlData());
 		
 		return t.toString();
 	}
@@ -85,11 +84,7 @@ public class TestCaseTemplateEngine {
 	}
 
 	public void setPairwiseTestCasesXmlData(String xmlData) {
-		this.pairwiseTestCasesXmlData = xmlData.replaceAll("\"", "'").replace("\n", "");
-	}
-	
-	public void setMethodUnderTestXmlData(String xmlData) {
-		this.methodUnderTestXmlData = xmlData.replaceAll("\n\\s*", "");
+		this.pairwiseTestCasesXmlData = xmlData.replace("\"", "\\\"").replace("\n", "");
 	}
 
 	public void setTemplateDir(String templateDir) {
