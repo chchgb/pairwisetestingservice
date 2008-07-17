@@ -14,6 +14,7 @@ public class MethodUnderTestFinder {
 
 	private String className;
 	private MethodSignatureFinder methodSignatureFinder;
+	private ChildParametersExtractor extractor = new ChildParametersExtractor();
 
 	public MethodUnderTestFinder(String sourceFilePath, String className) {
 		this.methodSignatureFinder = new MethodSignatureFinder(sourceFilePath);
@@ -21,13 +22,27 @@ public class MethodUnderTestFinder {
 	}
 
 	public MethodUnderTest getMethodUnderTest(String returnTypeName, String methodName) throws MethodUnderTestException {
-		MethodUnderTest methodUnderTest = new MethodUnderTest(returnTypeName, methodName);
-		MethodSignature methodSignature
-					= methodSignatureFinder.getMethodSignature(returnTypeName, methodName);
-		Class<?> clazz = ClassUtil.getClass(className);
+		
+		MethodUnderTest methodUnderTest = null;
+		
 		try {
+			// MethodUnderTest's Name and Return Value
+			if (ClassUtil.isSimpleType(returnTypeName)) {
+				methodUnderTest = new MethodUnderTest(returnTypeName, methodName);
+			} else {
+				methodUnderTest = new MethodUnderTest();
+				methodUnderTest.setName(methodName);
+				ComplexParameter returnValueParameter
+					= new ComplexParameter(returnTypeName, "ReturnValue");
+				fillChildren(returnValueParameter);
+				methodUnderTest.setReturnValueRarameter(returnValueParameter);
+			}
+			
+			// MethodUnderTest's Input Parameters
+			MethodSignature methodSignature
+						= methodSignatureFinder.getMethodSignature(returnTypeName, methodName);
+			Class<?> clazz = ClassUtil.getClass(className);
 			Method m = ClassUtil.getFirstMethod(clazz, returnTypeName, methodName);
-			ChildParametersExtractor extractor = new ChildParametersExtractor();
 			for (int i = 0; i < m.getParameterTypes().length; i++) {
 				Class<?> parameterType = m.getParameterTypes()[i];
 				String parameterName = methodSignature.getParameters()[i].getName();
@@ -38,10 +53,7 @@ public class MethodUnderTestFinder {
 				// ComplexParameter
 				} else {
 					ComplexParameter p = new ComplexParameter(parameterType.getName(), parameterName);
-					Parameter[] children = extractor.getParameters(parameterType.getName());
-					for (Parameter child : children) {
-						p.add(child);
-					}
+					fillChildren(p);
 					methodUnderTest.add(p);
 				}
 			}
@@ -49,5 +61,15 @@ public class MethodUnderTestFinder {
 			throw new MethodUnderTestException(e);
 		}
 		return methodUnderTest;
+	}
+
+	/**
+	 * Extract ComplexParameter's child parameters and fill them into it
+	 */
+	private void fillChildren(ComplexParameter p) {
+		Parameter[] children = extractor.getParameters(p.getType());
+		for (Parameter child : children) {
+			p.add(child);
+		}
 	}
 }
