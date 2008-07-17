@@ -2,12 +2,14 @@ package pairwisetesting.complex;
 
 import java.util.ArrayList;
 
+import pairwisetesting.util.ClassUtil;
+
 public class ComplexParameter extends Parameter {
 
 	private ArrayList<Parameter> children = new ArrayList<Parameter>();
 
 	public ComplexParameter(String type, String name) {
-		super(type, name, true);
+		super(type, name);
 		// Parameter[] parameters = new
 		// ChildParametersExtractor().getParameters(type);
 		// children.addAll(Arrays.asList(parameters));
@@ -17,14 +19,6 @@ public class ComplexParameter extends Parameter {
 		this.children.add(child);
 		child.setDepth(this.getDepth() + 1);
 		child.addFullNamePrefix(this.getFullName());
-	}
-
-	public void accept(IParameterVisitor pv) {
-		pv.visit(this);
-		for (Parameter child : children) {
-			child.accept(pv);
-		}
-		pv.endVisit(this);
 	}
 
 	public void setDepth(int newDepth) {
@@ -43,6 +37,26 @@ public class ComplexParameter extends Parameter {
 
 	public Parameter[] getChildren() {
 		return this.children.toArray(new Parameter[0]);
+	}
+	
+	@Override
+	public void accept(IParameterVisitor pv) {
+		pv.visit(this);
+		for (Parameter child : children) {
+			child.accept(pv);
+		}
+		pv.endVisit(this);
+	}
+	
+	@Override
+	public boolean isComplex() {
+		return true;
+	}
+	
+	@Override
+	public boolean isAbstract() {
+		Class<?> clazz = ClassUtil.getClass(this.getType());
+		return (ClassUtil.isInterface(clazz) || ClassUtil.isAbstractClass(clazz));
 	}
 
 	@Override
