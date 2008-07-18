@@ -1,5 +1,7 @@
 package $packageName$;
 
+import java.util.Arrays;
+
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -32,9 +34,9 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
     @Test(dataProvider = "$dataProviderName; null="PairwiseTestingDataProvider"$")
     public void test$methodUnderTest; format="capitalize"$($params:parameter(); separator=", "$, final $returnType$ expected) {
         $if(isStaticMethod)$
-        Assert.assertEquals($classUnderTest$.$invokeMethodUnderTest()$, expected);
+        myAssertEquals($classUnderTest$.$invokeMethodUnderTest()$, expected);
         $elseif(isSingleton)$
-        Assert.assertEquals($classUnderTest$.$singletonMethod; null="getInstance"$().$invokeMethodUnderTest()$, expected);
+        myAssertEquals($classUnderTest$.$singletonMethod; null="getInstance"$().$invokeMethodUnderTest()$, expected);
         $else$
         $if(needMock)$$createMockObjects()$$endif$
         $instanceClassUnderTest()$
@@ -44,13 +46,13 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
         $if(needMock)$
         verify();
         $endif$
-        Assert.assertEquals($classUnderTest; format="camelize"$.$checkStateMethod$(), expected);
+        myAssertEquals($classUnderTest; format="camelize"$.$checkStateMethod$(), expected);
         $else$
         $returnType$ testResult = $classUnderTest; format="camelize"$.$invokeMethodUnderTest()$;
         $if(needMock)$
         verify();
         $endif$
-        Assert.assertEquals(testResult, expected);
+        myAssertEquals(testResult, expected);
         $endif$
         $endif$
     }
@@ -86,5 +88,25 @@ public class PairwiseTest $if(needMock)$extends MockObjectTestCase$endif$ {
             testDataObjects[i] = xmlHelper.assign(methodUnderTestXmlData, testData[i]);
         }
         return testDataObjects;
+    }
+    
+    private void myAssertEquals(int[] test, int[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(float[] test, float[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(double[] test, double[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(String[] test, String[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(Object test, Object expected) {
+        Assert.assertEquals(test, expected);
     }
 }
