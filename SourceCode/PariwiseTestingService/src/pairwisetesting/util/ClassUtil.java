@@ -101,7 +101,8 @@ public class ClassUtil {
 		if (className.equals("void")) {
 			return true;
 		}
-		return isSimpleType(getClass(className));
+		// Currently only support one dimension array type
+		return isSimpleType(getClass(className.replace("[]", "")));
 	}
 	
 	/**
@@ -110,7 +111,7 @@ public class ClassUtil {
 	public static Method getFirstMethod(Class<?> clazz, String returnTypeName, String methodName) {
 		Method[] allMethods = clazz.getDeclaredMethods();
 		for (Method m : allMethods) {
-			if (m.getReturnType().getName().equals(returnTypeName)
+			if (m.getReturnType().getCanonicalName().equals(returnTypeName)
 					&& m.getName().equals(methodName)) {
 				return m;
 			}
