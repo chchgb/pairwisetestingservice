@@ -1,5 +1,7 @@
 package testingngservices.test.math;
 
+import java.util.Arrays;
+
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -17,9 +19,7 @@ public class PairwiseTest  {
 
     @Test(dataProvider = "PairwiseTestingDataProvider")
     public void testIsBetween(final int n, final int lower, final int upper, final boolean expected) {
-        Assert.assertEquals(Range.isBetween(n, lower, upper), expected);
-
-    }
+        myAssertEquals(Range.getInstance().isBetween(n, lower, upper), expected);    }
 
     @DataProvider(name = "PairwiseTestingDataProvider")
     public Object[][] rangeData() throws Exception {
@@ -52,5 +52,25 @@ public class PairwiseTest  {
             testDataObjects[i] = xmlHelper.assign(methodUnderTestXmlData, testData[i]);
         }
         return testDataObjects;
+    }
+    
+    private void myAssertEquals(int[] test, int[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(float[] test, float[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(double[] test, double[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(String[] test, String[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(Object test, Object expected) {
+        Assert.assertEquals(test, expected);
     }
 }

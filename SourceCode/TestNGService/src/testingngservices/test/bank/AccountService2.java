@@ -18,8 +18,18 @@ public class AccountService2 {
 		return accountB;
 	}
 	
-	public Account transfer3(Account accountA, Account accountB, double[] amount) {
+	public Account transfer3(Account accountA, Account accountB, double[] amounts) {
+		for (double amount : amounts) {
+			transfer2(accountA, accountB, amount);
+		}
 		return accountB;
+	}
+	
+	public double[] transfer4(Account accountA, Account accountB, double[] amounts) {
+		for (double amount : amounts) {
+			transfer2(accountA, accountB, amount);
+		}
+		return amounts;
 	}
 
 }

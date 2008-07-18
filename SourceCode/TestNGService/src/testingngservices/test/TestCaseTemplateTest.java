@@ -421,6 +421,8 @@ public class TestCaseTemplateTest extends TestCase {
 		// Simple Array Type
 		mut = finder.getMethodUnderTest("testingngservices.test.bank.Account", "transfer3");
 		assertEquals("double[]", mut.getParameters()[2].getType());
+		mut = finder.getMethodUnderTest("double[]", "transfer4");
+		assertEquals("double[]", mut.getReturnType());
 	}
 	
 	public void testTestCaseTemplateWithComplexParameter() throws Exception {
@@ -534,5 +536,60 @@ public class TestCaseTemplateTest extends TestCase {
 					"final testingngservices.test.bank.Account accountB, " +
 					"final double amount, " +
 					"final testingngservices.test.bank.Account expected)"));
+	}
+	
+	public void testTestCaseTemplateWithSimpleArrayType() throws Exception {
+		String pairwiseTestCasesXmlData = "<?xml version=\"1.0\"?>"
+            + "<testcases>"
+            + "<factor>accountA.id</factor>"
+            + "<factor>accountA.balance</factor>"
+            + "<factor>accountA.name</factor>"
+            + "<factor>accountB.id</factor>"
+            + "<factor>accountB.balance</factor>"
+            + "<factor>accountB.name</factor>"
+            + "<factor>amounts</factor>"
+            + "<run>" +
+            		"<level>A001</level>" +
+            		"<level>10000</level>" +
+            		"<level>Andy</level>" +
+            		"<level>A002</level>" +
+            		"<level>10000</level>" +
+            		"<level>Alex</level>" +
+            		"<level>[1000, 2000]</level>" +
+            		"<expected>[1000, 2000]</expected>"
+            + "</run>"
+            + "<run>" +
+		    		"<level>A001</level>" +
+		    		"<level>20000</level>" +
+		    		"<level>Andy</level>" +
+		    		"<level>A002</level>" +
+		    		"<level>10000</level>" +
+		    		"<level>Alex</level>" +
+		    		"<level>[3000, 4000]</level>" +
+		    		"<expected>[3000, 4000]</expected>"
+		    + "</run>"           
+            + "</testcases>";
+		TestCaseTemplateParameter tp = new TestCaseTemplateParameter();
+		tp.setPackageName("testingngservices.test.bank");
+		tp.setClassUnderTest("AccountService2");
+		String sourceFilePath = "src/testingngservices/test/bank/AccountService2.java";
+		String className = "testingngservices.test.bank.AccountService2";
+		MethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
+		MethodUnderTest mut = mutFinder.getMethodUnderTest("double[]", "transfer4");
+		tp.setMethodUnderTest(mut);
+		
+		// IParameterVisitor ppv = new PrintParameterVisitor();
+		// mut.accept(ppv);
+		TestCaseTemplateEngine te = new TestCaseTemplateEngine();
+		te.setPairwiseTestCasesXmlData(pairwiseTestCasesXmlData);
+		te.setTestCaseTemplateParameterXmlData(tp.toXML());
+		// System.out.println(new XStreamMethodUnderTestXMLHelper().toXML(mut));
+		// System.out.println(te.generateTestNGTestCase());
+		assertTrue("It should contain this", te.generateTestNGTestCase().contains(
+				"testTransfer4(" +
+					"final testingngservices.test.bank.Account accountA, " +
+					"final testingngservices.test.bank.Account accountB, " +
+					"final double[] amounts, " +
+					"final double[] expected)"));
 	}
 }

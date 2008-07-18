@@ -1,5 +1,7 @@
 package testingngservices.test.bookstore;
 
+import java.util.Arrays;
+
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -36,7 +38,7 @@ public class PairwiseTest extends MockObjectTestCase {
         bookStore.setLogger(logger);
         double testResult = bookStore.computeDiscountedPrice(level, accountType, coupon);
         verify();
-        Assert.assertEquals(testResult, expected);
+        myAssertEquals(testResult, expected);
     }
 
     @DataProvider(name = "PairwiseTestingDataProvider")
@@ -70,5 +72,25 @@ public class PairwiseTest extends MockObjectTestCase {
             testDataObjects[i] = xmlHelper.assign(methodUnderTestXmlData, testData[i]);
         }
         return testDataObjects;
+    }
+    
+    private void myAssertEquals(int[] test, int[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(float[] test, float[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(double[] test, double[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(String[] test, String[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(Object test, Object expected) {
+        Assert.assertEquals(test, expected);
     }
 }
