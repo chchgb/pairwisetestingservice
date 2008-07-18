@@ -2,8 +2,8 @@ package pairwisetesting.test.edu;
 
 public class BubbleSorter implements ISorter {
 
-	public double sort(double[] numbers) {
-		return 0;
+	public double[] sort(double[] numbers) {
+		return null;
 	}
 
 }
