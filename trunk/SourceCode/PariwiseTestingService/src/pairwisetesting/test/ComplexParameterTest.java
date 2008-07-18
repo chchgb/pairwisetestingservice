@@ -166,11 +166,11 @@ public class ComplexParameterTest extends TestCase {
 		eduManager2.add(new SimpleParameter("double", "average"));
 		ComplexParameter student2 = new ComplexParameter(
 				"pairwisetesting.test.edu.Student", "student");
-		SimpleParameter studentId2 = new SimpleParameter("String", "id");
+		SimpleParameter studentId2 = new SimpleParameter("java.lang.String", "id");
 		student2.add(studentId2);
 		ComplexParameter teacher2 = new ComplexParameter(
 				"pairwisetesting.test.edu.Teacher", "teacher");
-		SimpleParameter teacherId2 = new SimpleParameter("String", "id");
+		SimpleParameter teacherId2 = new SimpleParameter("java.lang.String", "id");
 		teacher2.add(teacherId2);
 		student2.add(teacher2);
 		m = new MethodUnderTest("double", "doStatistics");
@@ -191,6 +191,43 @@ public class ComplexParameterTest extends TestCase {
 		assertEquals("S003", ((Student)objects[1]).getId());
 		assertEquals("T003", ((Student)objects[1]).getTeacher().getId());
 		assertEquals(85.0, Double.parseDouble(objects[2].toString()));
+		
+		// Simple Array Type
+		ComplexParameter sorter
+			= new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		SimpleParameter scores = new SimpleParameter("double[]", "scores");
+		m = new MethodUnderTest("double", "sort");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"[ 67.0 , 89.0 ,  87.0, 90.0 ]",
+				"45.0"});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("double[]",
+				((double[])objects[1]).getClass().getCanonicalName());
+		double[] arr2 = (double[])objects[1];
+		assertTrue(Arrays.equals(new double[] {67.0, 89.0, 87.0, 90.0}, arr2));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.BubbleSorter", 
+				"[90.0]",
+				"50.0"});
+		assertEquals("pairwisetesting.test.edu.BubbleSorter",
+				((pairwisetesting.test.edu.BubbleSorter)objects[0]).getClass().getName());
+		arr2 = (double[])objects[1];
+		assertTrue(Arrays.equals(new double[] {90.0}, arr2));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.BubbleSorter", 
+				"[]",
+				"60.0"});
+		arr2 = (double[])objects[1];
+		assertTrue(Arrays.equals(new double[0], arr2));
 	}
 	
 	public void testChildParametersExtractor(){

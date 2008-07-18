@@ -51,7 +51,11 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 
 	public void visit(SimpleParameter p) {
 		beginTag(p);
-		xmlParameter.append(values[next++]);
+		if (isSimpleArrayType(p)) {
+			appendSimpleArrayValue(p);
+		} else {
+			xmlParameter.append(values[next++]);
+		}
 	}
 
 	public void endVisit(SimpleParameter p) {
@@ -73,7 +77,11 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 	private void beginTag(SimpleParameter p) {
 		if (p.getDepth() == 0) {
 			xmlParameter = new StringBuilder();
-			xmlParameter.append("<" + p.getType() + ">");
+			if (isSimpleArrayType(p)) {
+				xmlParameter.append("<" +  getXStreamArrayType(p.getType()) + ">");
+			} else {
+				xmlParameter.append("<" + p.getType() + ">");
+			}
 		} else {
 			xmlParameter.append("<" + p.getName() + ">");
 		}
@@ -98,12 +106,49 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 			if (p.isAbstract()) {
 				xmlParameter.append("</" + this.currentConcreteType + ">");
 			} else {
-				xmlParameter.append("</" + p.getType() + ">");
+				if (isSimpleArrayType(p)) {
+					xmlParameter.append("</" + getXStreamArrayType(p.getType()) + ">");
+				} else {
+					xmlParameter.append("</" + p.getType() + ">");
+				}
 			}
 			xmlParameters.add(xmlParameter.toString());
 		} else {
 			xmlParameter.append("</" + p.getName() + ">");
 		}
 	}
+	
+	// Currently all array types are considered simple
+	private boolean isSimpleArrayType(Parameter p) {
+		return p.getType().endsWith("[]");
+	}
+	
+	private String getElementType(String arrayType) {
+		return arrayType.replace("[]", "");
+	}
 
+	private String getXStreamArrayType(String arrayType) {
+		return arrayType.replace("[]", "-array");
+	}
+	
+	public String[] getElements(String arrayValue) {
+		arrayValue = arrayValue.trim();
+		if (arrayValue.length() <= 2) { // []
+			return new String[0];
+		} else {
+			String elements = arrayValue.substring(1, arrayValue.length() - 1).trim();
+			return elements.split("\\s*,\\s*");
+		}
+	}
+	
+	private void appendSimpleArrayValue(SimpleParameter p) {
+		String elementType = getElementType(p.getType());
+		String[] elements = getElements(values[next++]);
+		// System.out.println(Arrays.toString(elements));
+		for (String element : elements) {
+			xmlParameter.append("<" + elementType + ">");
+			xmlParameter.append(element);
+			xmlParameter.append("</" + elementType + ">");
+		}
+	}
 }
