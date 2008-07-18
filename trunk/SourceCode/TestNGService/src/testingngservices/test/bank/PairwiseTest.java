@@ -1,5 +1,7 @@
 package testingngservices.test.bank;
 
+import java.util.Arrays;
+
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -19,7 +21,7 @@ public class PairwiseTest  {
     public void testTransfer2(final testingngservices.test.bank.Account accountA, final testingngservices.test.bank.Account accountB, final double amount, final testingngservices.test.bank.Account expected) {
         AccountService2 accountService2 = new AccountService2();
         testingngservices.test.bank.Account testResult = accountService2.transfer2(accountA, accountB, amount);
-        Assert.assertEquals(testResult, expected);
+        myAssertEquals(testResult, expected);
     }
 
     @DataProvider(name = "PairwiseTestingDataProvider")
@@ -53,5 +55,25 @@ public class PairwiseTest  {
             testDataObjects[i] = xmlHelper.assign(methodUnderTestXmlData, testData[i]);
         }
         return testDataObjects;
+    }
+    
+    private void myAssertEquals(int[] test, int[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(float[] test, float[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(double[] test, double[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(String[] test, String[] expected) {
+        Assert.assertTrue(Arrays.equals(test, expected));
+    }
+    
+    private void myAssertEquals(Object test, Object expected) {
+        Assert.assertEquals(test, expected);
     }
 }
