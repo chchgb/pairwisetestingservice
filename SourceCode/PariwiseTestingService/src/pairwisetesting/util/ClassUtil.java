@@ -92,7 +92,9 @@ public class ClassUtil {
 	public static boolean isSimpleType(Class<?> clazz){
 		return (clazz.isPrimitive() 
 				|| clazz == String.class
-				|| clazz.isEnum());
+				|| clazz.isEnum() 
+				// Currently array type is considered as simple type
+				|| clazz.isArray()); 
 	}
 	
 	public static boolean isSimpleType(String className){
