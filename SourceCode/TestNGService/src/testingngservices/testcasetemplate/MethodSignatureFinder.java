@@ -6,6 +6,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import pairwisetesting.util.ClassUtil;
 import pairwisetesting.util.TextFile;
 import testingngservices.testcasetemplate.core.MethodSignature;
 
@@ -19,7 +20,7 @@ public class MethodSignatureFinder {
 	}
 
 	public MethodSignature getMethodSignature(String returnTypeName, String methodName) {
-		String simpleReturnTypeName = returnTypeName.replaceFirst(".*[.]", "");
+		String simpleReturnTypeName = ClassUtil.getSimpleClassName(returnTypeName);
 		// System.out.println(simpleReturnTypeName);
 		MethodSignatureVisitor visitor
 			= new MethodSignatureVisitor(simpleReturnTypeName, methodName);
