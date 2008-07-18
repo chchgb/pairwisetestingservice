@@ -48,11 +48,11 @@ public class MethodUnderTestFinder {
 				String parameterName = methodSignature.getParameters()[i].getName();
 				// SimpleParameter
 				if (ClassUtil.isSimpleType(parameterType)) {
-					SimpleParameter p = new SimpleParameter(parameterType.getName(), parameterName);
+					SimpleParameter p = new SimpleParameter(parameterType.getCanonicalName(), parameterName);
 					methodUnderTest.add(p);
 				// ComplexParameter
 				} else {
-					ComplexParameter p = new ComplexParameter(parameterType.getName(), parameterName);
+					ComplexParameter p = new ComplexParameter(parameterType.getCanonicalName(), parameterName);
 					fillChildren(p);
 					methodUnderTest.add(p);
 				}

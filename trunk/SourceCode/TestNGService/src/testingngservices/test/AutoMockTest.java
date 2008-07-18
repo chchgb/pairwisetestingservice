@@ -60,6 +60,8 @@ public class AutoMockTest extends TestCase {
 		
 		assertTrue(ClassUtil.isSimpleType(int.class));
 		assertTrue(ClassUtil.isSimpleType(String.class));
+		assertTrue(ClassUtil.isSimpleType(int[].class));
+		assertTrue(ClassUtil.isSimpleType(String[].class));
 		
 		assertTrue(ClassUtil.isSimpleType("int"));
 		assertTrue(ClassUtil.isSimpleType("java.lang.String"));
