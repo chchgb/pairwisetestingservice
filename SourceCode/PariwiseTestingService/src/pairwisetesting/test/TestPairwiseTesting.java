@@ -26,10 +26,11 @@ import pairwisetesting.engine.am.oaprovider.ols.Rp_OLS_Provider;
 import pairwisetesting.engine.am.oaprovider.util.MathUtil;
 import pairwisetesting.engine.jenny.JennyEngine;
 import pairwisetesting.engine.pict.PICTEngine;
+import pairwisetesting.level.AbstractTypeLevelGenerator;
 import pairwisetesting.level.BooleanLevelGenerator;
+import pairwisetesting.level.EP_BVA_IntegerLevelGenerator;
 import pairwisetesting.level.EnumLevelGenerator;
 import pairwisetesting.level.ILevelGenerator;
-import pairwisetesting.level.EP_BVA_IntegerLevelGenerator;
 import pairwisetesting.metaparameterparser.ExcelMetaParameterProvider;
 import pairwisetesting.metaparameterparser.FileMetaParameterProvider;
 import pairwisetesting.metaparameterparser.FileMetaParameterProviderFactory;
@@ -1501,6 +1502,22 @@ public class TestPairwiseTesting extends TestCase {
 		
 		expected = new String[] {"true", "false"};
 		lg = new BooleanLevelGenerator();
+		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+		
+		lg = new AbstractTypeLevelGenerator("pairwisetesting.test.edu.IEducationManager", "bin");
+		expected = new String[] {
+				"pairwisetesting.test.edu.EducationManager1", 
+				"pairwisetesting.test.edu.EducationManager2", 
+				"pairwisetesting.test.edu.EducationManager3"};
+		// System.out.println(Arrays.toString(lg.generateLevels()));
+		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+		
+		lg = new AbstractTypeLevelGenerator("pairwisetesting.test.edu.AbstractEducationManager", "bin");
+		expected = new String[] {
+				"pairwisetesting.test.edu.EducationManager1", 
+				"pairwisetesting.test.edu.EducationManager2", 
+				"pairwisetesting.test.edu.EducationManager3"};
+		// System.out.println(Arrays.toString(lg.generateLevels()));
 		assertTrue(Arrays.equals(expected, lg.generateLevels()));
 	}
 	
