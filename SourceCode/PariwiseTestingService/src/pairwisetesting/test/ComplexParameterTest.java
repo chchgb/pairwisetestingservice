@@ -197,7 +197,7 @@ public class ComplexParameterTest extends TestCase {
 			= new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
 		assertTrue(sorter.isAbstract());
 		SimpleParameter scores = new SimpleParameter("double[]", "scores");
-		m = new MethodUnderTest("double", "sort");
+		m = new MethodUnderTest("double[]", "sort");
 		m.add(sorter);
 		m.add(scores);
 		xml = helper.toXML(m);
@@ -205,29 +205,35 @@ public class ComplexParameterTest extends TestCase {
 		objects = helper.assign(xml, new String[] { 
 				"pairwisetesting.test.edu.QuickSorter", 
 				"[ 67.0 , 89.0 ,  87.0, 90.0 ]",
-				"45.0"});
+				" [67.0 , 87.0, 89.0, 90.0] "});
 		assertEquals("pairwisetesting.test.edu.QuickSorter",
 				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
 		assertEquals("double[]",
 				((double[])objects[1]).getClass().getCanonicalName());
 		double[] arr2 = (double[])objects[1];
 		assertTrue(Arrays.equals(new double[] {67.0, 89.0, 87.0, 90.0}, arr2));
+		double[] result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0, 87.0, 89.0, 90.0}, result));
 		
 		objects = helper.assign(xml, new String[] { 
 				"pairwisetesting.test.edu.BubbleSorter", 
 				"[90.0]",
-				"50.0"});
+				"[90.0]"});
 		assertEquals("pairwisetesting.test.edu.BubbleSorter",
 				((pairwisetesting.test.edu.BubbleSorter)objects[0]).getClass().getName());
 		arr2 = (double[])objects[1];
 		assertTrue(Arrays.equals(new double[] {90.0}, arr2));
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {90.0}, result));
 		
 		objects = helper.assign(xml, new String[] { 
 				"pairwisetesting.test.edu.BubbleSorter", 
 				"[]",
-				"60.0"});
+				"[]"});
 		arr2 = (double[])objects[1];
 		assertTrue(Arrays.equals(new double[0], arr2));
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[0], result));
 	}
 	
 	public void testChildParametersExtractor(){
