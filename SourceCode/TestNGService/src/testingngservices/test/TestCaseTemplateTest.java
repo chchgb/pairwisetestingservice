@@ -417,6 +417,10 @@ public class TestCaseTemplateTest extends TestCase {
 		assertEquals("java.lang.String",returnValueParameter.getChildren()[0].getType());
 		assertEquals("double", returnValueParameter.getChildren()[1].getType());
 		assertEquals("java.lang.String", returnValueParameter.getChildren()[2].getType());
+		
+		// Simple Array Type
+		mut = finder.getMethodUnderTest("testingngservices.test.bank.Account", "transfer3");
+		assertEquals("double[]", mut.getParameters()[2].getType());
 	}
 	
 	public void testTestCaseTemplateWithComplexParameter() throws Exception {

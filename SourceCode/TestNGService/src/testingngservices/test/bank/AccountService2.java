@@ -17,5 +17,9 @@ public class AccountService2 {
 		accountB.setBalance(accountB.getBalance() + amount);
 		return accountB;
 	}
+	
+	public Account transfer3(Account accountA, Account accountB, double[] amount) {
+		return accountB;
+	}
 
 }
