@@ -378,6 +378,13 @@ public class TestCaseTemplateTest extends TestCase {
 		// System.out.println(new XStreamMethodUnderTestXMLHelper().toXML(mut));
 		
 		mut = finder.getMethodUnderTest("void", "transfer2");
+//		for(pairwisetesting.complex.Parameter para:mut.getParameters()){
+//			System.out.println(para.getFullName());
+//		}
+		
+		pairwisetesting.complex.Parameter[] para = mut.getParameters();
+		System.out.println(((ComplexParameter)para[0]).getChildren()[0].getFullName());
+		
 		assertEquals("transfer2", mut.getName());
 		assertEquals("void", mut.getReturnType());
 		assertEquals(3, mut.getParameters().length);
