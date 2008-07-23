@@ -11,7 +11,7 @@ public class ChildParametersExtractor {
 		ArrayList<Parameter> list = new ArrayList<Parameter>(); 
 		
 		try {
-			Field[] fields = Class.forName(className).getDeclaredFields();
+			Field[] fields = ClassUtil.getClass(className).getDeclaredFields();
 			for (Field f : fields) {
 				if (ClassUtil.isSimpleType(f.getType())) {
 					Parameter p = new SimpleParameter(f.getType().getName(), f.getName());
