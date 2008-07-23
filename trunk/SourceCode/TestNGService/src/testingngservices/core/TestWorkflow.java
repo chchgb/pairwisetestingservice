@@ -30,6 +30,19 @@ public class TestWorkflow {
 	public String testWorkflow() {
 		String result = null;
 		testingMeta.addSourceFile("src/pairwisetesting/util/Converter.java");
+		testingMeta.addSourceFile("src/pairwisetesting/util/ClassUtil.java");
+		
+		{
+			testingMeta.addSourceFile("src/pairwisetesting/complex/ChildParametersExtractor.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/ComplexParameter.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/DefaultParameterVisitor.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/IMethodUnderTestXMLHelper.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/IParameterVisitor.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/MethodUnderTest.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/Parameter.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/SimpleParameter.java");
+			testingMeta.addSourceFile("src/pairwisetesting/complex/XStreamMethodUnderTestXMLHelper.java");
+		}
 		// testingMeta.addFile("src/test/expect/Expectation.java");
 		
 		ArrayList<String> libList = new ArrayList<String>();
@@ -46,6 +59,9 @@ public class TestWorkflow {
 			libList.add("cglib-nodep-2.1_3.jar");
 			libList.add("antlr-2.7.7.jar");
 			libList.add("junit.jar");
+			libList.add("jxl.jar");
+			libList.add("xstream-1.3.jar");
+			
 			
 		}
 
@@ -122,13 +138,15 @@ public class TestWorkflow {
 
 			URLClassLoader ucl = new URLClassLoader(urls, cl);
 			
+			Thread.currentThread().setContextClassLoader(ucl);
+			
 			System.out.println("UCL length : " + ucl.getURLs().length);
 			System.out.println("UCL : " + Arrays.toString(ucl.getURLs()));
 
 			// Run Test with TestNG
 			// testingMeta.gettestCaseClassName()
 			Class<?> clazz = ucl.loadClass(testingMeta.gettestCaseClassName());
-			ucl.loadClass("test.bookstore.Logger");
+//			ucl.loadClass("test.bookstore.Logger");
 //			ucl.loadClass(testingMeta.gettestCaseClassName());
 //			ucl.loadClass(testingMeta.gettestCaseClassName());
 //			ucl.loadClass(testingMeta.gettestCaseClassName());
