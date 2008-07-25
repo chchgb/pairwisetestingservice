@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import pairwisetesting.util.ClassUtil;
 import pairwisetesting.util.Directory;
 
 public class DependencyFinder {
@@ -97,9 +98,9 @@ public class DependencyFinder {
 		findDependency(className);
 
 		DependencyResult result = new DependencyResult();
-		result.srcList = new ArrayList<String>(srcList);
 		result.libList = new ArrayList<String>(libList);
 		result.mockList = new ArrayList<String>(generateMockList());
+		result.srcList = new ArrayList<String>(srcList);
 		result.impList = new ArrayList<String>(impList);
 
 		return result;
@@ -112,6 +113,8 @@ public class DependencyFinder {
 		resolveKeyLibName(rawResult);
 
 		Iterator<String> iter = classList.iterator();
+		// System.out.println(classList);
+		
 		while (iter.hasNext()) {
 			String className = iter.next();
 			String classPath = buildSourcePath(className);
@@ -138,7 +141,7 @@ public class DependencyFinder {
 
 		try {
 			String command = extCommand.toString();
-			// System.out.println(command);
+			//System.out.println(command);
 
 			Process p = Runtime.getRuntime().exec(command);
 
@@ -169,7 +172,7 @@ public class DependencyFinder {
 
 		try {
 			String command = c2cCommand.toString();
-			// System.out.println(command);
+			//System.out.println(command);
 
 			Process p = Runtime.getRuntime().exec(command);
 			BufferedReader in = new BufferedReader(new InputStreamReader(p
@@ -178,7 +181,7 @@ public class DependencyFinder {
 			String str = null;
 			while (null != (str = in.readLine())) {
 				resultList.add(str);
-				// System.out.println(str);
+				//System.out.println(str);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -306,7 +309,7 @@ public class DependencyFinder {
 
 			// Collect interfaces & abstract & concrete classes
 			try {
-				Class<?> clazz = Class.forName(fullClassName);
+				Class<?> clazz = ClassUtil.getClass(fullClassName);
 				if (clazz.isInterface()) {
 					interfaceSet.add(clazz);
 				} else if (Modifier.isAbstract(clazz.getModifiers())) {
@@ -314,22 +317,32 @@ public class DependencyFinder {
 				} else {
 					concreteSet.add(clazz);
 				}
-			} catch (ClassNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
+		HashSet<String> allConcreteClassNames = getAllConcreteClassNames();
+		//System.out.println(interfaceSet);
+		
 		// Remove implemented interfaces & extended abstract classes
-		for (Class<?> c : concreteSet) {
+		// If some class implements an interface or extends an abstract class, 
+		// then add the class into the srcList
+		for (String s : allConcreteClassNames) {
+			
+			
+			Class<?> c = ClassUtil.getClass(s);
 			Iterator<Class<?>> iter = interfaceSet.iterator();
 			while (iter.hasNext()) {
-				if (Arrays.asList(c.getInterfaces()).contains(iter.next())) {
+				if (containsInterface(c, iter.next())) {
+					srcList.add(buildSourcePath(s));
 					iter.remove();
 				}
 			}
 			iter = absClassSet.iterator();
 			while (iter.hasNext()) {
-				if (c.getSuperclass() == iter.next()) {
+				if (isSuperClass(c, iter.next())) {
+					srcList.add(buildSourcePath(s));
 					iter.remove();
 				}
 			}
@@ -343,5 +356,36 @@ public class DependencyFinder {
 			mockSet.add(c.getName());
 		}
 		return mockSet;
+	}
+	
+	private HashSet<String> getAllConcreteClassNames(){
+		HashSet<String> set = new HashSet<String>();
+		
+		Directory.TreeInfo treeInfo = Directory.walk(binPath, ".*[.]class$");
+		for (File javaFile : treeInfo) {
+			String str = javaFile.getPath();
+			String currentClassName
+				= str.replace(File.separator, ".").replace(binPath + ".", "").replace(".class", "");
+			Class<?> clazz = ClassUtil.getClass(currentClassName);
+			if (!isAbstract(clazz)) {
+				set.add(currentClassName);
+			}
+		}
+		return set;
+	}
+	
+	private boolean isAbstract(Class<?> clazz) {
+		return (ClassUtil.isInterface(clazz) || ClassUtil.isAbstractClass(clazz));
+	}
+	
+	private boolean containsInterface(Class<?> dstClass, Class<?> srcClass) {
+		if (dstClass == null) return false;
+		return (Arrays.asList(dstClass.getInterfaces()).contains(srcClass)
+				|| containsInterface(dstClass.getSuperclass(), srcClass));
+	}
+	private boolean isSuperClass(Class<?> dstClass, Class<?> srcClass) {
+		Class<?> superClass = dstClass.getSuperclass();
+		if (superClass == null) return false;
+		return (superClass == srcClass || isSuperClass(superClass, srcClass));
 	}
 }
