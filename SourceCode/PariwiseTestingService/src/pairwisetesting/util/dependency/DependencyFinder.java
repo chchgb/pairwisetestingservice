@@ -334,14 +334,14 @@ public class DependencyFinder {
 			Class<?> c = ClassUtil.getClass(s);
 			Iterator<Class<?>> iter = interfaceSet.iterator();
 			while (iter.hasNext()) {
-				if (containsInterface(c, iter.next())) {
+				if (ClassUtil.containsInterface(c, iter.next())) {
 					srcList.add(buildSourcePath(s));
 					iter.remove();
 				}
 			}
 			iter = absClassSet.iterator();
 			while (iter.hasNext()) {
-				if (isSuperClass(c, iter.next())) {
+				if (ClassUtil.isSuperClass(c, iter.next())) {
 					srcList.add(buildSourcePath(s));
 					iter.remove();
 				}
@@ -367,25 +367,12 @@ public class DependencyFinder {
 			String currentClassName
 				= str.replace(File.separator, ".").replace(binPath + ".", "").replace(".class", "");
 			Class<?> clazz = ClassUtil.getClass(currentClassName);
-			if (!isAbstract(clazz)) {
+			if (!ClassUtil.isAbstractClass(clazz)) {
 				set.add(currentClassName);
 			}
 		}
 		return set;
 	}
 	
-	private boolean isAbstract(Class<?> clazz) {
-		return (ClassUtil.isInterface(clazz) || ClassUtil.isAbstractClass(clazz));
-	}
-	
-	private boolean containsInterface(Class<?> dstClass, Class<?> srcClass) {
-		if (dstClass == null) return false;
-		return (Arrays.asList(dstClass.getInterfaces()).contains(srcClass)
-				|| containsInterface(dstClass.getSuperclass(), srcClass));
-	}
-	private boolean isSuperClass(Class<?> dstClass, Class<?> srcClass) {
-		Class<?> superClass = dstClass.getSuperclass();
-		if (superClass == null) return false;
-		return (superClass == srcClass || isSuperClass(superClass, srcClass));
-	}
+
 }

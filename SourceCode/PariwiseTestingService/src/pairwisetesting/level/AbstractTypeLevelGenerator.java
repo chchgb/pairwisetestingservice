@@ -30,27 +30,12 @@ public class AbstractTypeLevelGenerator implements ILevelGenerator {
 
 			// System.out.println("=>" + clazz);
 			// System.out.println(Arrays.asList(clazz.getInterfaces()));
-			if (!isAbstract(clazz)
-					&& (containsInterface(clazz, targetClass)
-						|| isSuperClass(clazz, targetClass))) {
+			if (!ClassUtil.isAbstractClass(clazz)
+					&& (ClassUtil.containsInterface(clazz, targetClass)
+						|| ClassUtil.isSuperClass(clazz, targetClass))) {
 				dir.add(currentClassName);
 			}
 		}
 		return dir.toArray(new String[0]);
-	}
-	
-	public boolean isAbstract(Class<?> clazz) {
-		return (ClassUtil.isInterface(clazz) || ClassUtil.isAbstractClass(clazz));
-	}
-	
-	private boolean containsInterface(Class<?> dstClass, Class<?> srcClass) {
-		if (dstClass == null) return false;
-		return (Arrays.asList(dstClass.getInterfaces()).contains(srcClass)
-				|| containsInterface(dstClass.getSuperclass(), srcClass));
-	}
-	private boolean isSuperClass(Class<?> dstClass, Class<?> srcClass) {
-		Class<?> superClass = dstClass.getSuperclass();
-		if (superClass == null) return false;
-		return (superClass == srcClass || isSuperClass(superClass, srcClass));
 	}
 }
