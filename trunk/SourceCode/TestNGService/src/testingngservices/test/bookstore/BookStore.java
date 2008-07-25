@@ -1,4 +1,5 @@
 package testingngservices.test.bookstore;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.common.collect.Maps;
@@ -72,5 +73,9 @@ public class BookStore {
 
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+	
+	public void compute1(ArrayList<String> inputs) {
+		
 	}
 }

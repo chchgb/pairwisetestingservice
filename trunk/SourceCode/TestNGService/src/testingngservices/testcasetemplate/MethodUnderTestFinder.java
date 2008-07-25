@@ -46,9 +46,11 @@ public class MethodUnderTestFinder implements IMethodUnderTestFinder {
 			for (int i = 0; i < m.getParameterTypes().length; i++) {
 				Class<?> parameterType = m.getParameterTypes()[i];
 				String parameterName = methodSignature.getParameters()[i].getName();
+				String shortTypeName = methodSignature.getParameters()[i].getType();
 				// SimpleParameter
 				if (ClassUtil.isSimpleType(parameterType)) {
-					SimpleParameter p = new SimpleParameter(parameterType.getCanonicalName(), parameterName);
+					String fullTypeName = getFullTypeName(shortTypeName, parameterType.getCanonicalName());
+					SimpleParameter p = new SimpleParameter(fullTypeName, parameterName);
 					methodUnderTest.add(p);
 				// ComplexParameter
 				} else {
@@ -61,6 +63,14 @@ public class MethodUnderTestFinder implements IMethodUnderTestFinder {
 			throw new MethodUnderTestException(e);
 		}
 		return methodUnderTest;
+	}
+
+	private String getFullTypeName(String shortTypeName, String canonicalName) {
+		if (canonicalName.lastIndexOf('.') != -1) {
+			return canonicalName.substring(0, canonicalName.lastIndexOf('.') + 1) + shortTypeName;
+		} else {
+			return canonicalName;
+		}
 	}
 
 	/**

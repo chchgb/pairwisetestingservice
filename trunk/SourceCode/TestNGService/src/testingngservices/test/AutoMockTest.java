@@ -68,6 +68,9 @@ public class AutoMockTest extends TestCase {
 		assertTrue(ClassUtil.isSimpleType("void"));
 		assertTrue(ClassUtil.isSimpleType("double[]"));
 		assertTrue(ClassUtil.isSimpleType("java.lang.String[]"));
+		assertTrue(ClassUtil.isSimpleType("java.util.ArrayList"));
+		assertTrue(ClassUtil.isSimpleType("java.util.HashMap"));
+		assertTrue(ClassUtil.isSimpleType("java.util.HashSet"));
 		
 		assertEquals("withdraw", 
 				ClassUtil.getFirstMethod(ClassUtil.getClass("testingngservices.test.bank.AccountService"), 

@@ -1,6 +1,7 @@
 package testingngservices.test.bank;
 
 
+
 public class AccountService {
 
 	private IAccountManager manager;
