@@ -1,11 +1,7 @@
 package pairwisetesting.util;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,16 +21,13 @@ public class ClassUtil {
 			if (primitiveClassMap.containsKey(className)) {
 				return primitiveClassMap.get(className);
 			} else {
-				
-				
 				ClassLoader cl = Thread.currentThread().getContextClassLoader();			
 				return cl.loadClass(className);
 				//return Class.forName(className, true, cl);
 			}
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("ClassNotFoundException :" + className);
+			throw new RuntimeException(e);
 		}
-//		return null;
 	}
 
 	public static boolean isAbstractClass(Class<?> clazz) {
