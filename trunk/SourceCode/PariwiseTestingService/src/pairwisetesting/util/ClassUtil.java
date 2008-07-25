@@ -3,6 +3,7 @@ package pairwisetesting.util;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ClassUtil {
@@ -118,5 +119,16 @@ public class ClassUtil {
 			}
 		}
 		return null;
+	}
+	
+	public static boolean containsInterface(Class<?> dstClass, Class<?> srcClass) {
+		if (dstClass == null) return false;
+		return (Arrays.asList(dstClass.getInterfaces()).contains(srcClass)
+				|| containsInterface(dstClass.getSuperclass(), srcClass));
+	}
+	public static boolean isSuperClass(Class<?> dstClass, Class<?> srcClass) {
+		Class<?> superClass = dstClass.getSuperclass();
+		if (superClass == null) return false;
+		return (superClass == srcClass || isSuperClass(superClass, srcClass));
 	}
 }
