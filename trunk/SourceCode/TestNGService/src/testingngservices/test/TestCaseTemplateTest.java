@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import pairwisetesting.complex.ComplexParameter;
 import pairwisetesting.complex.MethodUnderTest;
 import pairwisetesting.complex.SimpleParameter;
+import testingngservices.testcasetemplate.IMethodUnderTestFinder;
 import testingngservices.testcasetemplate.MethodSignatureFinder;
 import testingngservices.testcasetemplate.MethodUnderTestException;
 import testingngservices.testcasetemplate.MethodUnderTestFinder;
@@ -116,7 +117,7 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.setClassUnderTest("Range");
 		String sourceFilePath = "src/testingngservices/test/math/Range.java";
 		String className = "testingngservices.test.math.Range";
-		MethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
+		IMethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
 		MethodUnderTest mut = mutFinder.getMethodUnderTest("boolean", "isBetween");
 		// System.out.println(new XStreamMethodUnderTestXMLHelper().toXML(mut));
 		tp.setMethodUnderTest(mut);
@@ -364,7 +365,7 @@ public class TestCaseTemplateTest extends TestCase {
 	public void testMethodUnderTestFinder() throws MethodUnderTestException {
 		String sourceFilePath = "src/testingngservices/test/bank/AccountService.java";
 		String className = "testingngservices.test.bank.AccountService";
-		MethodUnderTestFinder finder = new MethodUnderTestFinder(sourceFilePath, className);
+		IMethodUnderTestFinder finder = new MethodUnderTestFinder(sourceFilePath, className);
 		MethodUnderTest mut = finder.getMethodUnderTest("double", "transfer");
 		assertEquals("transfer", mut.getName());
 		assertEquals("double", mut.getReturnType());
@@ -377,14 +378,7 @@ public class TestCaseTemplateTest extends TestCase {
 		assertEquals("amount", mut.getParameters()[2].getName());
 		// System.out.println(new XStreamMethodUnderTestXMLHelper().toXML(mut));
 		
-		mut = finder.getMethodUnderTest("void", "transfer2");
-//		for(pairwisetesting.complex.Parameter para:mut.getParameters()){
-//			System.out.println(para.getFullName());
-//		}
-		
-		pairwisetesting.complex.Parameter[] para = mut.getParameters();
-		System.out.println(((ComplexParameter)para[0]).getChildren()[0].getFullName());
-		
+		mut = finder.getMethodUnderTest("void", "transfer2");		
 		assertEquals("transfer2", mut.getName());
 		assertEquals("void", mut.getReturnType());
 		assertEquals(3, mut.getParameters().length);
@@ -468,7 +462,7 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.setClassUnderTest("AccountService2");
 		String sourceFilePath = "src/testingngservices/test/bank/AccountService2.java";
 		String className = "testingngservices.test.bank.AccountService2";
-		MethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
+		IMethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
 		MethodUnderTest mut = mutFinder.getMethodUnderTest("double", "transfer");
 		tp.setMethodUnderTest(mut);
 		
@@ -526,7 +520,7 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.setClassUnderTest("AccountService2");
 		String sourceFilePath = "src/testingngservices/test/bank/AccountService2.java";
 		String className = "testingngservices.test.bank.AccountService2";
-		MethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
+		IMethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
 		MethodUnderTest mut = mutFinder.getMethodUnderTest("testingngservices.test.bank.Account", "transfer2");
 		tp.setMethodUnderTest(mut);
 		
@@ -581,7 +575,7 @@ public class TestCaseTemplateTest extends TestCase {
 		tp.setClassUnderTest("AccountService2");
 		String sourceFilePath = "src/testingngservices/test/bank/AccountService2.java";
 		String className = "testingngservices.test.bank.AccountService2";
-		MethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
+		IMethodUnderTestFinder mutFinder = new MethodUnderTestFinder(sourceFilePath, className);
 		MethodUnderTest mut = mutFinder.getMethodUnderTest("double[]", "transfer4");
 		tp.setMethodUnderTest(mut);
 		
@@ -598,5 +592,12 @@ public class TestCaseTemplateTest extends TestCase {
 					"final testingngservices.test.bank.Account accountB, " +
 					"final double[] amounts, " +
 					"final double[] expected)"));
+		
+//		System.out.println(
+//				Class.forName("testingngservices.test.bank.AccountService2").getClassLoader());
+//		System.out.println(
+//				Thread.currentThread().getContextClassLoader());
+//		System.out.println(
+//				Class.forName("testingngservices.test.bank.AccountService2", true, Thread.currentThread().getContextClassLoader()).getClassLoader());
 	}
 }
