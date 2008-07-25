@@ -1,6 +1,10 @@
 package pairwisetesting.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 import junit.framework.TestCase;
 import pairwisetesting.complex.ChildParametersExtractor;
@@ -86,6 +90,7 @@ public class ComplexParameterTest extends TestCase {
 		assertEquals(3, m.getParameters().length);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testMethodUnderTestXMLHelper() {
 		SimpleParameter p1 = new SimpleParameter("int", "number");
 		ComplexParameter p2 = new ComplexParameter(
@@ -228,12 +233,276 @@ public class ComplexParameterTest extends TestCase {
 		
 		objects = helper.assign(xml, new String[] { 
 				"pairwisetesting.test.edu.BubbleSorter", 
-				"[]",
+				"[ ]",
 				"[]"});
 		arr2 = (double[])objects[1];
 		assertTrue(Arrays.equals(new double[0], arr2));
 		result = (double[])objects[2];
 		assertTrue(Arrays.equals(new double[0], result));
+		
+		// Simple Container Type - HashSet
+		sorter
+			= new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		scores = new SimpleParameter("java.util.HashSet<Double>", "scores");
+		m = new MethodUnderTest("double[]", "sort1");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"{ 67.0 , 89.0 ,  87.0, 90.0 }",
+				" [67.0 , 87.0, 89.0, 90.0] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.HashSet",
+				((HashSet)objects[1]).getClass().getCanonicalName());
+		HashSet<Double> expectedSet = new HashSet<Double>();
+		expectedSet.add(67.0);
+		expectedSet.add(89.0);
+		expectedSet.add(87.0);
+		expectedSet.add(90.0);
+		HashSet<Double> set	= (HashSet<Double>)objects[1];
+		// System.out.println(set);
+		assertEquals(expectedSet, set);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0, 87.0, 89.0, 90.0}, result));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"{ 67.0  }",
+				" [67.0 ] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.HashSet",
+				((HashSet)objects[1]).getClass().getCanonicalName());
+		expectedSet = new HashSet<Double>();
+		expectedSet.add(67.0);
+		set	= (HashSet<Double>)objects[1];
+		// System.out.println(set);
+		assertEquals(expectedSet, set);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0}, result));
+		
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0}, result));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"{ }",
+				" [] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.HashSet",
+				((HashSet)objects[1]).getClass().getCanonicalName());
+		expectedSet = new HashSet<Double>();
+		set	= (HashSet<Double>)objects[1];
+		// System.out.println(set);
+		assertEquals(expectedSet, set);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {}, result));
+		
+		// Simple Container Type - ArrayList
+		sorter
+			= new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		scores = new SimpleParameter("java.util.ArrayList<Double>", "scores");
+		m = new MethodUnderTest("double[]", "sort2");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"( 67.0 , 89.0 ,  87.0, 90.0 )",
+				" [67.0 , 87.0, 89.0, 90.0] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.ArrayList",
+				((ArrayList)objects[1]).getClass().getCanonicalName());
+		ArrayList<Double> expectedList = new ArrayList<Double>();
+		expectedList.add(67.0);
+		expectedList.add(89.0);
+		expectedList.add(87.0);
+		expectedList.add(90.0);
+		ArrayList<Double> list = (ArrayList<Double>)objects[1];
+		// System.out.println(list);
+		assertEquals(expectedList, list);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0, 87.0, 89.0, 90.0}, result));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"( 67.0  )",
+				" [67.0 ] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.ArrayList",
+				((ArrayList)objects[1]).getClass().getCanonicalName());
+		expectedList = new ArrayList<Double>();
+		expectedList.add(67.0);
+		list = (ArrayList<Double>)objects[1];
+		// System.out.println(list);
+		assertEquals(expectedList, list);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0}, result));
+		
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0}, result));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"( )",
+				" [] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.ArrayList",
+				((ArrayList)objects[1]).getClass().getCanonicalName());
+		expectedList = new ArrayList<Double>();
+		list = (ArrayList<Double>)objects[1];
+		// System.out.println(list);
+		assertEquals(expectedList, list);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {}, result));
+		
+		// Simple Container Type - LinkedList
+		sorter
+			= new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		scores = new SimpleParameter("java.util.LinkedList<Double>", "scores");
+		m = new MethodUnderTest("double[]", "sort3");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"( 67.0 , 89.0 ,  87.0, 90.0 )",
+				" [67.0 , 87.0, 89.0, 90.0] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.LinkedList",
+				((LinkedList)objects[1]).getClass().getCanonicalName());
+		LinkedList<Double> expectedList2 = new LinkedList<Double>();
+		expectedList2.add(67.0);
+		expectedList2.add(89.0);
+		expectedList2.add(87.0);
+		expectedList2.add(90.0);
+		LinkedList<Double> list2 = (LinkedList<Double>)objects[1];
+		// System.out.println(list);
+		assertEquals(expectedList2, list2);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0, 87.0, 89.0, 90.0}, result));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"( 67.0  )",
+				" [67.0 ] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.LinkedList",
+				((LinkedList)objects[1]).getClass().getCanonicalName());
+		expectedList2 = new LinkedList<Double>();
+		expectedList2.add(67.0);
+		list2 = (LinkedList<Double>)objects[1];
+		// System.out.println(list);
+		assertEquals(expectedList2, list2);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0}, result));
+		
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0}, result));
+		
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"( )",
+				" [] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.LinkedList",
+				((LinkedList)objects[1]).getClass().getCanonicalName());
+		expectedList2 = new LinkedList<Double>();
+		list2 = (LinkedList<Double>)objects[1];
+		// System.out.println(list);
+		assertEquals(expectedList2, list2);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {}, result));
+		
+		// Simple Container Type - HashMap
+		sorter = new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		scores = new SimpleParameter("java.util.HashMap<String, Double>", "scores");
+		m = new MethodUnderTest("double[]", "sort4");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"{ a: 67.0 , b : 89.0 ,  c:87.0, d:90.0 }",
+				" [67.0 , 87.0, 89.0, 90.0] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.HashMap",
+				((HashMap)objects[1]).getClass().getCanonicalName());
+		HashMap<String, Double> expectedmap2 = new HashMap<String, Double>();
+		expectedmap2.put("a", 67.0);
+		expectedmap2.put("b", 89.0);
+		expectedmap2.put("c", 87.0);
+		expectedmap2.put("d", 90.0);
+		HashMap<String, Double> map2 = (HashMap<String, Double>)objects[1];
+		// System.out.println(map);
+		assertEquals(expectedmap2, map2);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {67.0, 87.0, 89.0, 90.0}, result));
+		
+		sorter = new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		scores = new SimpleParameter("java.util.HashMap<String, Double>", "scores");
+		m = new MethodUnderTest("double[]", "sort4");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"{ b : 89.0 }",
+				" [ 89.0] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.HashMap",
+				((HashMap)objects[1]).getClass().getCanonicalName());
+		expectedmap2 = new HashMap<String, Double>();
+		expectedmap2.put("b", 89.0);
+		map2 = (HashMap<String, Double>)objects[1];
+		// System.out.println(map);
+		assertEquals(expectedmap2, map2);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {89.0}, result));
+		
+		sorter = new ComplexParameter("pairwisetesting.test.edu.ISorter", "sorter");
+		assertTrue(sorter.isAbstract());
+		scores = new SimpleParameter("java.util.HashMap<String, Double>", "scores");
+		m = new MethodUnderTest("double[]", "sort4");
+		m.add(sorter);
+		m.add(scores);
+		xml = helper.toXML(m);
+		// System.out.println(xml);
+		objects = helper.assign(xml, new String[] { 
+				"pairwisetesting.test.edu.QuickSorter", 
+				"{ }",
+				" [] "});
+		assertEquals("pairwisetesting.test.edu.QuickSorter",
+				((pairwisetesting.test.edu.QuickSorter)objects[0]).getClass().getName());
+		assertEquals("java.util.HashMap",
+				((HashMap)objects[1]).getClass().getCanonicalName());
+		expectedmap2 = new HashMap<String, Double>();
+		map2 = (HashMap<String, Double>)objects[1];
+		// System.out.println(map);
+		assertEquals(expectedmap2, map2);
+		result = (double[])objects[2];
+		assertTrue(Arrays.equals(new double[] {}, result));
 	}
 	
 	public void testChildParametersExtractor(){

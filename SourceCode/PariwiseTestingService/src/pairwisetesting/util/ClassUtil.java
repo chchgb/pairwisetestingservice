@@ -5,6 +5,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ClassUtil {
 	
@@ -96,7 +99,12 @@ public class ClassUtil {
 				|| clazz == String.class
 				|| clazz.isEnum() 
 				// Currently array type is considered as simple type
-				|| clazz.isArray()); 
+				|| clazz.isArray()
+				// Currently container type is considered as simple type
+				|| containsInterface(clazz, List.class)
+				|| containsInterface(clazz, Map.class)
+				|| containsInterface(clazz, Set.class)
+			); 
 	}
 	
 	public static boolean isSimpleType(String className){

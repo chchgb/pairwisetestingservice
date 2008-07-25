@@ -1,6 +1,8 @@
 package pairwisetesting.complex;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -53,6 +55,10 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 		beginTag(p);
 		if (isSimpleArrayType(p)) {
 			appendSimpleArrayValue(p);
+		} else if (isSimpleSetOrListType(p)) {
+			appendSimpleSetOrListValue(p);
+		} else if (isSimpleMapType(p)) {
+			appendSimpleMapValue(p);
 		} else {
 			xmlParameter.append(values[next++]);
 		}
@@ -79,6 +85,8 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 			xmlParameter = new StringBuilder();
 			if (isSimpleArrayType(p)) {
 				xmlParameter.append("<" +  getXStreamArrayType(p.getType()) + ">");
+			} else if (isSimpleContainerType(p)) {
+				xmlParameter.append("<" + getXStreamContainerType(p.getType()) + ">");
 			} else {
 				xmlParameter.append("<" + p.getType() + ">");
 			}
@@ -108,6 +116,8 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 			} else {
 				if (isSimpleArrayType(p)) {
 					xmlParameter.append("</" + getXStreamArrayType(p.getType()) + ">");
+				} else if (isSimpleContainerType(p)) {
+					xmlParameter.append("</" + getXStreamContainerType(p.getType()) + ">");
 				} else {
 					xmlParameter.append("</" + p.getType() + ">");
 				}
@@ -118,12 +128,29 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 		}
 	}
 	
-	// Currently all array types are considered simple
+	// Currently all Array types are considered simple
 	private boolean isSimpleArrayType(Parameter p) {
 		return p.getType().endsWith("[]");
 	}
 	
-	private String getElementType(String arrayType) {
+	// Currently all Container types are considered simple
+	private boolean isSimpleContainerType(Parameter p) {
+		return (isSimpleSetOrListType(p) || isSimpleMapType(p));
+	}
+	
+	// Currently all Set or List types are considered simple
+	private boolean isSimpleSetOrListType(Parameter p) {
+		return (p.getType().startsWith("java.util.ArrayList")
+				|| p.getType().startsWith("java.util.LinkedList")
+				|| p.getType().startsWith("java.util.HashSet"));
+	}
+	
+	// Currently all Set or List types are considered simple
+	private boolean isSimpleMapType(Parameter p) {
+		return (p.getType().startsWith("java.util.HashMap"));
+	}
+	
+	private String getSimpleArrayElementType(String arrayType) {
 		return arrayType.replace("[]", "");
 	}
 
@@ -131,24 +158,103 @@ class ParameterAssignmentVisitor implements IParameterVisitor {
 		return arrayType.replace("[]", "-array");
 	}
 	
-	public String[] getElements(String arrayValue) {
-		arrayValue = arrayValue.trim();
-		if (arrayValue.length() <= 2) { // []
+	private String getSimpleSetOrListElementType(String setOrListType) {
+		String regex = "<(.+)>";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(setOrListType);
+		String setOrListElementType = null;
+		if (matcher.find()) {
+			setOrListElementType = matcher.group(1).toLowerCase();
+		} else {
+			setOrListElementType = "object";
+		}
+		// System.out.println(setOrListType);
+		return setOrListElementType;
+	}
+	
+	private String[] getSimpleMapEntryType(String mapType) {
+		String regex = "<(.+)\\s*,\\s*(.+)>";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(mapType);
+		String[] mapEntryType = new String[2];
+		if (matcher.find()) {
+			mapEntryType[0] = matcher.group(1).toLowerCase();
+			mapEntryType[1] = matcher.group(2).toLowerCase();
+		} else {
+			mapEntryType[0] = "object";
+			mapEntryType[1] = "object";
+		}
+		// System.out.println(mapType);
+		return mapEntryType;
+	}
+	
+	private String getXStreamContainerType(String containerType) {
+		if (containerType.startsWith("java.util.ArrayList")) {
+			return "list";
+		} else if (containerType.startsWith("java.util.HashMap")) {
+			return "map";
+		} else if (containerType.startsWith("java.util.LinkedList")) {
+			return "linked-list";
+		} else if (containerType.startsWith("java.util.HashSet")) {
+			return "set";
+		} else {
+			return null;
+		}
+	}
+	
+	public String[] getContainerElements(String simpleContainerValue) {
+		simpleContainerValue = simpleContainerValue.trim();
+		if (simpleContainerValue.length() <= 2) { // [], {}, ()
 			return new String[0];
 		} else {
-			String elements = arrayValue.substring(1, arrayValue.length() - 1).trim();
-			return elements.split("\\s*,\\s*");
+			String elements
+				= simpleContainerValue.substring(1, simpleContainerValue.length() - 1).trim();
+			if (elements.equals("")) { // [  ], {  }, (  )
+				return new String[0];
+			} else {
+				return elements.split("\\s*[,:]\\s*");
+			}
+		}
+	}
+	
+	private void appendSetOrListElements(String setOrListElementType, String[] elements) {
+		for (String element : elements) {
+			xmlParameter.append("<" + setOrListElementType + ">");
+			xmlParameter.append(element);
+			xmlParameter.append("</" + setOrListElementType + ">");
+		}
+	}
+	
+	private void appendMapElements(String[] mapEntryType, String[] elements) {
+		for (int i = 0; i < elements.length; i += 2) {
+			xmlParameter.append("<entry>");
+			xmlParameter.append("<" + mapEntryType[0] + ">");
+			xmlParameter.append(elements[i]);
+			xmlParameter.append("</" + mapEntryType[0] + ">");
+			xmlParameter.append("<" + mapEntryType[1] + ">");
+			xmlParameter.append(elements[i+1]);
+			xmlParameter.append("</" + mapEntryType[1] + ">");
+			xmlParameter.append("</entry>");
 		}
 	}
 	
 	private void appendSimpleArrayValue(SimpleParameter p) {
-		String elementType = getElementType(p.getType());
-		String[] elements = getElements(values[next++]);
+		String elementType = getSimpleArrayElementType(p.getType());
+		String[] elements = getContainerElements(values[next++]);
 		// System.out.println(Arrays.toString(elements));
-		for (String element : elements) {
-			xmlParameter.append("<" + elementType + ">");
-			xmlParameter.append(element);
-			xmlParameter.append("</" + elementType + ">");
-		}
+		appendSetOrListElements(elementType, elements);
 	}
+	
+	private void appendSimpleSetOrListValue(SimpleParameter p) {
+		String elementType = getSimpleSetOrListElementType(p.getType());
+		String[] elements = getContainerElements(values[next++]);
+		appendSetOrListElements(elementType, elements);
+	}
+	
+	private void appendSimpleMapValue(SimpleParameter p) {
+		String[] mapEntryType = getSimpleMapEntryType(p.getType());
+		String[] elements = getContainerElements(values[next++]);
+		appendMapElements(mapEntryType, elements);
+	}
+
 }
