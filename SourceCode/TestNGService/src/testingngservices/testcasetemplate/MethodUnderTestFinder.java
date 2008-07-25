@@ -10,7 +10,7 @@ import pairwisetesting.complex.SimpleParameter;
 import pairwisetesting.util.ClassUtil;
 import testingngservices.testcasetemplate.core.MethodSignature;
 
-public class MethodUnderTestFinder {
+public class MethodUnderTestFinder implements IMethodUnderTestFinder {
 
 	private String className;
 	private MethodSignatureFinder methodSignatureFinder;
