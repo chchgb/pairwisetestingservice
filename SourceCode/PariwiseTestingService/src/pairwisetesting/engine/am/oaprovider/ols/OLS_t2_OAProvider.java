@@ -2,25 +2,39 @@ package pairwisetesting.engine.am.oaprovider.ols;
 
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 /**
- * This OA provider is based on OLS and its runs is t^2
+ * The OA provider based on Orthogonal Latin Square (OLS). 
+ * Its OA contains t^2 runs.
+ * 
+ * @see OLS_tu_OAProvider
  */
 public class OLS_t2_OAProvider extends OLS_OAProvider {
 
 	/**
+	 * Constructs an OLS OA Provider (t^2 runs) with the specified number 
+	 * of levels.
+	 * 
 	 * @param t
 	 *            the number of levels
+	 * @throws IllegalArgumentException
+	 *             if {@code t} < 1 or {@code t} is not a prime or prime power
 	 */
 	public OLS_t2_OAProvider(int t) {
 		super(t);
 	}
 
 	/**
-	 * @param m
-	 *            the number of factors and it should be at most t+1
+	 * @see pairwisetesting.engine.am.OAProvider#get(int)
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if {@code m < 2 || m > t+1}
 	 */
 	@Override
 	public int[][] get(int m) {
+		Preconditions.checkArgument(m >= 2 && m <= t+1, 
+				"The number of factors should be at least 2 and at most t+1.");
 
 		// OA Lt^2(t^m)
 		int[][] oa = new int[t * t][m];

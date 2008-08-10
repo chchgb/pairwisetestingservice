@@ -8,14 +8,31 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
+
+/**
+ * The utility class facilitates the way of reading/writing file.
+ * Borrowed from Bruce Eckel's Thinking in Java 4th.
+ * 
+ * @see ArrayList
+ */
 public class TextFile extends ArrayList<String> {
 	
 	private static final long serialVersionUID = -20207102858888293L;
 
 	/**
-	 * Read a file as a single string
+	 * Read a file as a single string.
+	 * 
+	 * @param fileName
+	 *            the specified file name
+	 * @throws NullPointerException
+	 *             if {@code fileName} is null
+	 * @throws RuntimeException
+	 *             if something wrong during processing
 	 */
 	public static String read(String fileName) {
+		Preconditions.checkNotNull(fileName, "file name");
 		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(new File(fileName).getAbsoluteFile()));
@@ -32,12 +49,22 @@ public class TextFile extends ArrayList<String> {
 		}
 		return sb.toString();
 	}
-	
-	
+
 	/**
-	 * Write text to a single file
+	 * Write text to a single file.
+	 * 
+	 * @param fileName
+	 *            the specified file name
+	 * @param text
+	 *            the text to write
+	 * @throws NullPointerException
+	 *             if {@code fileName} or {@code text} is null
+	 * @throws RuntimeException
+	 *             if something wrong during processing
 	 */
 	public static void write(String fileName, String text) {
+		Preconditions.checkNotNull(fileName, "file name");
+		Preconditions.checkNotNull(text, "text to write");
 		try {
 			File outFile = new File(fileName).getAbsoluteFile();
 			outFile.getParentFile().mkdirs();
@@ -55,20 +82,47 @@ public class TextFile extends ArrayList<String> {
 	}
 	
 	/**
-	 * Read a file, split by any regular expression
+	 * Constructs an array list from a file splitted by a regular expression.
+	 * 
+	 * @param fileName
+	 *            the specified file name
+	 * @param splitter
+	 *            a regular expression as the splitter
+	 * @throws NullPointerException
+	 *             if {@code fileName} or {@code splitter} is null
 	 */
 	public TextFile(String fileName, String splitter) {
-		super(Arrays.asList(read(fileName).split(splitter)));
-		// Regular expression split() often leaves an empty String at the first position
+		super(Arrays.asList(read(fileName).split(
+				Objects.nonNull(splitter, "splitter"))));
+		// Regular expression split() often leaves an empty String at the first
+		// position
 		if (get(0).equals("")) remove(0);
 	}
 	
-	// Read by lines
+	/**
+	 * Constructs an array list from a file splitted by {@literal \n}
+	 * 
+	 * @param fileName
+	 *            the specified file name
+	 * @throws NullPointerException
+	 *             if {@code fileName} is null
+	 */
 	public TextFile(String fileName) {
 		this(fileName, "\n");
 	}
 	
+	/**
+	 * Write contents to a single file.
+	 * 
+	 * @param fileName
+	 *            the specified file name
+	 * @throws NullPointerException
+	 *             if {@code fileName} is null
+	 * @throws RuntimeException
+	 *             if something wrong during processing
+	 */
 	public void write(String fileName) {
+		Preconditions.checkNotNull(fileName, "file name");
 		try {
 			File outFile = new File(fileName).getAbsoluteFile();
 			outFile.getParentFile().mkdirs();

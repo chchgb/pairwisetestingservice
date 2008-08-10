@@ -1,6 +1,7 @@
 package pairwisetesting.test;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -14,7 +15,7 @@ import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.coredomain.MetaParameterException;
 import pairwisetesting.engine.am.AMEngine;
 import pairwisetesting.engine.am.OAProvider;
-import pairwisetesting.engine.am.oaprovider.OAProviderFactory;
+import pairwisetesting.engine.am.oaprovider.CascadeOAProviderFactory;
 import pairwisetesting.engine.am.oaprovider.SelfRuleOAProviderFactory;
 import pairwisetesting.engine.am.oaprovider.hadamard.H_2s_OAProvider;
 import pairwisetesting.engine.am.oaprovider.hadamard.Matrix;
@@ -45,6 +46,7 @@ import pairwisetesting.test.mock.MockTestCasesGenerator;
 import pairwisetesting.testcasesgenerator.ExcelTestCasesGenerator;
 import pairwisetesting.testcasesgenerator.TXTTestCasesGenerator;
 import pairwisetesting.testcasesgenerator.XMLTestCasesGenerator;
+import pairwisetesting.util.Converter;
 import pairwisetesting.util.TextFile;
 
 public class TestPairwiseTesting extends TestCase {
@@ -86,6 +88,28 @@ public class TestPairwiseTesting extends TestCase {
 		expectedLevels[1] = "Firefox";
 		expectedLevels[2] = "Opera";
 		assertTrue(Arrays.equals(expectedLevels, f2.getLevels()));
+		
+		Factor ft = new Factor();
+		try {
+			ft.addLevel(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
+		try {
+			new Factor(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
+		try {
+			new Factor(null, null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
 	}
 
 	public void testMetaParameter() {
@@ -93,6 +117,41 @@ public class TestPairwiseTesting extends TestCase {
 
 		mp.setStrength(2);
 		assertEquals(2, mp.getStrength());
+		
+		try {
+			mp.setStrength(1);
+			fail("It should not accept strength < 2");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			mp.setStrength(-1);
+			fail("It should not accept strength < 2");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			mp.addFactor(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
+		try {
+			Factor ff = mp.getFactor(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
+		try {
+			mp.addConstraint(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
 
 		mp.addFactor(f1);
 		mp.addFactor(f2);
@@ -273,10 +332,25 @@ public class TestPairwiseTesting extends TestCase {
 		expected.setElement(6, 2, 0);
 		expected.setElement(6, 3, 0);
 		expected.setElement(6, 4, 0);
+		
 
 		Matrix res = m1.directProduct(m2);
 		// System.out.println(res);
 		assertEquals(expected, res);
+		
+		try {
+			m1.directProduct(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
+		try {
+			m1.to2DArray(0);
+			fail("It should not be out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
 
 		int[][] expected1 = new int[][] { { 2, -3, 3 }, { -6, 6, -9 },
 				{ 0, 3, 0 }, { 1, 0, 0 }, { -3, 0, 0 }, { 0, 0, 0 } };
@@ -325,6 +399,20 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				rawTestData));
+		
+		try {
+			provider.get(-2);
+			fail("The number of factors should be 2^s - 1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			provider.get(5);
+			fail("The number of factors should be 2^s - 1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
 	}
 	
 	public void testRp_OLS_Provider() {
@@ -382,6 +470,30 @@ public class TestPairwiseTesting extends TestCase {
 				OLS_list.get(0)));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected2,
 				OLS_list.get(1)));
+		
+		OLS_list = provider.generate_OLS(3, 0);
+		assertTrue("OLS list should be empty", OLS_list.isEmpty());
+		
+		try {
+			OLS_list = provider.generate_OLS(3, -1);
+			fail("The number of OLS should be >= 0 and at most t-1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			OLS_list = provider.generate_OLS(3, 3);
+			fail("The number of OLS should be >= 0 and at most t-1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			OLS_list = provider.generate_OLS(3, 4);
+			fail("The number of OLS should be >= 0 and at most t-1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
 	}
 	
 	public void testPoly_OLS_Provider() {
@@ -501,6 +613,30 @@ public class TestPairwiseTesting extends TestCase {
 				OLS_list.get(5)));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected7,
 				OLS_list.get(6)));
+		
+		OLS_list = provider.generate_OLS(8, 0);
+		assertEquals("OLS list should be empty", 0, OLS_list.size());
+		
+		try {
+			OLS_list = provider.generate_OLS(8, -1);
+			fail("The number of OLS should be >= 0 and at most t-1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			OLS_list = provider.generate_OLS(8, 8);
+			fail("The number of OLS should be >= 0 and at most t-1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			OLS_list = provider.generate_OLS(8, 9);
+			fail("The number of OLS should be >= 0 and at most t-1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
 	}
 
 	public void testRp_OLS_t2_OAProvider() {
@@ -586,6 +722,8 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
 				rawTestData));
+		
+		
 
 		// L27(3^5)
 		rawTestData = provider.get(5);
@@ -756,6 +894,32 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
 				rawTestData));
 		
+		provider = new OLS_t2_OAProvider(3);
+		try {
+			rawTestData = provider.get(5);
+			fail("The number of factors should be at least 2 and at most t+1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		try {
+			rawTestData = provider.get(1);
+			fail("The number of factors should be at least 2 and at most t+1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			provider = new OLS_t2_OAProvider(0);
+			fail("The number of levels should be a prime or prime power.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		try {
+			provider = new OLS_t2_OAProvider(6);
+			fail("The number of levels should be a prime or prime power.");
+		} catch (IllegalArgumentException e) {
+			
+		}
 	}
 	
 	public void testPoly_OLS_tu_OAProvider() {
@@ -832,10 +996,25 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(Arrays.deepToString(rawTestData));
 		assertTrue("2D arrays should be equal", Arrays.deepEquals(expected,
 				rawTestData));
+		
+		try {
+			rawTestData = provider.get(4);
+			fail("The number of factors should be at least t+1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			rawTestData = provider.get(3);
+			fail("The number of factors should be at least t+1.");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
 	}
 
 	public void testOAProviderFactory() throws EngineException {
-		OAProviderFactory factory = new OAProviderFactory();
+		CascadeOAProviderFactory factory = new CascadeOAProviderFactory();
 		assertTrue("It should create H_2s_OAProvider object", factory.create(2,
 				3) instanceof H_2s_OAProvider);
 		assertTrue("It should create OLS_tu_OAProvider object", factory
@@ -861,6 +1040,63 @@ public class TestPairwiseTesting extends TestCase {
 				.create(8, 9) instanceof OLS_t2_OAProvider);
 		assertTrue("It should create OLS_tu_OAProvider object", factory
 				.create(8, 10) instanceof OLS_tu_OAProvider);
+		
+		try {
+			factory.create(0, 2);
+			fail("The number of levels should >= 1");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			factory.create(1, 1);
+			fail("The number of factors should >= 2");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		SelfRuleOAProviderFactory factory2 = new SelfRuleOAProviderFactory();
+		OAProvider provider = factory2.create(2, 4);
+		assertEquals(9, provider.get(4).length);
+		provider = factory2.create(2, 5);
+		assertEquals(16, provider.get(5).length);
+		
+		provider = factory2.create(3, 5);
+		assertEquals(16, provider.get(5).length);
+		provider = factory2.create(3, 6);
+		assertEquals(25, provider.get(6).length);
+		
+		provider = factory2.create(4, 6);
+		assertEquals(25, provider.get(6).length);
+		provider = factory2.create(4, 7);
+		assertEquals(49, provider.get(7).length);
+		
+		provider = factory2.create(6, 7);
+		assertEquals(49, provider.get(7).length);
+		provider = factory2.create(6, 9);
+		assertEquals(64, provider.get(9).length);
+		
+		provider = factory2.create(10, 7);
+		assertEquals(121, provider.get(7).length);
+		provider = factory2.create(10, 19);
+		assertEquals(361, provider.get(19).length);
+		
+		provider = factory2.create(20, 19);
+		assertEquals(529, provider.get(19).length);
+		
+		try {
+			factory2.create(0, 2);
+			fail("The number of levels should >= 1");
+		} catch (IllegalArgumentException e) {
+			
+		}
+		
+		try {
+			factory2.create(1, 1);
+			fail("The number of factors should >= 2");
+		} catch (IllegalArgumentException e) {
+			
+		}
 	}
 
 	public void testAMEngine() throws EngineException {
@@ -1429,6 +1665,13 @@ public class TestPairwiseTesting extends TestCase {
 		// System.out.println(mp);
 		assertEquals("ExcelMetaParameterProvider should be OK", expected, mp);
 		
+		try {
+			provider = new ExcelMetaParameterProvider(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
 		provider = new TextMetaParameterProvider("testdata/MetaParameter.txt");
 		mp = provider.get();
 		// System.out.println(mp);
@@ -1453,38 +1696,15 @@ public class TestPairwiseTesting extends TestCase {
 				"testdata/MetaParameter_columns.doc").getClass());
 		assertEquals(TextMetaParameterProvider.class, factory.create(
 				"testdata/MetaParameter.txt").getClass());
-	}
-	
-	public void testSelfRuleOAProviderFactory() {
-		SelfRuleOAProviderFactory factory = new SelfRuleOAProviderFactory();
 		
-		OAProvider provider = factory.create(2, 4);
-		assertEquals(9, provider.get(4).length);
-		provider = factory.create(2, 5);
-		assertEquals(16, provider.get(5).length);
+		try {
+			factory.create(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
 		
-		provider = factory.create(3, 5);
-		assertEquals(16, provider.get(5).length);
-		provider = factory.create(3, 6);
-		assertEquals(25, provider.get(6).length);
-		
-		provider = factory.create(4, 6);
-		assertEquals(25, provider.get(6).length);
-		provider = factory.create(4, 7);
-		assertEquals(49, provider.get(7).length);
-		
-		provider = factory.create(6, 7);
-		assertEquals(49, provider.get(7).length);
-		provider = factory.create(6, 9);
-		assertEquals(64, provider.get(9).length);
-		
-		provider = factory.create(10, 7);
-		assertEquals(121, provider.get(7).length);
-		provider = factory.create(10, 19);
-		assertEquals(361, provider.get(19).length);
-		
-		provider = factory.create(20, 19);
-		assertEquals(529, provider.get(19).length);
+		assertNull(factory.create("testdata/MetaParameter.mp3"));
 	}
 	
 	public void testLevelGenerator() {
@@ -1496,9 +1716,27 @@ public class TestPairwiseTesting extends TestCase {
 		assertTrue("EP_BVA_IntegerLevelGenerator should be OK", 
 				Arrays.equals(expected, lg.generateLevels()));
 		
+		lg = new EP_BVA_IntegerLevelGenerator(3, 3);
+		expected = new String[] {"0", "2", "3", "4", "6"};
+		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+		
+		try {
+			lg = new EP_BVA_IntegerLevelGenerator(8, 7);
+			fail("The range start should not larger than the range end.");
+		} catch(IllegalArgumentException e) {
+			
+		}
+		
 		expected = new String[] {"Student", "Internal", "Normal"};
 		lg = new EnumLevelGenerator(AccountType.class);
 		assertTrue(Arrays.equals(expected, lg.generateLevels()));
+		
+		try {
+			lg = new EnumLevelGenerator(null);
+			fail("It should not accept null value.");
+		} catch(NullPointerException e) {
+			
+		}
 		
 		expected = new String[] {"true", "false"};
 		lg = new BooleanLevelGenerator();
@@ -1527,6 +1765,18 @@ public class TestPairwiseTesting extends TestCase {
 		String[][] testData = new MockOAEngine().generateTestData(mp);
 		String testCases = generator.generate(mp, testData);
 		assertNotNull(testCases);
+	}
+	
+	public void testConverter() {
+		assertEquals(345, Converter.convertTo("345", int.class));
+		assertEquals(345L, Converter.convertTo("345", long.class));
+		assertEquals(345.7f, Converter.convertTo("345.7f", float.class));
+		assertEquals(345.88d, Converter.convertTo("345.88", double.class));
+		assertEquals('A', Converter.convertTo("A", Character.class));
+		assertEquals(AccountType.Student, Converter.convertTo("Student", AccountType.class));
+		assertEquals("Name", Converter.convertTo("Name", String.class));
+		assertEquals(true, Converter.convertTo("True", Boolean.class));
+		assertEquals(Date.class, Converter.convertTo("2008-4-25", Date.class).getClass());
 	}
 	
 	protected void tearDown() throws Exception {

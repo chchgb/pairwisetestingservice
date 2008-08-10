@@ -8,18 +8,34 @@ import pairwisetesting.coredomain.MetaParameter;
 import pairwisetesting.coredomain.MetaParameterException;
 
 /**
- * Extract Factors/Levels from Word
- *
+ * This class acts as the provider of meta parameter from Word file.
+ * 
+ * @see MetaParameter 
  */
 public class WordMetaParameterProvider extends FileMetaParameterProvider {
 
+	/**
+	 * Constructs a meta parameter provider with the specified Word file that
+	 * contains the meta parameter.
+	 * 
+	 * @param filePath
+	 *            the path of the Word file that contains the meta parameter
+	 * @throws NullPointerException
+	 *             if {@code filePath} is null
+	 */
 	public WordMetaParameterProvider(String filePath) {
 		super(filePath);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see pairwisetesting.coredomain.IMetaParameterProvider#get()
+	 */
 	public MetaParameter get() throws MetaParameterException {
 		MetaParameter mp = new MetaParameter(2);
-		String command = String.format("python word_extractor.py %s %s", filePath, ":");
+		String command
+			= String.format("python word_extractor.py %s %s", filePath, ":");
 		try {
 			Process p = Runtime.getRuntime().exec(command);
 			p.waitFor();
