@@ -10,12 +10,25 @@ import pairwisetesting.coredomain.EngineException;
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.MetaParameter;
 
+/**
+ * The engine based on the tool
+ * <a href="http://burtleburtle.net/bob/math/jenny.html">Jenny<a>.
+ * 
+ * @see JennyTestDataTransformer
+ */
 public class JennyEngine extends Engine {
 
 	public JennyEngine() {
 		this.transformer = new JennyTestDataTransformer();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pairwisetesting.coredomain.Engine#generateRawTestData(pairwisetesting
+	 * .coredomain.MetaParameter)
+	 */
 	@Override
 	protected String[][] generateRawTestData(MetaParameter mp)
 			throws EngineException {

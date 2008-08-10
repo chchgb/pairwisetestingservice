@@ -1,12 +1,25 @@
 package pairwisetesting.engine.am;
 
+import com.google.common.base.Preconditions;
+
 import pairwisetesting.coredomain.Factor;
 import pairwisetesting.coredomain.ITestDataTransformer;
 import pairwisetesting.coredomain.MetaParameter;
 
+/**
+ * The test data transformer used for {@link AMEngine}.
+ * It handles the missing values by fill the valid levels in turn.
+ *
+ * @see AMEngine
+ */
 public class OATestDataTransformer implements ITestDataTransformer {
 
+	/* (non-Javadoc)
+	 * @see pairwisetesting.coredomain.ITestDataTransformer#transform(pairwisetesting.coredomain.MetaParameter, java.lang.String[][])
+	 */
 	public String[][] transform(MetaParameter mp, String[][] rawTestData) {
+		Preconditions.checkNotNull(mp, "meta parameter");
+		Preconditions.checkNotNull(rawTestData, "raw test data");
 		String[][] testData = rawTestData;
 		for (int columnIndex = 0; columnIndex < rawTestData[0].length; columnIndex++) {
 			

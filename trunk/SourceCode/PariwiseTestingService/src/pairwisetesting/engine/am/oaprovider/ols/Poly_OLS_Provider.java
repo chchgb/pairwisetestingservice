@@ -5,28 +5,56 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 import pairwisetesting.engine.am.oaprovider.gf.ExtendedGaloisField;
 import pairwisetesting.engine.am.oaprovider.gf.GaloisField;
 import pairwisetesting.engine.am.oaprovider.gf.GaloisPolynomial;
 import pairwisetesting.engine.am.oaprovider.util.MathUtil;
 
+/**
+ * The Orthogonal Latin Square (OLS) provider based on Polynomial Finite Field.
+ * 
+ * @see Rp_OLS_Provider
+ */
 public class Poly_OLS_Provider implements OLS_Provider {
 
+	/**
+	 * Returns the generated OLS based on Polynomial Finite Field.
+	 * 
+	 * @param t
+	 *            the order of the OLS and it should be a prime power
+	 * @param n
+	 *            the number of OLS and it should be at most {@code t-1}
+	 * @return the generated OLS based on Polynomial Finite Field
+	 * @throws IllegalArgumentException
+	 *             if {@code t} is not a prime power 
+	 *             or {@code n < 0 || n >= t}
+	 */
 	public List<int[][]> generate_OLS(int t, int n) {
+		Preconditions.checkArgument(MathUtil.partOfPrimePower(t) != null, 
+				"The order of the OLS should be a prime power.");
+		Preconditions.checkArgument((n >= 0 && n <= t-1), 
+				"The number of OLS should be >= 0 and at most t-1.");
 		return generatePoly_OLS(t, n);
 	}
 	
 	/**
-	 * Generate OLS based on polynomial finite field
+	 * Returns the generated OLS based on Polynomial Finite Field.
 	 * 
 	 * @param pm
-	 *            the order of the OLS and it should be prime power
+	 *            the order of the OLS and it should be a prime power
 	 * @param n
-	 *            the number of OLS and it should be at most pm-1
+	 *            the number of OLS and it should be at most {@code pm-1}
+	 * @return the generated OLS based on Polynomial Finite Field
 	 */
 	private List<int[][]> generatePoly_OLS(int pm, int n) {
-		
+
 		ArrayList<int[][]> OLS_list = new ArrayList<int[][]>(n);
+		
+		if (n == 0) {
+			return OLS_list;
+		}
 		
 		 // p & m
 		int[] parts = MathUtil.partOfPrimePower(pm);
@@ -54,15 +82,15 @@ public class Poly_OLS_Provider implements OLS_Provider {
 	}
 	
 	/**
-	 * Generate LS based on polynomial finite field
+	 * Returns the generated LS based on Polynomial Finite Field.
 	 * 
 	 * @param p
 	 *            the prime part of the order of the OLS
 	 * @param m
 	 *            the power part of the order of the OLS
+	 * @return the generated LS based on Polynomial Finite Field
 	 */
 	private int[][] generatePoly_LS(int p, int m) {
-		
 		GaloisField field = new GaloisField(p);
 		field.setDisplayMode(GaloisField.ALFAPOWER);
 		ExtendedGaloisField extendedField = new ExtendedGaloisField(field, 'X', m);
@@ -78,10 +106,9 @@ public class Poly_OLS_Provider implements OLS_Provider {
 				nextNumber++;
 			}
 		}
-		
 		// System.out.println(alfaPowerNumberMap);
 		
-		// order of the OLS
+		// the order of the OLS
 		int n = (int)Math.pow(p, m);
 		int[][] ls = new int[n][n];
 		

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -341,7 +340,7 @@ public class DependencyFinder {
 			}
 			iter = absClassSet.iterator();
 			while (iter.hasNext()) {
-				if (ClassUtil.isSuperClass(c, iter.next())) {
+				if (ClassUtil.containsSuperClass(c, iter.next())) {
 					srcList.add(buildSourcePath(s));
 					iter.remove();
 				}
