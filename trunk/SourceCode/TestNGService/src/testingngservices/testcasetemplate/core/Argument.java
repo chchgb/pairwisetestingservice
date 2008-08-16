@@ -1,20 +1,48 @@
 package testingngservices.testcasetemplate.core;
 
+import com.google.common.base.Preconditions;
+
+/**
+ * This class encapsulates the actual parameter assigned to method or
+ * constructor.
+ */
 public class Argument {
 
-    private String value;
-    private String type;
+	private String value;
+	private String type;
 
-    public Argument(String type, String value) {
+	/**
+	 * Constructs a argument with the specified type and value.
+	 * 
+	 * @param type
+	 *            the specified type
+	 * @param value
+	 *            the specified value
+	 * @throws NullPointerException
+	 *             if {@code type} or {@code value} is null
+	 */
+	public Argument(String type, String value) {
+		Preconditions.checkNotNull(type, "type");
+		Preconditions.checkNotNull(value, "value");
 		this.type = type;
-		this.value = value; 
+		this.value = value;
 	}
 
-    public String getValue() {
+	/**
+	 * Returns the string representation of the value of argument.
+	 * 
+	 * @return the string representation of the value of argument
+	 */
+	public String getValue() {
 		return value;
 	}
 
-    public String getType() {
+	/**
+	 * Returns the string representation of the type of argument.
+	 * 
+	 * @return the string representation of the type of argument
+	 */
+	public String getType() {
 		return type;
 	}
 
@@ -48,6 +76,5 @@ public class Argument {
 			return false;
 		return true;
 	}
-    
-    
+
 }

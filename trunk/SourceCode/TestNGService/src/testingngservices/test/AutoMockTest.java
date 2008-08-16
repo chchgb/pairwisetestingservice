@@ -107,6 +107,13 @@ public class AutoMockTest extends TestCase {
 		assertEquals("logger", finder.getFieldName(fieldClassName2));
 		assertEquals("logger", finder.getFieldName(fieldSimpleClassName2));
 		
+		try {
+			finder.getFieldName(null);
+			fail("It should not accept null value");
+		} catch (NullPointerException e) {
+			
+		}
+		
 		// Base case
 		Invocation[] expectedInvocations = new Invocation[2];
 		expectedInvocations[0] = new Invocation("logger.log(accountId)", false,
@@ -471,7 +478,6 @@ public class AutoMockTest extends TestCase {
 		assertEquals(InvocationCount.ATLEAST_ONCE, InvocationCount.IGNORING.plus(InvocationCount.ATLEAST_ONCE));
 		assertEquals(InvocationCount.ALLOWING, InvocationCount.IGNORING.plus(InvocationCount.ALLOWING));
 		assertEquals(InvocationCount.IGNORING, InvocationCount.IGNORING.plus(InvocationCount.IGNORING));
-	
 	}
 	
 	public void testJMockInvocations() {

@@ -1,4 +1,4 @@
-package testingngservices.core;
+package testingngservices.workflow;
 
 import java.util.*;
 import javax.tools.JavaCompiler;

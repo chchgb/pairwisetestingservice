@@ -1,20 +1,48 @@
 package testingngservices.testcasetemplate.core;
 
+import com.google.common.base.Preconditions;
+
+/**
+ * This class encapsulates the formal parameter belongs to method or
+ * constructor.
+ */
 public class Parameter {
 
-    private String name;
-    private String type;
+	private String name;
+	private String type;
 
-    public Parameter(String type, String name) {
+	/**
+	 * Constructs a parameter with the specified type and value.
+	 * 
+	 * @param type
+	 *            the specified type
+	 * @param name
+	 *            the specified name
+	 * @throws NullPointerException
+	 *             if {@code type} or {@code name} is null
+	 */
+	public Parameter(String type, String name) {
+		Preconditions.checkNotNull(type, "type");
+		Preconditions.checkNotNull(name, "name");
 		this.type = type;
-		this.name = name; 
+		this.name = name;
 	}
 
-    public String getName() {
+	/**
+	 * Returns the name of parameter.
+	 * 
+	 * @return the name of parameter
+	 */
+	public String getName() {
 		return name;
 	}
 
-    public String getType() {
+	/**
+	 * Returns the string representation of the type of parameter.
+	 * 
+	 * @return the string representation of the type of parameter
+	 */
+	public String getType() {
 		return type;
 	}
 

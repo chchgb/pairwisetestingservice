@@ -12,13 +12,22 @@ import pairwisetesting.complex.Parameter;
 import pairwisetesting.complex.XStreamMethodUnderTestXMLHelper;
 import testingngservices.testcasetemplate.core.Argument;
 
+import com.google.common.base.Preconditions;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+/**
+ * This class encapsulates the test case template parameter related information.
+ * 
+ * <p>
+ * <strong>Note that this implementation is not synchronized.</strong>
+ */
 public class TestCaseTemplateParameter {
+
 	private String packageName = "";
 	private String classUnderTest = "";
-	private ArrayList<Argument> constructorArguments = new ArrayList<Argument>();
+	private ArrayList<Argument> constructorArguments
+										= new ArrayList<Argument>();
 	private MethodUnderTest methodUnderTest = new MethodUnderTest();
 	private boolean isStaticMethod = false;
 	private String singletonMethod = "";
@@ -26,143 +35,375 @@ public class TestCaseTemplateParameter {
 	private double delta = 0;
 	private boolean hasDelta = false;
 	private ArrayList<String> imports = new ArrayList<String>();
-	private LinkedHashMap<String, String> classToMockInstanceNameMap = new LinkedHashMap<String, String>();
-	private LinkedHashMap<String, List<String>> jMockInvocationSequenceMap = new LinkedHashMap<String, List<String>>();
-	
+	private LinkedHashMap<String, String> classToMockInstanceNameMap
+			= new LinkedHashMap<String, String>();
+	private LinkedHashMap<String, List<String>> jMockInvocationSequenceMap
+			= new LinkedHashMap<String, List<String>>();
+
+	/**
+	 * Constructs a empty test case template parameter.
+	 */
 	public TestCaseTemplateParameter() {
 	}
-	
+
+	/**
+	 * Returns the method under test object.
+	 * 
+	 * @return the method under test object
+	 */
 	public MethodUnderTest getMethodUnderTest() {
 		return methodUnderTest;
 	}
-	
+
+	/**
+	 * Returns the XML data of the method under test object.
+	 * 
+	 * @return he XML data of the method under test object
+	 */
 	public String getMethodUnderTestXmlData() {
-		String xmlData = new XStreamMethodUnderTestXMLHelper().toXML(methodUnderTest);
+		String xmlData = new XStreamMethodUnderTestXMLHelper()
+				.toXML(methodUnderTest);
 		return xmlData.replaceAll("\n\\s*", "").replace("\"", "\\\"");
 	}
 
+	/**
+	 * Sets the method under test object.
+	 * 
+	 * @param methodUnderTest
+	 *            the specified method under test object
+	 * @throws NullPointerException
+	 *             if {@code methodUnderTest} is null
+	 */
 	public void setMethodUnderTest(MethodUnderTest methodUnderTest) {
+		Preconditions.checkNotNull(methodUnderTest, "method under test");
 		this.methodUnderTest = methodUnderTest;
 	}
 
+	/**
+	 * Sets the package name.
+	 * 
+	 * @param packageName
+	 *            the specified package name
+	 * @throws NullPointerException
+	 *             if {@code packageName} is null
+	 */
 	public void setPackageName(String packageName) {
+		Preconditions.checkNotNull(packageName, "package name");
 		this.packageName = packageName;
 	}
 
+	/**
+	 * Return the package name.
+	 * 
+	 * @return the package name
+	 */
 	public String getPackageName() {
 		return packageName;
 	}
 
+	/**
+	 * Returns the string representation of the class under test.
+	 * 
+	 * @return the string representation of the class under test
+	 */
 	public String getClassUnderTest() {
 		return classUnderTest;
 	}
 
+	/**
+	 * Sets the string representation of class under test.
+	 * 
+	 * @param classUnderTest
+	 *            the specified string representation of class under test
+	 * @throws NullPointerException
+	 *             if {@code classUnderTest} is null
+	 */
 	public void setClassUnderTest(String classUnderTest) {
+		Preconditions.checkNotNull(classUnderTest, "class under test");
 		this.classUnderTest = classUnderTest;
 	}
 
+	/**
+	 * Sets <tt>true</tt> if the method under test is a static method.
+	 * 
+	 * @param isStaticMethod
+	 *            <tt>true</tt> if if the method under test is a static method
+	 */
 	public void setStaticMethod(boolean isStaticMethod) {
 		this.isStaticMethod = isStaticMethod;
 	}
 
+	/**
+	 * Returns <tt>true</tt> if the method under test is a static method.
+	 * 
+	 * @return <tt>true</tt> if the method under test is a static method
+	 */
 	public boolean isStaticMethod() {
 		return isStaticMethod;
 	}
 
+	/**
+	 * Returns an array of the method under test's parameters.
+	 * 
+	 * @return an array of the method under test's parameters
+	 */
 	public Parameter[] getMethodParameters() {
 		return methodUnderTest.getParameters();
 	}
 
+	/**
+	 * Adds a new constructor argument.
+	 * 
+	 * @param type
+	 *            the specified constructor argument's type
+	 * @param value
+	 *            the specified constructor argument's value
+	 * @throws NullPointerException
+	 *             if {@code type} or {@code name} is null
+	 */
 	public void addConstructorArgument(String type, String value) {
+		Preconditions.checkNotNull(type, "argument's type");
+		Preconditions.checkNotNull(value, "argument's value");
 		this.constructorArguments.add(new Argument(type, value));
 	}
 
+	/**
+	 * Returns an array of the constructor arguments.
+	 * 
+	 * @return an array of the constructor arguments
+	 */
 	public Argument[] getConstructorArguments() {
 		return constructorArguments.toArray(new Argument[0]);
 	}
-	
+
+	/**
+	 * Returns <tt>true</tt> if the class under test has constructor arguments.
+	 * 
+	 * @return <tt>true</tt> if the class under test has constructor arguments
+	 */
 	public boolean hasConstructorArguments() {
 		return constructorArguments.isEmpty() == false;
 	}
 
+	/**
+	 * Returns the return type of the method under test.
+	 * 
+	 * @return the return type of the method under test
+	 */
 	public String getReturnType() {
 		return methodUnderTest.getReturnType();
 	}
 
+	/**
+	 * Returns the singleton method name of the class under test.
+	 * 
+	 * @return the singleton method name of the class under test.
+	 */
 	public String getSingletonMethod() {
 		return singletonMethod;
 	}
 
+	/**
+	 * Sets the singleton method name of the class under test.
+	 * 
+	 * @param singletonMethod
+	 *            the singleton method name of the class under test
+	 * @throws NullPointerException
+	 *             if {@code singletonMethod} is null
+	 */
 	public void setSingletonMethod(String singletonMethod) {
-		this.singletonMethod = singletonMethod;;
+		Preconditions.checkNotNull(singletonMethod, "singleton method");
+		this.singletonMethod = singletonMethod;
+		;
 	}
 
+	/**
+	 * Returns <tt>true</tt> if the class under test has singleton method.
+	 * 
+	 * @return <tt>true</tt> if the class under test has singleton method
+	 */
 	public boolean isSingleton() {
 		return singletonMethod.equals("") == false;
 	}
 
-	public String getCheckStateMethod() {
-		return checkStateMethod;
+	/**
+	 * Sets the check state method of the class under test.
+	 * 
+	 * @param checkStateMethod
+	 *            the specified check state method of the class under test
+	 * @throws NullPointerException
+	 *             if {@code checkStateMethod} is null
+	 */
+	public void setCheckStateMethod(String checkStateMethod) {
+		Preconditions.checkNotNull(checkStateMethod, "check state method");
+		this.checkStateMethod = checkStateMethod;
 	}
-	
+
+	/**
+	 * Returns <tt>true</tt> if the class under test has check state method.
+	 * 
+	 * @return <tt>true</tt> if the class under test has check state method
+	 */
 	public boolean hasCheckStateMethod() {
 		return checkStateMethod.equals("") == false;
 	}
 
-	public void setCheckStateMethod(String checkStateMethod) {
-		this.checkStateMethod = checkStateMethod;
+	/**
+	 * Returns the check state method of the class under test.
+	 * 
+	 * @return the check state method of the class under test
+	 */
+	public String getCheckStateMethod() {
+		return checkStateMethod;
 	}
 
-	public double getDelta() {
-		return delta;
-	}
-	
-	public boolean hasDelta() {
-		return hasDelta;
-	}
-	
+	/**
+	 * Sets the delta for the return value of method under test.
+	 * 
+	 * @param delta
+	 *            the specified delta for the return value of method under test
+	 */
 	public void setDelta(double delta) {
 		this.delta = delta;
 		this.hasDelta = true;
 	}
 	
-	public void addImport(String importName) {
-		this.imports.add(importName);
+	/**
+	 * Returns <tt>true</tt> if the return value of method under test has delta.
+	 * 
+	 * @return <tt>true</tt> if the return value of method under test has delta
+	 */
+	public boolean hasDelta() {
+		return hasDelta;
 	}
 	
+	/**
+	 * Returns the delta of the return value of method under test.
+	 * 
+	 * @return the delta of the return value of method under test 
+	 */
+	public double getDelta() {
+		return delta;
+	}
+
+	/**
+	 * Add a new import statement. 
+	 * 
+	 * @param importName the specified import name
+	 * @throws NullPointerException
+	 *             if {@code importName} is null
+	 */
+	public void addImport(String importName) {
+		Preconditions.checkNotNull(importName, "import name");
+		this.imports.add(importName);
+	}
+
+	/**
+	 * Returns an array of the import statements.
+	 * 
+	 * @return an array of the import statements
+	 */
 	public String[] getImports() {
 		return this.imports.toArray(new String[0]);
 	}
-	
+
+	/**
+	 * Returns <tt>true</tt> if the class under test has import statements.
+	 * 
+	 * @return <tt>true</tt> if the class under test has import statements
+	 */
 	public boolean hasImports() {
 		return this.imports.size() != 0;
 	}
-	
-	public void addClassToMockInstanceName(String className, String instanceName) {
+
+	/**
+	 * Add a new class to mock instance name.
+	 * 
+	 * @param className
+	 *            the specified name of the class to mock
+	 * @param instanceName
+	 *            the specified instance name of the class to mock
+	 * @throws NullPointerException
+	 *             if {@code className} or {@code instanceName} is null
+	 */
+	public void addClassToMockInstanceName(String className, 
+			String instanceName) {
+		Preconditions.checkNotNull(className, "class name");
+		Preconditions.checkNotNull(instanceName, "instance name");
 		this.classToMockInstanceNameMap.put(className, instanceName);
 	}
-	
+
+	/**
+	 * Returns the entry set of the class to mock instance names.
+	 * 
+	 * @return the entry set of the class to mock instance names 
+	 */
 	public Set<Map.Entry<String, String>> getClassToMockInstanceNameEntrySet() {
 		return this.classToMockInstanceNameMap.entrySet();
 	}
-	
+
+	/**
+	 * Returns <tt>true</tt> if the class under test has classes to mock.
+	 * 
+	 * @return <tt>true</tt> if the class under test has classes to mock
+	 */
 	public boolean hasClassesToMock() {
 		return this.classToMockInstanceNameMap.keySet().size() != 0;
 	}
-	
-	public void addJMockInvocationSequence(String className, String[] invokes) {
-		this.jMockInvocationSequenceMap.put(className, Arrays.asList(invokes));
-	}
-	
-	public List<String> getJMockInvocationSequence(String className) {
-		return this.jMockInvocationSequenceMap.get(className);
-	}
-	
-	public static TestCaseTemplateParameter fromXML(String xmlData) {
-		XStream xstream = new XStream(new DomDriver());
-		return (TestCaseTemplateParameter)xstream.fromXML(xmlData);
+
+	/**
+	 * Add a new JMock invocation sequence with the specified class name and
+	 * invocations.
+	 * @param className
+	 *            the specified class name
+	 * @param invocations
+	 *            the specified invocations
+	 * @throws NullPointerException
+	 *             if {@code className} or {@code invocations} is null
+	 */
+	public void addJMockInvocationSequence(String className, 
+			String[] invocations) {
+		Preconditions.checkNotNull(className, "class name");
+		Preconditions.checkNotNull(invocations, "invocations");
+		this.jMockInvocationSequenceMap.put(className, 
+				Arrays.asList(invocations));
 	}
 
+	/**
+	 * Returns the JMock invocation sequence with the specified class name.
+	 * 
+	 * @param className
+	 *            the specified class name.
+	 * @return the JMock invocation sequence with the specified class name
+	 * @throws NullPointerException
+	 *             if {@code className} is null
+	 */
+	public List<String> getJMockInvocationSequence(String className) {
+		Preconditions.checkNotNull(className, "class name");
+		return this.jMockInvocationSequenceMap.get(className);
+	}
+
+	/**
+	 * Constructs and returns a test case template parameter with the specified
+	 * XML data.
+	 * 
+	 * @param xmlData
+	 *            the specified XML data
+	 * @return a test case template parameter with the specified XML data
+	 * @throws NullPointerException
+	 *             if {@code xmlData} is null
+	 */
+	public static TestCaseTemplateParameter fromXML(String xmlData) {
+		Preconditions.checkNotNull(xmlData, "XML data");
+		XStream xstream = new XStream(new DomDriver());
+		return (TestCaseTemplateParameter) xstream.fromXML(xmlData);
+	}
+
+	/**
+	 * Returns the XML representation of the test case template parameter.
+	 * 
+	 * @return the XML representation of the test case template parameter
+	 */
 	public String toXML() {
 		XStream xstream = new XStream(new DomDriver());
 		return xstream.toXML(this);
@@ -269,5 +510,5 @@ public class TestCaseTemplateParameter {
 			return false;
 		return true;
 	}
-	
+
 }
