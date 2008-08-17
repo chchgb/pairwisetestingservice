@@ -21,6 +21,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * 
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
+ * 
+ * @see Argument
+ * @see MethodUnderTest
  */
 public class TestCaseTemplateParameter {
 
