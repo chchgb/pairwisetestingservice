@@ -1,7 +1,7 @@
 package pairwisetesting.coredomain;
 
 /**
- * Thrown to indicate exceptions related with the meta parameter
+ * Thrown to indicate exceptions related with the meta parameter.
  */
 public class MetaParameterException extends Exception {
 	

@@ -4,6 +4,9 @@ import pairwisetesting.complex.ComplexParameter;
 import pairwisetesting.complex.DefaultParameterVisitor;
 import pairwisetesting.complex.SimpleParameter;
 
+/**
+ * This class acts as the visitor to print the information of parameters.
+ */
 public class PrintParameterVisitor extends DefaultParameterVisitor {
 
 	public void visit(SimpleParameter p) {

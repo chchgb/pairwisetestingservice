@@ -39,7 +39,7 @@ public abstract class Engine {
 	 *            the meta parameter used by the engine
 	 * @return the test data
 	 * @throws NullPointerException
-	 *             if the specified meta parameter is null
+	 *             if {@code mp} is null
 	 * @throws EngineException
 	 *             if the engine can not handle the meta parameter
 	 */
