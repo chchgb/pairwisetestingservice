@@ -9,6 +9,8 @@ import com.google.common.base.Preconditions;
  * 
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
+ * 
+ * @see Parameter
  */
 public class MethodSignature {
 

@@ -15,6 +15,8 @@ import testingngservices.testcasetemplate.core.MethodSignature;
 /**
  * This class acts as the finder to find the method signature based on 
  * Eclipse AST.
+ * 
+ * @see MethodSignature
  */
 public class MethodSignatureFinder {
 	

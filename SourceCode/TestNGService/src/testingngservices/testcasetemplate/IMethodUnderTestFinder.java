@@ -6,6 +6,7 @@ import pairwisetesting.complex.MethodUnderTest;
  * This class acts as the finder to find the method under test.
  * 
  * @see MethodUnderTestFinder
+ * @see MethodUnderTest
  */
 public interface IMethodUnderTestFinder {
 

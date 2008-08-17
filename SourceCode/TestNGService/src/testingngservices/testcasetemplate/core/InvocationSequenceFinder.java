@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * 
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
+ * 
+ * @see testingngservices.testcasetemplate.ast.ASTInvocationSequenceFinder
+ * @see testingngservices.testcasetemplate.regex.RegexInvocationSequenceFinder
  */
 public abstract class InvocationSequenceFinder {
 
