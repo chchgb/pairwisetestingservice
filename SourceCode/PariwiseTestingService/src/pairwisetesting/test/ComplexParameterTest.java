@@ -36,6 +36,13 @@ public class ComplexParameterTest extends TestCase {
 		assertEquals("id", p.getName());
 		assertFalse(p.isComplex());
 		assertFalse(p.isAbstract());
+		
+		try {
+			p.setDepth(-1);
+			fail("The depth should >= 0.");
+		} catch (IllegalArgumentException e) {
+			
+		}
 
 		ComplexParameter st1 = new ComplexParameter("pairwisetesting.test.edu.Student", "student");
 		st1.add(p);

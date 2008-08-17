@@ -1,7 +1,7 @@
 package pairwisetesting.coredomain;
 
 /**
- * Thrown to indicate exceptions related with the logic of engine
+ * Thrown to indicate exceptions related with the logic of engine.
  */
 public class EngineException extends Exception {
 	

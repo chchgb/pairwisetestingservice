@@ -35,7 +35,7 @@ public class AMEngine extends Engine {
 	 * @param factory
 	 *            the specified OA provider factory
 	 * @throws NullPointerException
-	 *             if the specified OA provider factory is null
+	 *             if {@code factory} is null
 	 */
 	public AMEngine(IOAProviderFactory factory) {
 		Preconditions.checkNotNull(factory, "OA provider factory");
