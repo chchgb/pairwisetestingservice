@@ -3,7 +3,7 @@ package testingngservices.testcasetemplate.core;
 import java.util.ArrayList;
 
 /**
- * This class acts as the finder to find the invocation sequence of some method.
+ * This class acts as the finder to find the invocation sequence of some field.
  * 
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
