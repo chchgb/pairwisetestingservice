@@ -217,7 +217,6 @@ public class TestCaseTemplateParameter {
 	public void setSingletonMethod(String singletonMethod) {
 		Preconditions.checkNotNull(singletonMethod, "singleton method");
 		this.singletonMethod = singletonMethod;
-		;
 	}
 
 	/**
@@ -290,7 +289,7 @@ public class TestCaseTemplateParameter {
 	}
 
 	/**
-	 * Add a new import statement. 
+	 * Adds a new import statement. 
 	 * 
 	 * @param importName the specified import name
 	 * @throws NullPointerException
@@ -320,7 +319,7 @@ public class TestCaseTemplateParameter {
 	}
 
 	/**
-	 * Add a new class to mock instance name.
+	 * Adds a new class to mock instance name.
 	 * 
 	 * @param className
 	 *            the specified name of the class to mock
@@ -355,7 +354,7 @@ public class TestCaseTemplateParameter {
 	}
 
 	/**
-	 * Add a new JMock invocation sequence with the specified class name and
+	 * Adds a new JMock invocation sequence with the specified class name and
 	 * invocations.
 	 * @param className
 	 *            the specified class name
