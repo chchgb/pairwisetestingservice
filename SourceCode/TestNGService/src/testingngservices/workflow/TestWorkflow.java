@@ -17,16 +17,20 @@ import org.apache.commons.logging.LogFactory;
 import pairwisetesting.util.TestingMetaParameter;
 import pairwisetesting.util.TextFile;
 
+
+
 public class TestWorkflow {
 	private TestingMetaParameter testingMeta;
 	private String workPath;
 	private Log log = LogFactory.getLog(TestWorkflow.class);
-
+	
+	//
 	public TestWorkflow(TestingMetaParameter testingMeta) {
 		this.testingMeta = testingMeta;
 		this.workPath = testingMeta.getEndPath();
 	}
 
+	//包装了测试用例编译执行过程
 	public String testWorkflow() {
 		String result = null;
 		testingMeta.addSourceFile("src/pairwisetesting/util/Converter.java");
@@ -109,28 +113,6 @@ public class TestWorkflow {
 		
 		URL[] urls;
 		
-//		
-//		
-//		ArrayList<File> fileList = new ArrayList<File>();
-//		for(String libName:libList){
-//			File file = new File(workPath +"lib/"+ libName);
-//			fileList.add(file);
-//		}
-//		
-//		fileList.add(outputDir);
-//		urls = new URL[fileList.size()];
-//		for(int i=0;i<urls.length;i++){
-//			try {
-//				urls[i] = fileList.get(i).toURI().toURL();
-//				System.out.println(urls[i]);
-//			} catch (MalformedURLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		
-		//File lib = new File(workPath +"lib/");
-		
 		TestNG tng = null;
 		try {
 
@@ -146,11 +128,7 @@ public class TestWorkflow {
 			// Run Test with TestNG
 			// testingMeta.gettestCaseClassName()
 			Class<?> clazz = ucl.loadClass(testingMeta.gettestCaseClassName());
-//			ucl.loadClass("test.bookstore.Logger");
-//			ucl.loadClass(testingMeta.gettestCaseClassName());
-//			ucl.loadClass(testingMeta.gettestCaseClassName());
-//			ucl.loadClass(testingMeta.gettestCaseClassName());
-//			ucl.loadClass(testingMeta.gettestCaseClassName());
+
 			
 			log.info("ClassName : \n" +clazz);
 			
@@ -183,9 +161,6 @@ public class TestWorkflow {
 			tng = null;
 			
 		}
-		
-		//cl.clearAssertionStatus();
-		
 
 		return result;
 
