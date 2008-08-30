@@ -3,9 +3,13 @@ package testingngservices.service;
 
 public interface ITestNGService {
 	
-	public String testExecute(String testMeta);
+	//远程生成测试用例（testNG）
 	public String getTestCase(String methodMeta,String pairwiseXML);
+	//获得服务器端的Java Lib 列表
 	public String getLibList();
+	//上传服务器端缺失的Java Lib
 	public void uploadLib(String lib);
+	//远程执行测试用例，并返回测试结果
+	public String testExecute(String testMeta);
 	
 }
