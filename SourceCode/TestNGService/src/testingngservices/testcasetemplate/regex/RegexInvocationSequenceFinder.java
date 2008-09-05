@@ -53,7 +53,7 @@ public class RegexInvocationSequenceFinder extends InvocationSequenceFinder {
 		String fieldInvokeRegex = "(" + fieldName + "[.](.*?)[(](.*?)[)])[; )]";
 		Pattern fieldInvokePattern = Pattern.compile(fieldInvokeRegex);
 
-		// Make field.invoke(xxxxx) -> field.invocation[(]xxxxx[)]
+		// Make field.invoke(xxxxx) -> field.invoke[(]xxxxx[)]
 		Pattern methodSignaturePattern = Pattern.compile(scopeMethodSignature
 				.toString().replaceAll("([(]|[)])", "[$1]"));
 
@@ -98,7 +98,7 @@ public class RegexInvocationSequenceFinder extends InvocationSequenceFinder {
 				break;
 
 			if (isMethodStart) {
-				// Find the field Invoke
+				// Find the field invocation
 				Matcher macher = fieldInvokePattern.matcher(line);
 				if (macher.find()) {
 					Invocation invocation = new Invocation();
@@ -134,11 +134,11 @@ public class RegexInvocationSequenceFinder extends InvocationSequenceFinder {
 				isMethodStart = true;
 			}
 
-			// Mark of start of the block with the method scope
+			// Mark the start of the block with the specified method scope
 			if (isMethodStart && line.contains("{")) {
 				scopeMark++;
 			}
-			// Mark of end of the block with the method scope
+			// Mark the end of the block with the specified method scope
 			if (isMethodStart && line.contains("}")) {
 				scopeMark--;
 			}

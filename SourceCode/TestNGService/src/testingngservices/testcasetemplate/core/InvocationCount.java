@@ -12,7 +12,7 @@ public enum InvocationCount {
 	 */
 	ONCE(1),
 	/**
-	 * 1..* times
+	 * 1..* times.
 	 */
 	ATLEAST_ONCE(2),
 	/**
@@ -27,7 +27,7 @@ public enum InvocationCount {
 	private int level;
 
 	/**
-	 * Constructs a invocation count with the specified level. The level
+	 * Constructs an invocation count with the specified level. The level
 	 * indicates the strictness of invocation. The smaller the level is, the
 	 * stricter the invocation is.
 	 * 
